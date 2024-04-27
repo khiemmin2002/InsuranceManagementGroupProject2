@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Gurajada&display=swap');
+
+.left-side-background {
+    -fx-background-color: #bfe7ff;
+}
+
+.right-side-background {
+    -fx-background-color: #ffca6a;
+}
+
+.left-side-title {
+    -fx-font-family: "Gurajada";
+    -fx-font-size: 35;
+    -fx-font-weight: 800;
+}
