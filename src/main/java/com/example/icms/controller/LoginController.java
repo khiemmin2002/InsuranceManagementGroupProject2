@@ -52,16 +52,17 @@ public class LoginController {
     private void validateLogin() {
         DatabaseConnection databaseConnection = new DatabaseConnection();
         Connection connection = databaseConnection.getConnection();
-
-        String verifyLoginQuery = "SELECT role_id FROM users WHERE user_name = ? AND password = ?";
+        String verifyLoginQuery = "SELECT role_id FROM public.users WHERE user_name = ? AND password = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(verifyLoginQuery);
             preparedStatement.setString(1, usernameTextField.getText());
             preparedStatement.setString(2, passwordField.getText());
             ResultSet resultSet = preparedStatement.executeQuery();
 
+            System.out.println(resultSet);
+
             if (resultSet.next()) {
-                int roleId = resultSet.getInt("role_id");
+                int roleId = Integer.parseInt(resultSet.getString("role_id"));
                 System.out.println(roleId);
                 switch (roleId) {
                     case 1 ->
