@@ -9,14 +9,14 @@ public class DatabaseConnection {
 
     public Connection getConnection(){
         String databaseName = "insurance_card_managenent_system";
-        String databaseUser = "postgres";
-        String databasePassword = "nguyenaluy";
-        String url = "jdbc:postgresql://localhost:5432/"+databaseName;
+        String databaseUser = "admin";
+        String databasePassword = "cosc2440";
+        String url = "jdbc:postgresql://localhost:5434/"+databaseName;
 
         try{
             Class.forName("org.postgresql.Driver");
             databaseLink = DriverManager.getConnection(url, databaseUser, databasePassword);
-            System.out.println("Connected to the PostgreSQL database successfully!");
+            System.out.println("Connected to the PostgresSQL database successfully!");
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }

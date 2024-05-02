@@ -16,7 +16,7 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="openDependents" />
+              <MenuItem mnemonicParsing="false" text="Dependents" />
                   <MenuItem mnemonicParsing="false" onAction="#exitProgram" text="Exit" />
             </items>
           </Menu>
@@ -28,7 +28,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      <TableView layoutX="14.0" layoutY="78.0" prefHeight="323.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="80.0">
+      <TableView fx:id="tableView" layoutX="14.0" layoutY="78.0" prefHeight="323.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="80.0">
         <columns>
           <TableColumn maxWidth="1.7976931348623157E308" prefWidth="75.0" text="ID" />
           <TableColumn maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Insured Person" />
