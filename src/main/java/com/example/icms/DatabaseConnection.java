@@ -6,17 +6,12 @@ import java.sql.SQLException;
 
 public class DatabaseConnection {
     public Connection databaseLink;
-
-    public Connection getConnection(){
-        String databaseName = "insurance_card_managenent_system";
-        String databaseUser = "admin";
-        String databasePassword = "cosc2440";
-        String url = "jdbc:postgresql://localhost:5434/"+databaseName;
-
-        try{
+    public Connection getConnection() {
+        String url = "jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres?user=postgres.kdvbunduidmibrvamrpj&password=Group5PasswordHardToGuess";
+        try {
             Class.forName("org.postgresql.Driver");
-            databaseLink = DriverManager.getConnection(url, databaseUser, databasePassword);
-            System.out.println("Connected to the PostgresSQL database successfully!");
+            databaseLink = DriverManager.getConnection(url);
+            System.out.println("Connected to the PostgreSQL database successfully!");
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }

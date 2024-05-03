@@ -2,6 +2,7 @@ package com.example.icms.controller;
 
 import com.example.icms.DatabaseConnection;
 import com.example.icms.model.Claim;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -21,82 +22,89 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class PolicyHolderController {
-    @FXML
-    private MenuItem exitMenuItem;
 
     @FXML
-    private MenuItem updateClaimMenuItem;
+    private MenuItem addClaim;
 
     @FXML
-    private MenuItem deleteClaimMenuItem;
-    @FXML
-    private TableView<?> tableView;
+    private TableColumn<?, ?> cardNumber;
 
     @FXML
-    private TableColumn<?, ?> idColumn;
+    private TableColumn<?, ?> claimAmount;
+
     @FXML
-    private TableColumn<?, ?> insuredPersonColumn;
+    private TableColumn<?, ?> claimDate;
+
     @FXML
-    private TableColumn<?, ?> cardNumberColumn;
+    private TableColumn<?, ?> claimID;
+
     @FXML
-    private TableColumn<?, ?> examDateColumn;
+    private TableView<?> claimTable;
+
     @FXML
-    private TableColumn<?, ?> claimDateColumn;
+    private MenuItem deleteClaim;
+
     @FXML
-    private TableColumn<?, ?> claimAmountColumn;
+    private TableColumn<?, ?> documents;
+
     @FXML
-    private TableColumn<?, ?> statusColumn;
+    private TableColumn<?, ?> examDate;
+
     @FXML
-    private TableColumn<?, ?> documentsColumn;
+    private TableColumn<?, ?> insuredPerson;
+
+    @FXML
+    private TableColumn<?, ?> status;
+
+    @FXML
+    private MenuItem updateClaim;
+
     @FXML
     private TextField findClaimIdField;
 
     @FXML
     private void initialize() {
-        // Set column resize policy to constrain the column width
-        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        claimTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        // Add a listener to resize columns when table view size changes
-        tableView.widthProperty().addListener((observable, oldValue, newValue) -> {
-            double tableWidth = tableView.getWidth();
+        claimTable.widthProperty().addListener((observable, oldValue, newValue) -> {
+            double tableWidth = claimTable.getWidth();
             // Set percentage widths for each column
-            idColumn.setPrefWidth(tableWidth * 0.1);
-            insuredPersonColumn.setPrefWidth(tableWidth * 0.2);
-            cardNumberColumn.setPrefWidth(tableWidth * 0.15);
-            examDateColumn.setPrefWidth(tableWidth * 0.1);
-            claimDateColumn.setPrefWidth(tableWidth * 0.1);
-            claimAmountColumn.setPrefWidth(tableWidth * 0.1);
-            statusColumn.setPrefWidth(tableWidth * 0.1);
-            documentsColumn.setPrefWidth(tableWidth * 0.15);
+            claimID.setPrefWidth(tableWidth * 0.1);
+            insuredPerson.setPrefWidth(tableWidth * 0.2);
+            cardNumber.setPrefWidth(tableWidth * 0.15);
+            examDate.setPrefWidth(tableWidth * 0.1);
+            claimDate.setPrefWidth(tableWidth * 0.1);
+            claimAmount.setPrefWidth(tableWidth * 0.1);
+            status.setPrefWidth(tableWidth * 0.1);
+            documents.setPrefWidth(tableWidth * 0.15);
         });
     }
 
     @FXML
     private void openDependents() {
-        // Implement the logic to open dependents
+
     }
 
     @FXML
     private void exitProgram(ActionEvent event) {
-        Stage stage = (Stage) exitMenuItem.getParentPopup().getOwnerWindow();
-        stage.close();
+        Platform.exit();
     }
 
     @FXML
     private void updateClaim() {
-        // Implement the logic to update a claim
+
     }
 
     @FXML
     private void deleteClaim() {
-        // Implement the logic to delete a claim
+
     }
 
     @FXML
     private void findClaimId() {
-        // Implement the logic to find a claim by ID
+
         String claimId = findClaimIdField.getText();
-        // Use claimId to search for the claim in your data
+
     }
 
     public void fetchClaimData() {
@@ -123,18 +131,22 @@ public class PolicyHolderController {
                 claimData.add(claim);
             }
 
-            idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-            insuredPersonColumn.setCellValueFactory(new PropertyValueFactory<>("insuredPerson"));
-            cardNumberColumn.setCellValueFactory(new PropertyValueFactory<>("cardNumber"));
-            examDateColumn.setCellValueFactory(new PropertyValueFactory<>("examDate"));
-            claimDateColumn.setCellValueFactory(new PropertyValueFactory<>("claimDate"));
-            claimAmountColumn.setCellValueFactory(new PropertyValueFactory<>("claimAmount"));
-            statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
-            documentsColumn.setCellValueFactory(new PropertyValueFactory<>("documents"));
-         } catch (SQLException e) {
+            claimID.setCellValueFactory(new PropertyValueFactory<>("id"));
+            insuredPerson.setCellValueFactory(new PropertyValueFactory<>("insuredPerson"));
+            cardNumber.setCellValueFactory(new PropertyValueFactory<>("cardNumber"));
+            examDate.setCellValueFactory(new PropertyValueFactory<>("examDate"));
+            claimDate.setCellValueFactory(new PropertyValueFactory<>("claimDate"));
+            claimAmount.setCellValueFactory(new PropertyValueFactory<>("claimAmount"));
+            status.setCellValueFactory(new PropertyValueFactory<>("status"));
+            documents.setCellValueFactory(new PropertyValueFactory<>("documents"));
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
     }
 
+    @FXML
+    private void openAddClaimModal() {
+        // Implement the logic to open add claim modal
+    }
 }

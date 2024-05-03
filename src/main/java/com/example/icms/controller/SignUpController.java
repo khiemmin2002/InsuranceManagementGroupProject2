@@ -78,6 +78,7 @@ public class SignUpController {
             preparedStatement.setString(2, userName);
             preparedStatement.setString(3, password);
             preparedStatement.setInt(4, selectedRole);
+            
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
                 signUpMessageLabel.setText("You have been registered successfully!");

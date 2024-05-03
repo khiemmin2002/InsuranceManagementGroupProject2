@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.icms.controller.PolicyHolderController">
    <children>
       <MenuBar layoutX="-1.0" prefWidth="149.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -22,22 +21,23 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Manage">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#updateClaim" text="Update Claim" />
-                  <MenuItem mnemonicParsing="false" onAction="#deleteClaim" text="Delete Claim" />
+                  <MenuItem fx:id="addClaim" mnemonicParsing="false" onAction="#openAddClaimModal" text="Add Claim" />
+              <MenuItem fx:id="updateClaim" mnemonicParsing="false" onAction="#updateClaim" text="Update Claim" />
+                  <MenuItem fx:id="deleteClaim" mnemonicParsing="false" onAction="#deleteClaim" text="Delete Claim" />
             </items>
           </Menu>
         </menus>
       </MenuBar>
-      <TableView fx:id="tableView" layoutX="14.0" layoutY="78.0" prefHeight="323.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="80.0">
+      <TableView fx:id="claimTable" layoutX="14.0" layoutY="78.0" prefHeight="323.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="80.0">
         <columns>
-          <TableColumn maxWidth="1.7976931348623157E308" prefWidth="75.0" text="ID" />
-          <TableColumn maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Insured Person" />
-            <TableColumn maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Card Number" />
-            <TableColumn maxWidth="1.7976931348623157E308" prefWidth="76.0" text="Exam Date" />
-            <TableColumn maxWidth="1.7976931348623157E308" prefWidth="74.0" text="Claim Date" />
-            <TableColumn maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Claim Amount" />
-            <TableColumn maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Status" />
-            <TableColumn maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Documents" />
+          <TableColumn fx:id="claimID" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="ID" />
+          <TableColumn fx:id="insuredPerson" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Insured Person" />
+            <TableColumn fx:id="cardNumber" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Card Number" />
+            <TableColumn fx:id="examDate" maxWidth="1.7976931348623157E308" prefWidth="76.0" text="Exam Date" />
+            <TableColumn fx:id="claimDate" maxWidth="1.7976931348623157E308" prefWidth="74.0" text="Claim Date" />
+            <TableColumn fx:id="claimAmount" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Claim Amount" />
+            <TableColumn fx:id="status" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Status" />
+            <TableColumn fx:id="documents" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Documents" />
         </columns>
       </TableView>
       <TextField layoutX="220.0" layoutY="37.0" />
