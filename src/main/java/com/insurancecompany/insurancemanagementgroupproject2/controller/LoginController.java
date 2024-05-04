@@ -80,7 +80,7 @@ public class LoginController {
 
     public void loadAdminHomePage() {
         Stage currentStage = (Stage) usernameTextField.getScene().getWindow();
-        SceneLoader.loadScene("admin-homepage.fxml", currentStage);
+        SceneLoader.loadScene("fxml/admin-homepage.fxml", currentStage);
     }
 
 }
