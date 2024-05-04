@@ -1,4 +1,4 @@
-package com.insurancecompany.insurancemanagementgroupproject2.Models;
+package com.insurancecompany.insurancemanagementgroupproject2.model;
 
 public class PolicyHolder extends Customer{
     public PolicyHolder(String id, String full_name, String email, String phone_number, String address) {

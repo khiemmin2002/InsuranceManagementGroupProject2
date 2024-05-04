@@ -1,4 +1,4 @@
-package com.insurancecompany.insurancemanagementgroupproject2.Models;
+package com.insurancecompany.insurancemanagementgroupproject2.model;
 
 public abstract class Customer {
     private String id;
