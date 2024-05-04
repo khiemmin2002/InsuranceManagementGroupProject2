@@ -37,7 +37,9 @@
             <TableColumn fx:id="claimDate" maxWidth="1.7976931348623157E308" prefWidth="74.0" text="Claim Date" />
             <TableColumn fx:id="claimAmount" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Claim Amount" />
             <TableColumn fx:id="status" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Status" />
-            <TableColumn fx:id="documents" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Documents" />
+            <TableColumn fx:id="bankName" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Bank Name" />
+            <TableColumn fx:id="bankUserName" prefWidth="75.0" text="Bank User Name" />
+            <TableColumn fx:id="bankNumber" prefWidth="75.0" text="Bank Number" />
         </columns>
       </TableView>
       <TextField layoutX="220.0" layoutY="37.0" />

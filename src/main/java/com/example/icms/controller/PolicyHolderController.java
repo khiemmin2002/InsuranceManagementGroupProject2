@@ -45,7 +45,14 @@ public class PolicyHolderController {
     private MenuItem deleteClaim;
 
     @FXML
-    private TableColumn<?, ?> documents;
+    private TableColumn<?, ?> bankName;
+
+    @FXML
+    private TableColumn<?, ?> bankNumber;
+
+    @FXML
+    private TableColumn<?, ?> bankUserName;
+
 
     @FXML
     private TableColumn<?, ?> examDate;
@@ -68,7 +75,6 @@ public class PolicyHolderController {
 
         claimTable.widthProperty().addListener((observable, oldValue, newValue) -> {
             double tableWidth = claimTable.getWidth();
-            // Set percentage widths for each column
             claimID.setPrefWidth(tableWidth * 0.1);
             insuredPerson.setPrefWidth(tableWidth * 0.2);
             cardNumber.setPrefWidth(tableWidth * 0.15);
@@ -76,7 +82,9 @@ public class PolicyHolderController {
             claimDate.setPrefWidth(tableWidth * 0.1);
             claimAmount.setPrefWidth(tableWidth * 0.1);
             status.setPrefWidth(tableWidth * 0.1);
-            documents.setPrefWidth(tableWidth * 0.15);
+            bankName.setPrefWidth(tableWidth * 0.15);
+            bankUserName.setPrefWidth(tableWidth * 0.15);
+            bankNumber.setPrefWidth(tableWidth * 0.15);
         });
     }
 
@@ -127,7 +135,9 @@ public class PolicyHolderController {
                 claim.setClaimDate(queryResult.getDate("claim_date"));
                 claim.setClaimAmount(queryResult.getDouble("claim_amount"));
                 claim.setStatus(queryResult.getString("status"));
-                claim.setDocuments(queryResult.getString("documents"));
+                claim.setBankName(queryResult.getString("bank_name"));
+                claim.setBankUserName(queryResult.getString("bank_user_name"));
+                claim.setBankNumber(queryResult.getString("bank_number"));
                 claimData.add(claim);
             }
 
@@ -138,7 +148,9 @@ public class PolicyHolderController {
             claimDate.setCellValueFactory(new PropertyValueFactory<>("claimDate"));
             claimAmount.setCellValueFactory(new PropertyValueFactory<>("claimAmount"));
             status.setCellValueFactory(new PropertyValueFactory<>("status"));
-            documents.setCellValueFactory(new PropertyValueFactory<>("documents"));
+            bankName.setCellValueFactory(new PropertyValueFactory<>("bank_name"));
+            bankUserName.setCellValueFactory(new PropertyValueFactory<>("bank_user_name"));
+            bankNumber.setCellValueFactory(new PropertyValueFactory<>("bank_number"));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

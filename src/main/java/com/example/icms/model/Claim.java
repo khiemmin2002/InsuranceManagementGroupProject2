@@ -11,7 +11,12 @@ public class Claim {
     private Date claimDate;
     private double claimAmount;
     private String status;
-    private String documents;
+
+    private String bankName;
+
+    private String bankUserName;
+
+    private String bankNumber;
 
     public Claim() {
         this.id = "";
@@ -21,17 +26,21 @@ public class Claim {
         this.claimDate = new Date();
         this.claimAmount = 0.0;
         this.status = "";
-        this.documents = "";
+        this.bankName = "";
+        this.bankUserName = "";
+        this.bankNumber = "";
     }
 
-    public Claim(String insuredPerson, String cardNumber, Date examDate, Date claimDate, double claimAmount, String status, String documents) {
+    public Claim(String insuredPerson, String cardNumber, Date examDate, Date claimDate, double claimAmount, String status, String bankName, String bankUserName, String bankNumber) {
         this.insuredPerson = insuredPerson;
         this.cardNumber = cardNumber;
         this.examDate = examDate;
         this.claimDate = claimDate;
         this.claimAmount = claimAmount;
         this.status = status;
-        this.documents = documents;
+        this.bankName = bankName;
+        this.bankUserName = bankUserName;
+        this.bankNumber = bankNumber;
     }
 
     public String getId() {
@@ -90,11 +99,27 @@ public class Claim {
         this.status = status;
     }
 
-    public String getDocuments() {
-        return documents;
+    public String getBankName() {
+        return bankName;
     }
 
-    public void setDocuments(String documents) {
-        this.documents = documents;
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public String getBankUserName() {
+        return bankUserName;
+    }
+
+    public void setBankUserName(String bankUserName) {
+        this.bankUserName = bankUserName;
+    }
+
+    public String getBankNumber() {
+        return bankNumber;
+    }
+
+    public void setBankNumber(String bankNumber) {
+        this.bankNumber = bankNumber;
     }
 }
