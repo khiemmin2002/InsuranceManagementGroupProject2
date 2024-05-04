@@ -8,7 +8,7 @@ module com.insurancecompany.insurancemanagementgroupproject2 {
     requires org.postgresql.jdbc;
 
 
-
+    opens com.insurancecompany.insurancemanagementgroupproject2.Models to javafx.base;
     opens com.insurancecompany.insurancemanagementgroupproject2 to javafx.fxml;
     exports com.insurancecompany.insurancemanagementgroupproject2;
     exports com.insurancecompany.insurancemanagementgroupproject2.controller;
