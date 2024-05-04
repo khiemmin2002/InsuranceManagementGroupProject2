@@ -1,4 +1,4 @@
-package com.insurancecompany.insurancemanagementgroupproject2;
+package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
