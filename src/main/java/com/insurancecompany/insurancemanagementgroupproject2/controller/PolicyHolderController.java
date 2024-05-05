@@ -39,7 +39,7 @@ public class PolicyHolderController {
     private TableColumn<?, ?> claimID;
 
     @FXML
-    private TableView<?> claimTable;
+    private TableView<Claim> claimTable;
 
     @FXML
     private MenuItem deleteClaim;
@@ -86,6 +86,7 @@ public class PolicyHolderController {
             bankUserName.setPrefWidth(tableWidth * 0.15);
             bankNumber.setPrefWidth(tableWidth * 0.15);
         });
+        fetchClaimData();
     }
 
     @FXML
@@ -122,13 +123,13 @@ public class PolicyHolderController {
         ObservableList<Claim> claimData = FXCollections.observableArrayList();
 
         try {
-            String getClaimsQuery = "SELECT * FROM claims";
+            String getClaimsQuery = "SELECT * FROM public.claims";
             Statement statement = connection.createStatement();
             ResultSet queryResult = statement.executeQuery(getClaimsQuery);
 
             while (queryResult.next()) {
-        Claim claim = new Claim();
-                claim.setId(queryResult.getString("id"));
+                Claim claim = new Claim();
+                claim.setId(queryResult.getString("claim_id"));
                 claim.setInsuredPerson(queryResult.getString("insured_person"));
                 claim.setCardNumber(queryResult.getString("card_number"));
                 claim.setExamDate(queryResult.getDate("exam_date"));
@@ -148,14 +149,16 @@ public class PolicyHolderController {
             claimDate.setCellValueFactory(new PropertyValueFactory<>("claimDate"));
             claimAmount.setCellValueFactory(new PropertyValueFactory<>("claimAmount"));
             status.setCellValueFactory(new PropertyValueFactory<>("status"));
-            bankName.setCellValueFactory(new PropertyValueFactory<>("bank_name"));
-            bankUserName.setCellValueFactory(new PropertyValueFactory<>("bank_user_name"));
-            bankNumber.setCellValueFactory(new PropertyValueFactory<>("bank_number"));
+            bankName.setCellValueFactory(new PropertyValueFactory<>("bankName"));
+            bankUserName.setCellValueFactory(new PropertyValueFactory<>("bankUserName"));
+            bankNumber.setCellValueFactory(new PropertyValueFactory<>("bankNumber"));
+
+            claimTable.setItems(claimData); // Set the items to the TableView
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
+
 
     @FXML
     private void openAddClaimModal() {
