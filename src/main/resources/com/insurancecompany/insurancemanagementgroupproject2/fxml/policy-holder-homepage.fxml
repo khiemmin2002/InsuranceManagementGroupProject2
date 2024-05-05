@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -43,6 +44,7 @@
         </columns>
       </TableView>
       <TextField fx:id="inputClaimId" layoutX="220.0" layoutY="37.0" onAction="#findClaimId" />
-      <Text layoutX="138.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Find Claim ID" />
+      <Text layoutX="142.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" Customer ID" />
+      <Button fx:id="clearInputButton" layoutX="395.0" layoutY="38.0" mnemonicParsing="false" onAction="#clearInputData" text="Clear" />
    </children>
 </AnchorPane>

@@ -9,10 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 
@@ -67,6 +64,9 @@ public class PolicyHolderController {
     private TextField inputClaimId;
 
     @FXML
+    private Button clearInputButton;
+
+    @FXML
     private void initialize() {
         claimTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -105,18 +105,23 @@ public class PolicyHolderController {
     private void deleteClaim() {
 
     }
+    @FXML
+    void clearInputData(ActionEvent event) {
+        inputClaimId.clear();
+        fetchClaimData();
+    }
 
     @FXML
     private void findClaimId() {
 
-        String claimId = inputClaimId.getText();
+        String insuredPersonId = inputClaimId.getText();
         DatabaseConnection databaseConnection = new DatabaseConnection();
         Connection connection = databaseConnection.getConnection();
 
         try {
-            String claimQuery = "SELECT * FROM public.claims WHERE claim_id = ?";
+            String claimQuery = "SELECT * FROM public.claims WHERE insured_person = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(claimQuery);
-            preparedStatement.setString(1, claimId);
+            preparedStatement.setString(1, insuredPersonId);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             ObservableList<Claim> foundClaims = FXCollections.observableArrayList();
