@@ -42,7 +42,7 @@
             <TableColumn fx:id="bankNumber" prefWidth="75.0" text="Bank Number" />
         </columns>
       </TableView>
-      <TextField layoutX="220.0" layoutY="37.0" />
+      <TextField fx:id="inputClaimId" layoutX="220.0" layoutY="37.0" onAction="#findClaimId" />
       <Text layoutX="138.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Find Claim ID" />
    </children>
 </AnchorPane>

@@ -16,10 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class PolicyHolderController {
 
@@ -67,7 +64,7 @@ public class PolicyHolderController {
     private MenuItem updateClaim;
 
     @FXML
-    private TextField findClaimIdField;
+    private TextField inputClaimId;
 
     @FXML
     private void initialize() {
@@ -112,7 +109,38 @@ public class PolicyHolderController {
     @FXML
     private void findClaimId() {
 
-        String claimId = findClaimIdField.getText();
+        String claimId = inputClaimId.getText();
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        Connection connection = databaseConnection.getConnection();
+
+        try {
+            String claimQuery = "SELECT * FROM public.claims WHERE claim_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(claimQuery);
+            preparedStatement.setString(1, claimId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            ObservableList<Claim> foundClaims = FXCollections.observableArrayList();
+            while (resultSet.next()) {
+                Claim claim = new Claim();
+                claim.setId(resultSet.getString("claim_id"));
+                claim.setInsuredPerson(resultSet.getString("insured_person"));
+                claim.setCardNumber(resultSet.getString("card_number"));
+                claim.setExamDate(resultSet.getDate("exam_date"));
+                claim.setClaimDate(resultSet.getDate("claim_date"));
+                claim.setClaimAmount(resultSet.getDouble("claim_amount"));
+                claim.setStatus(resultSet.getString("status"));
+                claim.setBankName(resultSet.getString("bank_name"));
+                claim.setBankUserName(resultSet.getString("bank_user_name"));
+                claim.setBankNumber(resultSet.getString("bank_number"));
+
+                foundClaims.add(claim);
+
+            }
+            claimTable.setItems(foundClaims);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
