@@ -1,0 +1,24 @@
+.menu-button {
+    -fx-font-family: Helvetica;
+    -fx-font-size: 18;
+    -fx-text-fill: #0070ef;
+    -fx-background-radius: 0;
+    -fx-font-weight: 800;
+    -fx-background-color: transparent;
+}
+
+.menu-button:hover {
+    -fx-background-color: #5cd172;
+}
+
+.menu-button:pressed {
+    -fx-background-color: #40bf57;
+    -fx-font-size: 20;
+
+}
+
+.icon-svg {
+    -fx-fill: #0070ef;
+}
+
+

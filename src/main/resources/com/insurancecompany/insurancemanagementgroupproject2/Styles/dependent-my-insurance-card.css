@@ -1,0 +1,16 @@
+.insurance-card-label {
+    -fx-font-size: 13;
+    -fx-font-weight: 700;
+}
+
+.insurance-card-detail {
+    -fx-font-size: 13;
+    -fx-font-weight: 400;
+}
+
+.insurance-card-container {
+    -fx-padding: 10;
+    -fx-background-radius: 5;
+    -fx-background-color: #b6ecff;
+    -fx-effect: dropshadow(three-pass-box, rgba(150, 150, 150, 0.5), 5, 0.02, 2, 1);
+}

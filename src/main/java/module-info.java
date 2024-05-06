@@ -12,6 +12,9 @@ module com.insurancecompany.insurancemanagementgroupproject2 {
     opens com.insurancecompany.insurancemanagementgroupproject2 to javafx.fxml;
     exports com.insurancecompany.insurancemanagementgroupproject2;
     exports com.insurancecompany.insurancemanagementgroupproject2.controller;
-    opens com.insurancecompany.insurancemanagementgroupproject2.controller to javafx.fxml;
+    exports com.insurancecompany.insurancemanagementgroupproject2.Models;
+    exports com.insurancecompany.insurancemanagementgroupproject2.Views;
 
+
+    opens com.insurancecompany.insurancemanagementgroupproject2.controller to javafx.fxml;
 }
