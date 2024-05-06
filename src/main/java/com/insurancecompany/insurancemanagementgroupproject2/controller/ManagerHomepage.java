@@ -72,8 +72,10 @@ public class ManagerHomepage extends SurveyorHomepage{
     @FXML
     private TableColumn<?, ?> surveyorPhoneNumber;
     private List<Claim> claimList = new ArrayList<Claim>();
+    private SurveyorController surveyorController;
     @FXML
     private void initialize() {
+        surveyorController = new SurveyorController();
         // Set up column widths and cell value factories
         claimTable.widthProperty().addListener((observable, oldValue, newValue) -> {
             double tableWidth = claimTable.getWidth();
@@ -127,32 +129,9 @@ public class ManagerHomepage extends SurveyorHomepage{
         }
     };
     public void fetchSurveyorData(){
-        //Create new instance of DatabaseConnection class
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        Connection connection = databaseConnection.getConnection();
-        //Create ObservableList for TableView
-        ObservableList<Surveyor> surveyorData = FXCollections.observableArrayList();
-        //Handling SQL exception by surrounding try catch
-        try {
-            String getSurveyorQuery = "SELECT id,full_name,user_name,email,phone_number FROM users WHERE role_id = 2";
-            Statement statement = connection.createStatement();
-            ResultSet queryResult = statement.executeQuery(getSurveyorQuery);
-            //Extract result and put it into local arraylist
-            while (queryResult.next()){
-                Surveyor provider = new Surveyor(
-                        queryResult.getString("id"),
-                        queryResult.getString("full_name"),
-                        queryResult.getString("user_name"),
-                        queryResult.getString("email"),
-                        queryResult.getString("phone_number")
-                );
-                surveyorData.add(provider);
-            }
-            surveyorTable.setItems(surveyorData);
-            System.out.println("Fetch data from database.user successfully!");
-        }catch (SQLException e){
-            System.out.println("SQL exception: " + e);
-        }
+        ObservableList<Surveyor> surveyorObservableList = FXCollections.observableArrayList();
+        surveyorObservableList.addAll(surveyorController.fetchSurveyor());
+        surveyorTable.setItems(surveyorObservableList);
     }
 
     @Override
