@@ -2,6 +2,7 @@ package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
+import com.insurancecompany.insurancemanagementgroupproject2.HelloApplication;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Manager;
 import javafx.application.Platform;
@@ -9,10 +10,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 
+import java.io.IOException;
 import java.sql.*;
 
 public class PolicyHolderController {
@@ -65,6 +72,7 @@ public class PolicyHolderController {
 
     @FXML
     private Button clearInputButton;
+
 
     @FXML
     private void initialize() {
@@ -194,7 +202,17 @@ public class PolicyHolderController {
 
 
     @FXML
-    private void openAddClaimModal() {
-        // Implement the logic to open add claim modal
+    private void openAddClaimModal() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/add-claim.fxml"));
+        Parent root = fxmlLoader.load();
+
+        // Set up the scene
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Add Claim");
+        stage.setScene(new Scene(root));
+        stage.showAndWait();
     }
+
+
 }
