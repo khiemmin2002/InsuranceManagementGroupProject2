@@ -4,16 +4,16 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.LoginController">
+<AnchorPane prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.LoginController">
    <children>
-      <Label layoutX="279.0" layoutY="250.0" text="Username" />
-      <TextField fx:id="usernameTextField" layoutX="342.0" layoutY="246.0" prefHeight="25.0" prefWidth="179.0" promptText="helloworld@gmail.com" />
-      <Label layoutX="279.0" layoutY="296.0" text="Password" />
-      <PasswordField fx:id="passwordField" layoutX="342.0" layoutY="292.0" prefHeight="25.0" prefWidth="179.0" promptText="password..." />
-      <Button fx:id="cancelButton" layoutX="310.0" layoutY="405.0" mnemonicParsing="false" onAction="#cancelButtonOnAction" prefHeight="25.0" prefWidth="179.0" text="Cancel" />
-      <Button layoutX="310.0" layoutY="366.0" mnemonicParsing="false" onAction="#loginButtonOnAction" prefHeight="25.0" prefWidth="179.0" text="Log In" />
-      <Label fx:id="loginMessageLabel" layoutX="279.0" layoutY="330.0" />
-      <Text layoutX="279.0" layoutY="191.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Log In">
+      <Label layoutX="79.0" layoutY="150.0" text="Username" />
+      <TextField fx:id="usernameTextField" layoutX="142.0" layoutY="146.0" prefHeight="25.0" prefWidth="179.0" promptText="helloworld@gmail.com" />
+      <Label layoutX="79.0" layoutY="196.0" text="Password" />
+      <PasswordField fx:id="passwordField" layoutX="142.0" layoutY="192.0" prefHeight="25.0" prefWidth="179.0" promptText="password..." />
+      <Button fx:id="cancelButton" layoutX="110.0" layoutY="305.0" mnemonicParsing="false" onAction="#cancelButtonOnAction" prefHeight="25.0" prefWidth="179.0" text="Cancel" />
+      <Button layoutX="110.0" layoutY="266.0" mnemonicParsing="false" onAction="#loginButtonOnAction" prefHeight="25.0" prefWidth="179.0" text="Log In" />
+      <Label fx:id="loginMessageLabel" layoutX="79.0" layoutY="230.0" />
+      <Text layoutX="79.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Log In">
          <font>
             <Font size="20.0" />
          </font>

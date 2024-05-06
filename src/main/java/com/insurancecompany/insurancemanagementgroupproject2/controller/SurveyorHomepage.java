@@ -1,7 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
-import com.insurancecompany.insurancemanagementgroupproject2.Models.Claim;
+import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

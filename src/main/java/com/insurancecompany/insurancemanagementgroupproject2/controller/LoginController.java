@@ -59,8 +59,9 @@ public class LoginController {
                 int roleId = resultSet.getInt("role_id");
                 System.out.println(roleId);
                 switch (roleId) {
-                    case 1 ->
-                            loadAdminHomePage();
+                    case 1 -> loadAdminHomePage();
+                    case 2 -> loadSurveyorHomePage();
+                    case 3 -> loadManagerHomePage();
                     default -> loginMessageLabel.setText("Unknown role!");
                 }
             } else {
@@ -83,4 +84,12 @@ public class LoginController {
         SceneLoader.loadScene("fxml/admin-homepage.fxml", currentStage);
     }
 
+    public void loadSurveyorHomePage() {
+        Stage currentStage = (Stage) usernameTextField.getScene().getWindow();
+        SceneLoader.loadScene("fxml/surveyor-homepage.fxml", currentStage);
+    }
+    public void loadManagerHomePage() {
+        Stage currentStage = (Stage) usernameTextField.getScene().getWindow();
+        SceneLoader.loadScene("fxml/manager-homepage.fxml", currentStage);
+    }
 }

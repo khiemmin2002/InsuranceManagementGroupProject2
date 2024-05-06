@@ -1,7 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
-import com.insurancecompany.insurancemanagementgroupproject2.Models.Surveyor;
+import com.insurancecompany.insurancemanagementgroupproject2.model.Surveyor;
 
 import java.sql.*;
 import java.util.*;

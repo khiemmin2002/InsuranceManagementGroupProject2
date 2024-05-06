@@ -1,9 +1,9 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
-import com.insurancecompany.insurancemanagementgroupproject2.Models.Claim;
-import com.insurancecompany.insurancemanagementgroupproject2.Models.Provider;
-import com.insurancecompany.insurancemanagementgroupproject2.Models.Surveyor;
+import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
+import com.insurancecompany.insurancemanagementgroupproject2.model.Provider;
+import com.insurancecompany.insurancemanagementgroupproject2.model.Surveyor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,9 +16,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class ManagerHomepage extends SurveyorHomepage{
     @FXML
