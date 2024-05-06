@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.fxml.ManagerHomepage">
+    <Pane layoutX="162.0" layoutY="13.0" prefHeight="432.0" prefWidth="781.0">
+        <TableView fx:id="claimTable" layoutX="14.0" layoutY="29.0" prefHeight="380.0" prefWidth="746.0"
+                   AnchorPane.bottomAnchor="28.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-184.0"
+                   AnchorPane.topAnchor="29.0">
+            <columns>
+                <TableColumn fx:id="claimID" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="ID"/>
+                <TableColumn fx:id="insuredPerson" maxWidth="1.7976931348623157E308" prefWidth="75.0"
+                             text="Insured Person"/>
+                <TableColumn fx:id="cardNumber" maxWidth="1.7976931348623157E308" prefWidth="75.0"
+                             text="Card Number"/>
+                <TableColumn fx:id="examDate" maxWidth="1.7976931348623157E308" prefWidth="76.0" text="Exam Date"/>
+                <TableColumn fx:id="claimDate" maxWidth="1.7976931348623157E308" prefWidth="74.0"
+                             text="Claim Date"/>
+                <TableColumn fx:id="claimAmount" maxWidth="1.7976931348623157E308" prefWidth="75.0"
+                             text="Claim Amount"/>
+                <TableColumn fx:id="status" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Status"/>
+                <TableColumn fx:id="bankName" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Bank Name"/>
+                <TableColumn fx:id="bankUserName" prefWidth="75.0" text="Bank User Name"/>
+                <TableColumn fx:id="bankNumber" prefWidth="75.0" text="Bank Number"/>
+            </columns>
+        </TableView>
+    </Pane>
+</AnchorPane>

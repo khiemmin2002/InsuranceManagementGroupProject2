@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +32,12 @@ public class SurveyorHomepage {
     public Label errorLabel;
     @FXML
     public TextField insertID;
+    @FXML
+    public Button sortPerson;
+    @FXML
+    public Button sortCard;
+    @FXML
+    public Button refreshData;
     @FXML
     private TableColumn<?, ?> claimID;
     @FXML
@@ -54,8 +61,11 @@ public class SurveyorHomepage {
     private List<Claim> claimList;
     @FXML
     private void initialize() {
+        // Set up column widths and cell value factories
         claimTable.widthProperty().addListener((observable, oldValue, newValue) -> {
             double tableWidth = claimTable.getWidth();
+            // Set preferred widths for columns based on table width
+            // This ensures that columns resize dynamically
             claimID.setPrefWidth(tableWidth * 0.1);
             insuredPerson.setPrefWidth(tableWidth * 0.2);
             cardNumber.setPrefWidth(tableWidth * 0.15);
@@ -77,17 +87,24 @@ public class SurveyorHomepage {
             bankName.setCellValueFactory(new PropertyValueFactory<>("bankName"));
             bankUserName.setCellValueFactory(new PropertyValueFactory<>("bankUserName"));
             bankNumber.setCellValueFactory(new PropertyValueFactory<>("bankNumber"));
-            
+
+            // Set event handlers for buttons
             fetchAllClaimButton.setOnAction(fetchAllClick);
             fetchProposableClaimButton.setOnAction(fetchProposalClick);
             fetchSingleClaimButton.setOnAction(fetchSingleClaimClick);
+            sortPerson.setOnAction(sortByPerson);
+            sortCard.setOnAction(sortByCard);
+            refreshData.setOnAction(refreshClaimData);
+            //Call API to fetch claim data from database
             fetchClaimData();
         });
     }
 
     EventHandler<ActionEvent> fetchAllClick = _ -> fetchAllClaimData();
-
     EventHandler<ActionEvent> fetchProposalClick = _ -> fetchStatusNewClaimData();
+    EventHandler<ActionEvent> sortByPerson = _ -> sortByClaimPerson();
+    EventHandler<ActionEvent> sortByCard = _ -> sortByClaimCard();
+    EventHandler<ActionEvent> refreshClaimData = _ -> fetchClaimData();
 
     EventHandler<ActionEvent> fetchSingleClaimClick = new EventHandler<>() {
         @Override
@@ -100,16 +117,18 @@ public class SurveyorHomepage {
         }
     };
     public void fetchClaimData() {
+        //Create new instance of DatabaseConnection class
         DatabaseConnection databaseConnection = new DatabaseConnection();
         Connection connection = databaseConnection.getConnection();
-
+        //Create ObservableList for TableView
         ObservableList<Claim> claimData = FXCollections.observableArrayList();
         claimList = new ArrayList<Claim>();
+        //Handling SQL exception by surrounding try catch
         try {
             String getClaimsQuery = "SELECT * FROM claims";
             Statement statement = connection.createStatement();
             ResultSet queryResult = statement.executeQuery(getClaimsQuery);
-
+            //Extract result and put it into local arraylist
             while (queryResult.next()) {
                 Claim claim = new Claim();
                 claim.setId(queryResult.getString("claim_id"));
@@ -125,7 +144,8 @@ public class SurveyorHomepage {
                 claimData.add(claim);
                 claimList.add(claim);
             }
-//            System.out.println(claimData);
+            //Set view table
+            System.out.println("Fetch data from database successfully!");
             claimTable.setItems(claimData);
         } catch (SQLException e) {
             System.out.println("SQL error: " + e);
@@ -161,17 +181,63 @@ public class SurveyorHomepage {
         }
         claimTable.setItems(claimData);
     }
+    public void sortByClaimPerson(){
+        ObservableList<Claim> claimData = FXCollections.observableArrayList();
+        List<Claim> sortedList = claimList;
+        sortedList.sort(new Comparator<Claim>() {
+            @Override
+            public int compare(Claim o1, Claim o2) {
+                //Extract numerical number inside claim person ("C" + 7 number), then parse
+                //as Int to compare
+                long num1 = Long.parseLong(o1.getInsuredPerson().substring(1));
+                long num2 = Long.parseLong(o2.getInsuredPerson().substring(1));
+                //Compare the number after casting to integer
+                return Long.compare(num1,num2);
+            }
+        });
+        claimData.addAll(sortedList);
+        claimTable.setItems(claimData);
+    }
+    public void sortByClaimCard(){
+        ObservableList<Claim> claimData = FXCollections.observableArrayList();
+        List<Claim> sortedList = claimList;
+        sortedList.sort(new Comparator<Claim>() {
+            @Override
+            public int compare(Claim o1, Claim o2) {
+                //Extract numerical number inside claim id ("X" + number), then parse
+                //as Int to compare
+                long num1 = Long.parseLong(o1.getCardNumber().substring(1));
+                long num2 = Long.parseLong(o2.getCardNumber().substring(1));
+                //Compare the number after casting to integer
+                return Long.compare(num1,num2);
+            }
+        });
+        claimData.addAll(sortedList);
+        claimTable.setItems(claimData);
+    }
     public void createProposeAlert(String claimID){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Propose dialog");
         alert.setContentText("Proposing claim " + claimID + " to manager?");
-
+        // Define custom buttons, set it to the alert
+        ButtonType proposeButton = new ButtonType("Propose");
+        ButtonType requestButton = new ButtonType("Request");
+        ButtonType cancelButton = new ButtonType("Cancel", ButtonType.CANCEL.getButtonData());
+        alert.getButtonTypes().setAll(proposeButton,requestButton,cancelButton);
+        //Logic to handle operation of button
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
+            //Handle proposing a claim to manager
             System.out.println("Claim " + claimID + " proposed successfully!");
             insertID.setText("");
             fetchClaimData();
-        } else {
+        } else if (result.get() == requestButton) {
+            // Handle requesting more information from a claim
+            System.out.println("Claim " + claimID + " postponed.");
+            insertID.setText("");
+            fetchClaimData();
+        }else {
+            //Handle cancellation of operation
             insertID.setText("");
             System.out.println("Claim proposing cancelled.");
         }
