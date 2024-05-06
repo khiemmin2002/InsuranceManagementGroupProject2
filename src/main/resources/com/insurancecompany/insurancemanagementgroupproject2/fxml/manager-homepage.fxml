@@ -1,29 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.fxml.ManagerHomepage">
+<AnchorPane prefHeight="709.0" prefWidth="944.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.ManagerHomepage">
+    <Pane layoutX="14.0" layoutY="49.0" prefHeight="380.0" prefWidth="152.0">
+        <Button fx:id="fetchAllClaimButton" layoutX="21.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="All claims" />
+        <Button fx:id="fetchProposableClaimButton" layoutX="21.0" layoutY="48.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="Sort by proposed" />
+        <Label layoutX="37.0" layoutY="281.0" text="Approving claim" />
+        <TextField fx:id="insertID" layoutX="2.0" layoutY="305.0" />
+        <Button fx:id="fetchSingleClaimButton" layoutX="41.0" layoutY="339.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="find" />
+        <Label fx:id="errorLabel" layoutX="2.0" layoutY="330.0" prefHeight="17.0" prefWidth="149.0" />
+        <Label layoutX="46.0" layoutY="-9.0" text="Sort options" />
+        <Button fx:id="sortPerson" layoutX="22.0" layoutY="84.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="Order by person" />
+        <Button fx:id="sortCard" layoutX="23.0" layoutY="122.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="Order by card" />
+    </Pane>
     <Pane layoutX="162.0" layoutY="13.0" prefHeight="432.0" prefWidth="781.0">
-        <TableView fx:id="claimTable" layoutX="14.0" layoutY="29.0" prefHeight="380.0" prefWidth="746.0"
-                   AnchorPane.bottomAnchor="28.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-184.0"
-                   AnchorPane.topAnchor="29.0">
+        <TableView fx:id="claimTable" layoutX="14.0" layoutY="29.0" prefHeight="380.0" prefWidth="746.0" AnchorPane.bottomAnchor="28.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-184.0" AnchorPane.topAnchor="29.0">
             <columns>
-                <TableColumn fx:id="claimID" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="ID"/>
-                <TableColumn fx:id="insuredPerson" maxWidth="1.7976931348623157E308" prefWidth="75.0"
-                             text="Insured Person"/>
-                <TableColumn fx:id="cardNumber" maxWidth="1.7976931348623157E308" prefWidth="75.0"
-                             text="Card Number"/>
-                <TableColumn fx:id="examDate" maxWidth="1.7976931348623157E308" prefWidth="76.0" text="Exam Date"/>
-                <TableColumn fx:id="claimDate" maxWidth="1.7976931348623157E308" prefWidth="74.0"
-                             text="Claim Date"/>
-                <TableColumn fx:id="claimAmount" maxWidth="1.7976931348623157E308" prefWidth="75.0"
-                             text="Claim Amount"/>
-                <TableColumn fx:id="status" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Status"/>
-                <TableColumn fx:id="bankName" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Bank Name"/>
-                <TableColumn fx:id="bankUserName" prefWidth="75.0" text="Bank User Name"/>
-                <TableColumn fx:id="bankNumber" prefWidth="75.0" text="Bank Number"/>
+                <TableColumn fx:id="claimID" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="ID" />
+                <TableColumn fx:id="insuredPerson" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Insured Person" />
+                <TableColumn fx:id="cardNumber" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Card Number" />
+                <TableColumn fx:id="examDate" maxWidth="1.7976931348623157E308" prefWidth="76.0" text="Exam Date" />
+                <TableColumn fx:id="claimDate" maxWidth="1.7976931348623157E308" prefWidth="74.0" text="Claim Date" />
+                <TableColumn fx:id="claimAmount" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Claim Amount" />
+                <TableColumn fx:id="status" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Status" />
+                <TableColumn fx:id="bankName" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Bank Name" />
+                <TableColumn fx:id="bankUserName" prefWidth="75.0" text="Bank User Name" />
+                <TableColumn fx:id="bankNumber" prefWidth="75.0" text="Bank Number" />
             </columns>
         </TableView>
     </Pane>
+    <Button fx:id="refreshData" contentDisplay="BOTTOM" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" text="Refresh" underline="true"></Button>
+    <Pane layoutX="176.0" layoutY="429.0" prefHeight="279.0" prefWidth="746.0">
+        <TableView fx:id="surveyorTable" layoutX="14.0" layoutY="14.0" prefHeight="260.0" prefWidth="722.0">
+            <columns>
+                <TableColumn fx:id="surveyorID" maxWidth="1.7976931348623157E308" prefWidth="88.0" text="ID"/>
+                <TableColumn fx:id="surveyorFullName" maxWidth="1.7976931348623157E308" prefWidth="165.0"
+                             text="Full Name"/>
+                <TableColumn fx:id="surveyorUserName" maxWidth="1.7976931348623157E308" prefWidth="94.0"
+                             text="User Name"/>
+                <TableColumn fx:id="surveyorEmail" maxWidth="1.7976931348623157E308" prefWidth="196.0" text="Email"/>
+                <TableColumn fx:id="surveyorPhoneNumber" maxWidth="1.7976931348623157E308" prefWidth="178.0"
+                             text="Phone Number"/>
+            </columns>
+        </TableView>
+    </Pane>
+   <Pane layoutX="9.0" layoutY="445.0" prefHeight="254.0" prefWidth="167.0" />
 </AnchorPane>
