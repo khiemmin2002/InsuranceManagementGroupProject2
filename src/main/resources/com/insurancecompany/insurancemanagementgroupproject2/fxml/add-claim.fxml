@@ -9,25 +9,26 @@
 
 <Pane fx:id="addClaimPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.ClaimController">
    <children>
-      <TextField fx:id="insuredPersonInput" layoutX="220.0" layoutY="97.0" promptText="C1234567" />
-      <TextField fx:id="cardNumberInput" layoutX="219.0" layoutY="136.0" promptText="1234567890" />
-      <TextField fx:id="claimAmountInput" layoutX="220.0" layoutY="179.0" promptText="Claim Amount" text="0.0" />
+      <TextField fx:id="insuredPersonInput" layoutX="215.0" layoutY="68.0" promptText="C1234567" />
+      <TextField fx:id="cardNumberInput" layoutX="215.0" layoutY="107.0" promptText="1234567890" />
+      <TextField fx:id="claimAmountInput" layoutX="215.0" layoutY="140.0" promptText="Claim Amount" text="0.0" />
       <Text layoutX="256.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add a claim">
          <font>
             <Font size="18.0" />
          </font>
       </Text>
-      <Text layoutX="108.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insured Person ID: " />
-      <Text layoutX="69.0" layoutY="153.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insurance Card's Number: " />
-      <Text layoutX="127.0" layoutY="196.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Claim Amount: " />
-      <Button fx:id="cancelButton" layoutX="172.0" layoutY="338.0" mnemonicParsing="false" onAction="#backToHomePage" text="Cancel" />
+      <Text layoutX="107.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insured Person ID: " />
+      <Text layoutX="63.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insurance Card's Number: " />
+      <Text layoutX="116.0" layoutY="157.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Claim Amount: " />
+      <Button fx:id="cancelButton" layoutX="169.0" layoutY="325.0" mnemonicParsing="false" onAction="#backToHomePage" text="Cancel" />
       <Button fx:id="confirmAddButton" layoutX="349.0" layoutY="338.0" mnemonicParsing="false" onAction="#confirmAddClaim" text="Confirm" />
       <Label fx:id="validationMessage" layoutX="295.0" layoutY="72.0" prefHeight="17.0" prefWidth="8.0" />
-      <TextField fx:id="bankNameField" layoutX="220.0" layoutY="220.0" promptText="SCB" />
-      <Text layoutX="135.0" layoutY="237.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bank Name:" />
-      <TextField fx:id="bankUserNameField" layoutX="219.0" layoutY="266.0" promptText="Nguyen Van A" />
-      <Text layoutX="111.0" layoutY="283.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bank User Name:" />
-      <TextField fx:id="bankNumberField" layoutX="219.0" layoutY="305.0" promptText="1234567890" />
-      <Text layoutX="130.0" layoutY="322.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bank Number:" />
+      <TextField fx:id="bankNameField" layoutX="215.0" layoutY="179.0" promptText="SCB" />
+      <Text layoutX="136.0" layoutY="196.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bank Name:" />
+      <TextField fx:id="bankUserNameField" layoutX="215.0" layoutY="211.0" promptText="Nguyen Van A" />
+      <Text layoutX="110.0" layoutY="228.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bank User Name:" />
+      <TextField fx:id="bankNumberField" layoutX="215.0" layoutY="244.0" promptText="1234567890" />
+      <Text layoutX="130.0" layoutY="261.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bank Number:" />
+      <Button fx:id="btnUploadDocuments" layoutX="215.0" layoutY="283.0" mnemonicParsing="false" onAction="#uploadMultipleFiles" text="Upload documents" />
    </children>
 </Pane>
