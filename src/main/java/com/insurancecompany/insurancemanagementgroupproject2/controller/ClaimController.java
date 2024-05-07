@@ -123,6 +123,7 @@ public class ClaimController {
     }
 
     public static boolean proposeClaim(String claimID){
+        //Database connection
         DatabaseConnection databaseConnection = new DatabaseConnection();
         Connection connection = databaseConnection.getConnection();
         try{
@@ -139,6 +140,7 @@ public class ClaimController {
     }
 
     public static boolean resubmitClaim(String claimID){
+        //Database connection
         DatabaseConnection databaseConnection = new DatabaseConnection();
         Connection connection = databaseConnection.getConnection();
         try{
@@ -155,6 +157,7 @@ public class ClaimController {
     }
 
     public static boolean rejectClaim(String claimID){
+        //Database connection
         DatabaseConnection databaseConnection = new DatabaseConnection();
         Connection connection = databaseConnection.getConnection();
         try{
@@ -171,6 +174,7 @@ public class ClaimController {
     }
 
     public static boolean approveClaim(String claimID){
+        //Database connection
         DatabaseConnection databaseConnection = new DatabaseConnection();
         Connection connection = databaseConnection.getConnection();
         try{
