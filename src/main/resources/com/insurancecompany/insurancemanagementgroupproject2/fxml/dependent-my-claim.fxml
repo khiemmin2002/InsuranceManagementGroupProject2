@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="667.0" prefWidth="904.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TableView layoutX="21.0" layoutY="20.0" prefHeight="637.0" prefWidth="871.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+        <columns>
+          <TableColumn prefWidth="75.0" text="Customer ID" />
+          <TableColumn prefWidth="95.0" text="Insured Person" />
+            <TableColumn prefWidth="87.0" text="Card Number" />
+            <TableColumn prefWidth="74.0" text="Exam Date" />
+            <TableColumn minWidth="0.0" prefWidth="74.0" text="Claim Date" />
+            <TableColumn minWidth="0.0" prefWidth="105.86447143554688" text="Claim Amount" />
+            <TableColumn minWidth="0.0" prefWidth="50.1356201171875" text="Status" />
+            <TableColumn minWidth="0.0" prefWidth="78.0" text="Bank Name" />
+            <TableColumn minWidth="0.0" prefWidth="113.832763671875" text="Bank User Name" />
+            <TableColumn minWidth="0.0" prefWidth="119.5" text="Bank Number" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

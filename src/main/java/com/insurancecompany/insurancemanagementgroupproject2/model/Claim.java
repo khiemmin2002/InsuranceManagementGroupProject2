@@ -43,6 +43,7 @@ public  class Claim {
         this.bankNumber = bankNumber;
     }
 
+
     public String getId() {
         return id;
     }
