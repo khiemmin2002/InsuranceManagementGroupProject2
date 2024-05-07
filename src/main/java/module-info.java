@@ -1,4 +1,3 @@
-
 module com.insurancecompany.insurancemanagementgroupproject2 {
 
     requires javafx.controls;
@@ -7,14 +6,11 @@ module com.insurancecompany.insurancemanagementgroupproject2 {
     requires java.sql;
     requires org.postgresql.jdbc;
 
-
-
+    opens com.insurancecompany.insurancemanagementgroupproject2.model to javafx.base;
     opens com.insurancecompany.insurancemanagementgroupproject2 to javafx.fxml;
     exports com.insurancecompany.insurancemanagementgroupproject2;
     exports com.insurancecompany.insurancemanagementgroupproject2.controller;
     exports com.insurancecompany.insurancemanagementgroupproject2.Models;
     exports com.insurancecompany.insurancemanagementgroupproject2.Views;
-
-
     opens com.insurancecompany.insurancemanagementgroupproject2.controller to javafx.fxml;
 }

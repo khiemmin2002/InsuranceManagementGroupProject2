@@ -1,4 +1,4 @@
-package com.insurancecompany.insurancemanagementgroupproject2.Models;
+package com.insurancecompany.insurancemanagementgroupproject2.model;
 
 import java.sql.Date;
 
