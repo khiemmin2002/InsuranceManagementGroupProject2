@@ -235,7 +235,8 @@ public class SurveyorHomepage {
             fetchClaimData();
         } else if (result.get() == requestButton) {
             // Handle requesting more information from a claim
-            System.out.println("Claim " + claimID + " request for more information!");
+            boolean success = ClaimController.resubmitClaim(claimID);
+            System.out.println("Claim " + claimID + " request for more information: " + success);
             insertID.setText("");
             fetchClaimData();
         }else {

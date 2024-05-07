@@ -162,14 +162,16 @@ public class ManagerHomepage extends SurveyorHomepage{
         alert.getButtonTypes().setAll(approveButton,denyButton,cancelButton);
         //Logic to handle operation of button
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
+        if (result.isPresent() && result.get() == approveButton) {
             //Handle proposing a claim to manager
-            System.out.println("Claim " + claimID + " approved successfully!");
+            boolean success = ClaimController.approveClaim(claimID);
+            System.out.println("Claim " + claimID + " approved successfully: " + success);
             insertID.setText("");
             fetchClaimData();
         } else if (result.get() == denyButton) {
             // Handle requesting more information from a claim
-            System.out.println("Claim " + claimID + " denied!");
+            boolean success = ClaimController.rejectClaim(claimID);
+            System.out.println("Claim " + claimID + " denied: " + success);
             insertID.setText("");
             fetchClaimData();
         }else {
