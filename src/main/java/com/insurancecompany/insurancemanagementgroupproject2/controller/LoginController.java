@@ -2,6 +2,7 @@ package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.SceneLoader;
+import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -59,8 +60,11 @@ public class LoginController {
                 int roleId = resultSet.getInt("role_id");
                 System.out.println(roleId);
                 switch (roleId) {
-                    case 1 ->
-                            loadAdminHomePage();
+                    case 1 -> {
+                        LoginData.usernameLogin = usernameTextField.getText();
+                        LoginData.roleId = roleId;
+                        loadAdminHomePage();
+                    }
                     default -> loginMessageLabel.setText("Unknown role!");
                 }
             } else {
@@ -80,7 +84,8 @@ public class LoginController {
 
     public void loadAdminHomePage() {
         Stage currentStage = (Stage) usernameTextField.getScene().getWindow();
-        SceneLoader.loadScene("fxml/admin-homepage.fxml", currentStage);
+        currentStage.setTitle("Admin Portal");
+        SceneLoader.loadSceneWithInput("fxml/admin-homepage.fxml", currentStage,900,600);
     }
 
 }
