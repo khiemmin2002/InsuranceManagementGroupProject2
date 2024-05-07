@@ -1,7 +1,8 @@
 package com.insurancecompany.insurancemanagementgroupproject2.model;
 
 public class Surveyor extends Provider{
-    public Surveyor(String id, String full_name) {
-        super(id, full_name);
+
+    public Surveyor(String id, String fullName, String userName, String email, String phoneNumber) {
+        super(id, fullName, userName, email, phoneNumber);
     }
 }
