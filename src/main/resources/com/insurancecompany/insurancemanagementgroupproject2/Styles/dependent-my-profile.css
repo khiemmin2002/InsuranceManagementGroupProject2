@@ -1,0 +1,16 @@
+.personal-data-label {
+    -fx-font-size: 13;
+    -fx-font-weight: 700;
+}
+
+.personal-data-detail {
+    -fx-font-size: 13;
+    -fx-font-weight: 400;
+}
+
+.personal-data-container {
+    -fx-padding: 10;
+    -fx-background-radius: 5;
+    -fx-background-color: #ffa852;
+    -fx-effect: dropshadow(three-pass-box, rgba(150, 150, 150, 0.5), 5, 0.02, 2, 1);
+}

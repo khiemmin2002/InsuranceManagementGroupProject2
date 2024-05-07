@@ -13,7 +13,7 @@
     <Button layoutX="419.0" layoutY="158.0" mnemonicParsing="false" text="Button"/>
     <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="176.0" layoutY="209.0" pickOnBounds="true"
                preserveRatio="true">
-        <Image url="@../images/David Goggins.jpg"/>
+        <Image url="@../Images/David Goggins.jpg"/>
     </ImageView>
 
 </AnchorPane>
