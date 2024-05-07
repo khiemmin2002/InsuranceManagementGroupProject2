@@ -87,10 +87,6 @@ public class ClaimController {
         String claimId = generateRandomClaimID();
         currentClaimId = claimId;
 
-    @FXML
-    void confirmAddClaim(ActionEvent event)  {
-        String claimId = generateRandomClaimID();
-
         String cardNumber = cardNumberInput.getText();
         String claimAmountText = claimAmountInput.getText();
         String insuredPerson = insuredPersonInput.getText();
@@ -99,16 +95,12 @@ public class ClaimController {
         String bankNumber = bankNumberField.getText();
 
         if (cardNumber.isEmpty() || claimAmountText.isEmpty() || insuredPerson.isEmpty()) {
-            if (cardNumber.isEmpty() || claimAmountText.isEmpty() || insuredPerson.isEmpty()) {
-                System.out.println("Debug: cardNumber: " + cardNumber);
-                System.out.println("Debug: claimAmountText: " + claimAmountText);
-                System.out.println("Debug: insuredPerson: " + insuredPerson);
-                validationMessage.setText("Please fill in all fields");
-                return;
-            }
-
-            validationMessage.setText("Please fill in all field");
+            System.out.println("Debug: cardNumber: " + cardNumber);
+            System.out.println("Debug: claimAmountText: " + claimAmountText);
+            System.out.println("Debug: insuredPerson: " + insuredPerson);
+            validationMessage.setText("Please fill in all fields");
             return;
+
         }
         double claimAmount = Double.parseDouble(claimAmountText);
         DatabaseConnection databaseConnection = new DatabaseConnection();
