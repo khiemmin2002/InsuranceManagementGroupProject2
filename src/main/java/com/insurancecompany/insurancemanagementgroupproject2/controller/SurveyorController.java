@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SurveyorController {
+public class SurveyorController extends Thread{
     private final DatabaseConnection databaseConnection;
     private final Connection connection;
 

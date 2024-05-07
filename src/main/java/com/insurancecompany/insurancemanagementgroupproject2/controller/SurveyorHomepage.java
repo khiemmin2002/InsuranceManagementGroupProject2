@@ -116,40 +116,13 @@ public class SurveyorHomepage {
         }
     };
     public List<Claim> fetchClaimData() {
-        //Create new instance of DatabaseConnection class
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        Connection connection = databaseConnection.getConnection();
         //Create ObservableList for TableView
         ObservableList<Claim> claimData = FXCollections.observableArrayList();
-        claimList = new ArrayList<Claim>();
+        claimList = ClaimController.fetchClaim();
         //Handling SQL exception by surrounding try catch
-        try {
-            String getClaimsQuery = "SELECT * FROM claims";
-            Statement statement = connection.createStatement();
-            ResultSet queryResult = statement.executeQuery(getClaimsQuery);
-            //Extract result and put it into local arraylist
-            while (queryResult.next()) {
-                Claim claim = new Claim();
-                claim.setId(queryResult.getString("claim_id"));
-                claim.setInsuredPerson(queryResult.getString("insured_person"));
-                claim.setCardNumber(queryResult.getString("card_number"));
-                claim.setExamDate(queryResult.getDate("exam_date"));
-                claim.setClaimDate(queryResult.getDate("claim_date"));
-                claim.setClaimAmount(queryResult.getFloat("claim_amount"));
-                claim.setStatus(queryResult.getString("status"));
-                claim.setBankName(queryResult.getString("bank_name"));
-                claim.setBankUserName(queryResult.getString("bank_user_name"));
-                claim.setBankNumber(queryResult.getString("bank_number"));
-                claimData.add(claim);
-                claimList.add(claim);
-            }
-            //Set view table
-            System.out.println("Fetch data from database.claim successfully!");
-            claimTable.setItems(claimData);
-            return claimList;
-        } catch (SQLException e) {
-            System.out.println("SQL error: " + e);
-        }
+        claimData.addAll(claimList);
+        //Set view table
+        claimTable.setItems(claimData);
         return claimList;
     }
     public void fetchSingleClaim(String claimID){

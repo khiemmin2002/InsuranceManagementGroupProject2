@@ -2,6 +2,7 @@ package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.HelloApplication;
+import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,9 +17,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class ClaimController {
@@ -121,6 +122,36 @@ public class ClaimController {
             throw new RuntimeException(e);
         }
     }
+    public static List<Claim> fetchClaim(){
+        //Create new instance of DatabaseConnection class
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        Connection connection = databaseConnection.getConnection();
+        List<Claim> claimList = new ArrayList<Claim>();
+        try {
+            String getClaimsQuery = "SELECT * FROM claims";
+            Statement statement = connection.createStatement();
+            ResultSet queryResult = statement.executeQuery(getClaimsQuery);
+            //Extract result and put it into local arraylist
+            while (queryResult.next()) {
+                Claim claim = new Claim();
+                claim.setId(queryResult.getString("claim_id"));
+                claim.setInsuredPerson(queryResult.getString("insured_person"));
+                claim.setCardNumber(queryResult.getString("card_number"));
+                claim.setExamDate(queryResult.getDate("exam_date"));
+                claim.setClaimDate(queryResult.getDate("claim_date"));
+                claim.setClaimAmount(queryResult.getFloat("claim_amount"));
+                claim.setStatus(queryResult.getString("status"));
+                claim.setBankName(queryResult.getString("bank_name"));
+                claim.setBankUserName(queryResult.getString("bank_user_name"));
+                claim.setBankNumber(queryResult.getString("bank_number"));
+                claimList.add(claim);
+            }
+            System.out.println("Fetch data from database.claim successfully!");
+        } catch (SQLException e) {
+            System.out.println("SQL error: " + e);
+        }
+        return claimList;
+    }
 
     public static boolean proposeClaim(String claimID){
         //Database connection
@@ -189,7 +220,6 @@ public class ClaimController {
             return false;
         }
     }
-
     private void clearInputFields() {
         cardNumberInput.clear();
         claimAmountInput.clear();
