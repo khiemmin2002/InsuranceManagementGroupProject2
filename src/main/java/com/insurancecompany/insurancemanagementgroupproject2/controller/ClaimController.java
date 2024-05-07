@@ -122,6 +122,24 @@ public class ClaimController {
         }
     }
 
+    public static boolean proposeClaim(String claimID){
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        Connection connection = databaseConnection.getConnection();
+        try{
+            String proposeClaim = "UPDATE claims SET status = 'PROCESSING', exam_date = CURRENT_DATE WHERE claim_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(proposeClaim);
+            preparedStatement.setString(1,claimID);
+            preparedStatement.execute();
+            System.out.println("Successfully propose claim " + claimID);
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Error in SQL function proposeClaim: " + e);
+            return false;
+        }
+    }
+
+    
+
     private void clearInputFields() {
         cardNumberInput.clear();
         claimAmountInput.clear();

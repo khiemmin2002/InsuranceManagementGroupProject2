@@ -227,9 +227,10 @@ public class SurveyorHomepage {
         alert.getButtonTypes().setAll(proposeButton,requestButton,cancelButton);
         //Logic to handle operation of button
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
+        if (result.isPresent() && result.get() == proposeButton) {
             //Handle proposing a claim to manager
-            System.out.println("Claim " + claimID + " proposed successfully!");
+            boolean success = ClaimController.proposeClaim(claimID);
+            System.out.println("Claim " + claimID + " proposed successfully: " + success);
             insertID.setText("");
             fetchClaimData();
         } else if (result.get() == requestButton) {
