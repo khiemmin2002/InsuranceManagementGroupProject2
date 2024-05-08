@@ -112,12 +112,13 @@ public class ManagerHomepage extends SurveyorHomepage{
         sortPerson.setOnAction(sortByPerson);
         sortCard.setOnAction(sortByCard);
         refreshData.setOnAction(refreshClaimData);
+        logout.setOnAction(logoutClick);
         managerName.setText("Welcome Insurance Manager " + LoginData.usernameLogin);
         //Call API to fetch claim data from database
         claimList = fetchClaimData();
         fetchSurveyorData();
-
     }
+    EventHandler<ActionEvent> logoutClick = (ActionEvent ) -> LoginData.logOut(logout);
     EventHandler<ActionEvent> refreshClaimData = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent actionEvent) {
