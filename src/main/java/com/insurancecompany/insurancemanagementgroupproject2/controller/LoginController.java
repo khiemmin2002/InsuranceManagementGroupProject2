@@ -104,7 +104,7 @@ public class LoginController {
     public void loadAdminHomePage() {
         Stage currentStage = (Stage) usernameTextField.getScene().getWindow();
         currentStage.setTitle("Admin Portal");
-        SceneLoader.loadScene("fxml/admin-homepage.fxml", currentStage);
+        SceneLoader.loadSceneWithInput("fxml/admin-homepage.fxml", currentStage,900,600);
     }
 
     public void loadSurveyorHomePage() {
