@@ -2,6 +2,7 @@ package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.SceneLoader;
+import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -30,7 +31,7 @@ public class LoginController {
     private PasswordField passwordField;
 
     @FXML
-    public void loginButtonOnAction(ActionEvent event) {
+    public void loginButtonOnAction() {
         if (!usernameTextField.getText().isEmpty() && !passwordField.getText().isEmpty()) {
             validateLogin();
         } else {
@@ -59,9 +60,24 @@ public class LoginController {
                 int roleId = resultSet.getInt("role_id");
                 System.out.println(roleId);
                 switch (roleId) {
-                    case 1 -> loadAdminHomePage();
-                    case 2 -> loadSurveyorHomePage();
-                    case 3 -> loadManagerHomePage();
+                    case 1 -> {
+                        LoginData.usernameLogin = usernameTextField.getText();
+                        LoginData.roleId = roleId;
+                        loadAdminHomePage();
+                        System.out.println(LoginData.usernameLogin);
+                    }
+                    case 2 -> {
+                        LoginData.usernameLogin = usernameTextField.getText();
+                        LoginData.roleId = roleId;
+                        loadSurveyorHomePage();
+                        System.out.println(LoginData.usernameLogin);
+                    }
+                    case 3 -> {
+                        LoginData.usernameLogin = usernameTextField.getText();
+                        LoginData.roleId = roleId;
+                        loadManagerHomePage();
+                        System.out.println(LoginData.usernameLogin);
+                    }
                     default -> loginMessageLabel.setText("Unknown role!");
                 }
             } else {
@@ -81,6 +97,7 @@ public class LoginController {
 
     public void loadAdminHomePage() {
         Stage currentStage = (Stage) usernameTextField.getScene().getWindow();
+        currentStage.setTitle("Admin Portal");
         SceneLoader.loadScene("fxml/admin-homepage.fxml", currentStage);
     }
 

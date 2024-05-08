@@ -99,11 +99,12 @@ public class SurveyorHomepage {
         fetchClaimData();
     }
 
-    EventHandler<ActionEvent> fetchAllClick = _ -> fetchAllClaimData();
-    EventHandler<ActionEvent> fetchProposalClick = _ -> fetchStatusNewClaimData();
-    EventHandler<ActionEvent> sortByPerson = _ -> sortByClaimPerson();
-    EventHandler<ActionEvent> sortByCard = _ -> sortByClaimCard();
-    EventHandler<ActionEvent> refreshClaimData = _ -> fetchClaimData();
+    EventHandler<ActionEvent> fetchAllClick = (ActionEvent ) -> fetchAllClaimData();
+    EventHandler<ActionEvent> fetchProposalClick = (ActionEvent ) -> fetchStatusNewClaimData();
+    EventHandler<ActionEvent> sortByPerson = (ActionEvent ) -> sortByClaimPerson();
+    EventHandler<ActionEvent> sortByCard = (ActionEvent ) -> sortByClaimCard();
+    EventHandler<ActionEvent> refreshClaimData = (ActionEvent ) -> fetchClaimData();
+
 
     EventHandler<ActionEvent> fetchSingleClaimClick = new EventHandler<>() {
         @Override

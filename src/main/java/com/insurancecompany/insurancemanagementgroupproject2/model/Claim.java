@@ -2,7 +2,7 @@ package com.insurancecompany.insurancemanagementgroupproject2.model;
 
 import java.util.Date;
 
-public  class Claim {
+public class Claim {
 
     private String id;
     private String insuredPerson;
