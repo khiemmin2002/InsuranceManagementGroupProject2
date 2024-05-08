@@ -33,6 +33,7 @@
                 <TableColumn fx:id="bankNumber" prefWidth="75.0" text="Bank Number" />
             </columns>
         </TableView>
+      <Label fx:id="surveryorName" layoutX="281.0" layoutY="6.0" prefHeight="17.0" prefWidth="276.0" />
     </Pane>
    <Button fx:id="refreshData" contentDisplay="BOTTOM" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" text="Refresh" underline="true">
       <cursor>
