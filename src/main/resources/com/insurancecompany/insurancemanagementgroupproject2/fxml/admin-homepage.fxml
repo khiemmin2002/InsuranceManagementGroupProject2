@@ -11,6 +11,8 @@
 <?import javafx.scene.effect.Light.Distant?>
 <?import javafx.scene.effect.Lighting?>
 <?import javafx.scene.effect.Shadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
@@ -26,19 +28,18 @@
                <top>
                   <AnchorPane prefHeight="40.0" prefWidth="800.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: cyan;">
+                        <AnchorPane prefHeight="40.0" prefWidth="900.0" style="-fx-background-color: #6CEB88;">
                            <children>
-                              <Label layoutX="33.0" layoutY="2.0" prefHeight="36.0" prefWidth="114.0" text="Insurance Claim &#10;Management System" />
-                           </children></AnchorPane>
-                        <AnchorPane layoutX="180.0" prefHeight="40.0" prefWidth="720.0" style="-fx-background-color: cyan;">
-                           <children>
-                              <Label layoutY="12.0" text="Admin Dashboard" />
-                              <Label layoutX="468.0" layoutY="12.0" text="Welcome," />
-                              <Label fx:id="topUsername" layoutX="527.0" layoutY="12.0" text="Admin account name">
+                              <Label layoutX="28.0" layoutY="10.0" text="Admin Dashboard">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font></Label>
+                              <Label layoutX="605.0" layoutY="12.0" text="Welcome," />
+                              <Label fx:id="topUsername" layoutX="664.0" layoutY="12.0" text="Admin account name">
                                  <font>
                                     <Font name="System Bold" size="12.0" />
                                  </font></Label>
-                              <Button fx:id="logOutButtonOnAction" layoutX="648.0" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="58.0" text="Log out" />
+                              <Button fx:id="logOutButtonOnAction" layoutX="811.0" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="58.0" text="Log out" />
                            </children>
                         </AnchorPane>
                      </children>
@@ -372,27 +373,29 @@
                   </AnchorPane>
                </center>
                <left>
-                  <AnchorPane prefHeight="560.0" prefWidth="180.0" style="-fx-background-color: cyan;" BorderPane.alignment="CENTER">
+                  <AnchorPane prefHeight="587.0" prefWidth="180.0" style="-fx-background-color: #6CEB88;" BorderPane.alignment="CENTER">
                      <children>
-                        <Circle fill="DODGERBLUE" layoutX="90.0" layoutY="62.0" radius="30.0" stroke="BLACK" strokeType="INSIDE" />
-                        <Label layoutX="7.0" layoutY="101.0" text="Admin ID:" />
-                        <Label fx:id="navAdminid" layoutX="75.0" layoutY="101.0" text="C1000101">
+                        <Label layoutX="7.0" layoutY="152.0" text="Admin ID:" />
+                        <Label fx:id="navAdminid" layoutX="75.0" layoutY="152.0" text="C1000101">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Label>
-                        <Label layoutX="7.0" layoutY="127.0" text="Username:" />
-                        <Label fx:id="navUsername" layoutX="69.0" layoutY="127.0" text="admin1234" />
-                        <Label layoutX="9.0" layoutY="152.0" text="Fullname:" />
-                        <Label fx:id="navFullname" layoutX="65.0" layoutY="152.0" text="Nguyen Van A" />
-                        <Button fx:id="navMainDashboardBtn" layoutX="10.0" layoutY="244.0" mnemonicParsing="false" onAction="#switchDashboard" prefHeight="25.0" prefWidth="160.0" text="Main Dashboard" />
-                        <Button fx:id="navUsersBtn" layoutX="10.0" layoutY="278.0" mnemonicParsing="false" onAction="#switchDashboard" prefHeight="25.0" prefWidth="160.0" text="Users" />
-                        <Button fx:id="navInsuranceCardsBtn" layoutX="10.0" layoutY="315.0" mnemonicParsing="false" onAction="#switchDashboard" prefHeight="25.0" prefWidth="160.0" text="Insurance Cards" />
-                        <Button fx:id="navClaimsBtn" layoutX="10.0" layoutY="350.0" mnemonicParsing="false" onAction="#switchDashboard" prefWidth="160.0" text="Claims" />
-                        <Line endX="61.5" layoutX="109.0" layoutY="207.0" startX="-100.0" strokeWidth="3.0" />
-                        <Label layoutX="7.0" layoutY="218.0" text="Feature:" />
+                        <Label layoutX="7.0" layoutY="178.0" text="Username:" />
+                        <Label fx:id="navUsername" layoutX="69.0" layoutY="178.0" text="admin1234" />
+                        <Label layoutX="9.0" layoutY="203.0" text="Fullname:" />
+                        <Label fx:id="navFullname" layoutX="65.0" layoutY="203.0" text="Nguyen Van A" />
+                        <Button fx:id="navMainDashboardBtn" layoutX="10.0" layoutY="280.0" mnemonicParsing="false" onAction="#switchDashboard" prefHeight="25.0" prefWidth="160.0" text="Main Dashboard" />
+                        <Button fx:id="navUsersBtn" layoutX="10.0" layoutY="314.0" mnemonicParsing="false" onAction="#switchDashboard" prefHeight="25.0" prefWidth="160.0" text="Users" />
+                        <Button fx:id="navInsuranceCardsBtn" layoutX="10.0" layoutY="351.0" mnemonicParsing="false" onAction="#switchDashboard" prefHeight="25.0" prefWidth="160.0" text="Insurance Cards" />
+                        <Button fx:id="navClaimsBtn" layoutX="10.0" layoutY="386.0" mnemonicParsing="false" onAction="#switchDashboard" prefWidth="160.0" text="Claims" />
+                        <Line endX="61.5" layoutX="109.0" layoutY="241.0" startX="-100.0" strokeWidth="3.0" />
+                        <Label layoutX="6.0" layoutY="255.0" text="Feature:" />
                         <Label layoutX="9.0" layoutY="450.0" text="Profile:" />
                         <Button fx:id="navProfileBtn" layoutX="10.0" layoutY="475.0" mnemonicParsing="false" onAction="#switchDashboard" prefWidth="160.0" text="Profile" />
+                        <ImageView fitHeight="145.0" fitWidth="150.0" layoutX="15.0" pickOnBounds="true" preserveRatio="true">
+                           <Image url="@../images/David%20Goggins.jpg" />
+                        </ImageView>
                      </children>
                   </AnchorPane>
                </left>
