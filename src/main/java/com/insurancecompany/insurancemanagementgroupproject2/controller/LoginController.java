@@ -62,6 +62,7 @@ public class LoginController {
                     case 1 -> loadAdminHomePage();
                     case 2 -> loadSurveyorHomePage();
                     case 3 -> loadManagerHomePage();
+                    case 6 -> loadDependentHomePage();
                     default -> loginMessageLabel.setText("Unknown role!");
                 }
             } else {
@@ -91,5 +92,10 @@ public class LoginController {
     public void loadManagerHomePage() {
         Stage currentStage = (Stage) usernameTextField.getScene().getWindow();
         SceneLoader.loadScene("fxml/manager-homepage.fxml", currentStage);
+    }
+
+    public void loadDependentHomePage() {
+        Stage currentStage = (Stage) usernameTextField.getScene().getWindow();
+        SceneLoader.loadScene("fxml/dependent-homepage.fxml", currentStage);
     }
 }
