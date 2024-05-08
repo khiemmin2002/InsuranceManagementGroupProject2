@@ -4,6 +4,7 @@ package com.insurancecompany.insurancemanagementgroupproject2.controller;
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.HelloApplication;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
+import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Manager;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -88,6 +89,8 @@ public class PolicyHolderController {
     @FXML
     private Button btnUploadDocuments;
 
+    private String userName;
+
 
     private void setUpDeleteColumn() {
         deleteColumn.setCellFactory(new Callback<TableColumn<Claim, Void>, TableCell<Claim, Void>>() {
@@ -140,6 +143,7 @@ public class PolicyHolderController {
             bankNumber.setPrefWidth(tableWidth * 0.15);
             deleteColumn.setPrefWidth(tableWidth * 0.15);
         });
+        this.userName = LoginData.usernameLogin;
         setUpDeleteColumn();
         fetchClaimData();
     }
@@ -214,9 +218,11 @@ public class PolicyHolderController {
         ObservableList<Claim> claimData = FXCollections.observableArrayList();
 
         try {
-            String getClaimsQuery = "SELECT * FROM public.claims";
-            Statement statement = connection.createStatement();
-            ResultSet queryResult = statement.executeQuery(getClaimsQuery);
+            String getClaimsQuery = "SELECT * FROM public.claims WHERE insured_person = " +
+                    "(SELECT id FROM public.users WHERE user_name = ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(getClaimsQuery);
+            preparedStatement.setString(1, this.userName);
+            ResultSet queryResult = preparedStatement.executeQuery();
 
             while (queryResult.next()) {
                 Claim claim = new Claim();
@@ -243,6 +249,7 @@ public class PolicyHolderController {
             bankName.setCellValueFactory(new PropertyValueFactory<>("bankName"));
             bankUserName.setCellValueFactory(new PropertyValueFactory<>("bankUserName"));
             bankNumber.setCellValueFactory(new PropertyValueFactory<>("bankNumber"));
+
 
             claimTable.setItems(claimData); // Set the items to the TableView
         } catch (SQLException e) {

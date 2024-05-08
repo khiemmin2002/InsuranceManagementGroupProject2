@@ -79,6 +79,12 @@ public class LoginController {
                         loadManagerHomePage();
                         System.out.println(LoginData.usernameLogin);
                     }
+                    case 5 -> {
+                        LoginData.usernameLogin = usernameTextField.getText();
+                        LoginData.roleId = roleId;
+                        loadPolicyHolderHomePage();
+                        System.out.println(LoginData.usernameLogin);
+                    }
                     case 6 -> {
                         LoginData.usernameLogin = usernameTextField.getText();
                         LoginData.roleId = roleId;
