@@ -120,7 +120,6 @@ public class ManagerHomepage extends SurveyorHomepage{
         claimList = fetchClaimData();
         fetchSurveyorData();
     }
-    EventHandler<ActionEvent> logoutClick = (ActionEvent ) -> LoginData.logOut(logout);
     EventHandler<ActionEvent> refreshClaimData = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent actionEvent) {

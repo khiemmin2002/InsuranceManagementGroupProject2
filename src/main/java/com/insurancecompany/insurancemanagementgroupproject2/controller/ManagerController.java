@@ -18,32 +18,6 @@ public class ManagerController {
         this.connection = databaseConnection.getConnection();
     }
 
-    public List<Manager> fetchManager(){
-        List<Manager> managerList = new ArrayList<Manager>();
-        try {
-            String getManagerQuery = "SELECT * FROM users WHERE role_id = 3";
-            Statement statement = connection.createStatement();
-            ResultSet queryResult = statement.executeQuery(getManagerQuery);
-            while (queryResult.next()){
-                Manager manager = new Manager(
-                        queryResult.getString("id"),
-                        queryResult.getString("full_name"),
-                        queryResult.getString("user_name"),
-                        queryResult.getString("email"),
-                        queryResult.getString("phone_number"),
-                        queryResult.getString("password"),
-                        queryResult.getString("address"),
-                        queryResult.getInt("role_id")
-                );
-                managerList.add(manager);
-            }
-            System.out.println("Fetch data from database.users successfully!");
-        }catch (SQLException e){
-            System.out.println("SQL exception: " + e);
-        }
-        return managerList;
-    }
-
     public boolean createNewManager(String id, String full_name, String user_name, String password, String email, String phone_number, String address){
         try{
             String insertSurveyor = "INSERT INTO users VALUES (?,?,?,?, 3,?,?,?)";
@@ -60,38 +34,6 @@ public class ManagerController {
             return true;
         }catch (SQLException e){
             System.out.println("SQL exception from SurveyorController.createNewSurveyor: " + e);
-            return false;
-        }
-    }
-
-    public boolean updateSurveyorInformation(String id,String full_name, String email, String phone_number, String address){
-        try{
-            String updateSurveyor = "UPDATE users SET full_name = ?, email = ?, phone_number = ?, address = ? WHERE id = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(updateSurveyor);
-            preparedStatement.setString(1,full_name);
-            preparedStatement.setString(2,email);
-            preparedStatement.setString(3,phone_number);
-            preparedStatement.setString(4,address);
-            preparedStatement.setString(5,id);
-            preparedStatement.execute();
-            System.out.println("Updated manager at id " + id);
-            return true;
-        }catch (SQLException e){
-            System.out.println("SQL exception from SurveyourController.updateSurveyor: " + e);
-            return false;
-        }
-    }
-
-    public boolean removeSurveyor(String id){
-        try{
-            String updateSurveyor = "DELETE FROM users WHERE id = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(updateSurveyor);
-            preparedStatement.setString(1,id);
-            preparedStatement.execute();
-            System.out.println("Delete manager of id " + id);
-            return true;
-        }catch (SQLException e){
-            System.out.println("SQL exception from SurveyourController.updateSurveyor: " + e);
             return false;
         }
     }
