@@ -282,7 +282,7 @@ public class ClaimController {
         DatabaseConnection databaseConnection = new DatabaseConnection();
         Connection connection = databaseConnection.getConnection();
         try{
-            String rejectClaim = "UPDATE claims SET status = 'REJECT' WHERE claim_id = ?";
+            String rejectClaim = "UPDATE claims SET status = 'REJECT', claim_date = CURRENT_DATE WHERE claim_id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(rejectClaim);
             preparedStatement.setString(1,claimID);
             preparedStatement.execute();
