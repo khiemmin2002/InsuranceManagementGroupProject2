@@ -78,6 +78,12 @@ public class LoginController {
                         loadManagerHomePage();
                         System.out.println(LoginData.usernameLogin);
                     }
+                    case 6 -> {
+                        LoginData.usernameLogin = usernameTextField.getText();
+                        LoginData.roleId = roleId;
+                        loadDependentHomePage();
+                        System.out.println(LoginData.usernameLogin);
+                    }
                     default -> loginMessageLabel.setText("Unknown role!");
                 }
             } else {
@@ -108,5 +114,10 @@ public class LoginController {
     public void loadManagerHomePage() {
         Stage currentStage = (Stage) usernameTextField.getScene().getWindow();
         SceneLoader.loadScene("fxml/manager-homepage.fxml", currentStage);
+    }
+
+    public void loadDependentHomePage() {
+        Stage currentStage = (Stage) usernameTextField.getScene().getWindow();
+        SceneLoader.loadScene("fxml/dependent-homepage.fxml", currentStage);
     }
 }

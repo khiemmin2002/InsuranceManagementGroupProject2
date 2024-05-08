@@ -1,7 +1,9 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
+import com.insurancecompany.insurancemanagementgroupproject2.model.Manager;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Surveyor;
+import com.insurancecompany.insurancemanagementgroupproject2.model.User;
 
 import java.sql.*;
 import java.util.*;
@@ -15,28 +17,30 @@ public class ManagerController {
         this.connection = databaseConnection.getConnection();
     }
 
-    public List<Surveyor> fetchManager(){
-        List<Surveyor> surveyorList = new ArrayList<Surveyor>();
+    public List<Manager> fetchManager(){
+        List<Manager> managerList = new ArrayList<Manager>();
         try {
-            String getSurveyorQuery = "SELECT id,full_name,user_name,email,phone_number FROM users WHERE role_id = 3";
+            String getManagerQuery = "SELECT * FROM users WHERE role_id = 3";
             Statement statement = connection.createStatement();
-            ResultSet queryResult = statement.executeQuery(getSurveyorQuery);
-            //Extract result and put it into local arraylist
+            ResultSet queryResult = statement.executeQuery(getManagerQuery);
             while (queryResult.next()){
-                Surveyor provider = new Surveyor(
+                Manager manager = new Manager(
                         queryResult.getString("id"),
                         queryResult.getString("full_name"),
                         queryResult.getString("user_name"),
                         queryResult.getString("email"),
-                        queryResult.getString("phone_number")
+                        queryResult.getString("phone_number"),
+                        queryResult.getString("password"),
+                        queryResult.getString("address"),
+                        queryResult.getInt("role_id")
                 );
-                surveyorList.add(provider);
+                managerList.add(manager);
             }
             System.out.println("Fetch data from database.users successfully!");
         }catch (SQLException e){
             System.out.println("SQL exception: " + e);
         }
-        return surveyorList;
+        return managerList;
     }
 
     public boolean createNewManager(String id, String full_name, String user_name, String password, String email, String phone_number, String address){

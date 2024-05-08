@@ -26,7 +26,7 @@ public class ManagerHomepage extends SurveyorHomepage{
     @FXML
     private Label errorLabel;
     @FXML
-    private TextField insertID;
+    private ChoiceBox<String> claimChoiceBox;
     @FXML
     private Button sortPerson;
     @FXML
@@ -105,13 +105,14 @@ public class ManagerHomepage extends SurveyorHomepage{
         // Set event handlers for buttons
         fetchAllClaimButton.setOnAction(fetchAllClick);
         fetchProposableClaimButton.setOnAction(fetchProposalClick);
-        fetchSingleClaimButton.setOnAction(fetchSingleClaimClick);
+        fetchSingleClaimButton.setOnAction(approveClaimClick);
         sortPerson.setOnAction(sortByPerson);
         sortCard.setOnAction(sortByCard);
         refreshData.setOnAction(refreshClaimData);
         //Call API to fetch claim data from database
         claimList = fetchClaimData();
         fetchSurveyorData();
+
     }
     EventHandler<ActionEvent> refreshClaimData = new EventHandler<ActionEvent>() {
         @Override
@@ -120,10 +121,39 @@ public class ManagerHomepage extends SurveyorHomepage{
             fetchSurveyorData();
         }
     };
+    EventHandler<ActionEvent> approveClaimClick = new EventHandler<>() {
+        @Override
+        public void handle(ActionEvent actionEvent) {
+            if (claimChoiceBox.getValue() == null) {
+                errorLabel.setText("Cannot approve empty claim!");
+            } else {
+                fetchSingleClaim(claimChoiceBox.getValue());
+            }
+        }
+    };
     public void fetchSurveyorData(){
         ObservableList<Surveyor> surveyorObservableList = FXCollections.observableArrayList();
         surveyorObservableList.addAll(surveyorController.fetchSurveyor());
         surveyorTable.setItems(surveyorObservableList);
+    }
+
+    @Override
+    public List<Claim> fetchClaimData() {
+        //Create ObservableList for TableView
+        ObservableList<Claim> claimData = FXCollections.observableArrayList();
+        ObservableList<String> processingClaimID = FXCollections.observableArrayList();
+        claimList = ClaimController.fetchClaim();
+        //Handling SQL exception by surrounding try catch
+        claimData.addAll(claimList);
+        //Set view table
+        claimTable.setItems(claimData);
+        for (Claim claim : claimList){
+            if(claim.getStatus().equals("PROCESSING")){
+                processingClaimID.add(claim.getId());
+            }
+        }
+        claimChoiceBox.setItems(processingClaimID);
+        return claimList;
     }
 
     @Override
@@ -160,18 +190,19 @@ public class ManagerHomepage extends SurveyorHomepage{
             //Handle proposing a claim to manager
             boolean success = ClaimController.approveClaim(claimID);
             System.out.println("Claim " + claimID + " approved successfully: " + success);
-            insertID.setText("");
+            claimChoiceBox.setValue(null);
             fetchClaimData();
         } else if (result.get() == denyButton) {
             // Handle requesting more information from a claim
             boolean success = ClaimController.rejectClaim(claimID);
             System.out.println("Claim " + claimID + " denied: " + success);
-            insertID.setText("");
+            claimChoiceBox.setValue(null);
             fetchClaimData();
         }else {
             //Handle cancellation of operation
-            insertID.setText("");
+            claimChoiceBox.setValue(null);
             System.out.println("Claim proposing cancelled.");
+            fetchAllClaimData();
         }
     }
 }

@@ -85,8 +85,6 @@ public class ClaimController {
     @FXML
     void confirmAddClaim(ActionEvent event)  {
         String claimId = generateRandomClaimID();
-        currentClaimId = claimId;
-
         String cardNumber = cardNumberInput.getText();
         String claimAmountText = claimAmountInput.getText();
         String insuredPerson = insuredPersonInput.getText();
@@ -209,7 +207,6 @@ public class ClaimController {
         }
         return name.substring(lastIndexOf);
     }
-
         public static List<Claim> fetchClaim() {
             DatabaseConnection databaseConnection = new DatabaseConnection();
             Connection connection = databaseConnection.getConnection();
@@ -255,51 +252,55 @@ public class ClaimController {
             }
         }
 
-        public static boolean resubmitClaim (String claimID){
-            DatabaseConnection databaseConnection = new DatabaseConnection();
-            Connection connection = databaseConnection.getConnection();
-            try {
-                String resubmitClaim = "UPDATE claims SET status = 'RESUBMIT', exam_date = NULL  WHERE claim_id = ?";
-                PreparedStatement preparedStatement = connection.prepareStatement(resubmitClaim);
-                preparedStatement.setString(1, claimID);
-                preparedStatement.execute();
-                System.out.println("Successfully resubmit claim " + claimID);
-                return true;
-            } catch (SQLException e) {
-                System.out.println("Error in SQL function resubmitClaim: " + e);
-                return false;
-            }
-        }
 
-        public static boolean rejectClaim (String claimID){
-            DatabaseConnection databaseConnection = new DatabaseConnection();
-            Connection connection = databaseConnection.getConnection();
-            try {
-                String rejectClaim = "UPDATE claims SET status = 'REJECT' WHERE claim_id = ?";
-                PreparedStatement preparedStatement = connection.prepareStatement(rejectClaim);
-                preparedStatement.setString(1, claimID);
-                preparedStatement.execute();
-                System.out.println("Successfully reject claim " + claimID);
-                return true;
-            } catch (SQLException e) {
-                System.out.println("Error in SQL function rejectClaim: " + e);
-                return false;
-            }
-        }
-
-        public static boolean approveClaim (String claimID){
-            DatabaseConnection databaseConnection = new DatabaseConnection();
-            Connection connection = databaseConnection.getConnection();
-            try {
-                String approveClaim = "UPDATE claims SET status = 'DONE', claim_date = CURRENT_DATE WHERE claim_id = ?";
-                PreparedStatement preparedStatement = connection.prepareStatement(approveClaim);
-                preparedStatement.setString(1, claimID);
-                preparedStatement.execute();
-                System.out.println("Successfully approve claim " + claimID);
-                return true;
-            } catch (SQLException e) {
-                System.out.println("Error in SQL function approveClaim: " + e);
-                return false;
-            }
+    public static boolean resubmitClaim(String claimID){
+        //Database connection
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        Connection connection = databaseConnection.getConnection();
+        try{
+            String resubmitClaim = "UPDATE claims SET status = 'RESUBMIT', exam_date = NULL  WHERE claim_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(resubmitClaim);
+            preparedStatement.setString(1,claimID);
+            preparedStatement.execute();
+            System.out.println("Successfully resubmit claim " + claimID);
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Error in SQL function resubmitClaim: " + e);
+            return false;
         }
     }
+
+    public static boolean rejectClaim(String claimID){
+        //Database connection
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        Connection connection = databaseConnection.getConnection();
+        try{
+            String rejectClaim = "UPDATE claims SET status = 'REJECT', claim_date = CURRENT_DATE WHERE claim_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(rejectClaim);
+            preparedStatement.setString(1,claimID);
+            preparedStatement.execute();
+            System.out.println("Successfully reject claim " + claimID);
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Error in SQL function rejectClaim: " + e);
+            return false;
+        }
+    }
+
+    public static boolean approveClaim(String claimID){
+        //Database connection
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        Connection connection = databaseConnection.getConnection();
+        try{
+            String approveClaim = "UPDATE claims SET status = 'DONE', claim_date = CURRENT_DATE WHERE claim_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(approveClaim);
+            preparedStatement.setString(1,claimID);
+            preparedStatement.execute();
+            System.out.println("Successfully approve claim " + claimID);
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Error in SQL function approveClaim: " + e);
+            return false;
+        }
+    }
+}
