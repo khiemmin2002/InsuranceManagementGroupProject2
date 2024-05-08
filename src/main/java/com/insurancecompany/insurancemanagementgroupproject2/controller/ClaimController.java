@@ -81,12 +81,12 @@ public class ClaimController {
 
 
     private String currentClaimId;
-
-
+    
 
     @FXML
     void confirmAddClaim(ActionEvent event)  {
         String claimId = generateRandomClaimID();
+
 
         String cardNumber = cardNumberInput.getText();
         String claimAmountText = claimAmountInput.getText();
@@ -96,16 +96,12 @@ public class ClaimController {
         String bankNumber = bankNumberField.getText();
 
         if (cardNumber.isEmpty() || claimAmountText.isEmpty() || insuredPerson.isEmpty()) {
-            if (cardNumber.isEmpty() || claimAmountText.isEmpty() || insuredPerson.isEmpty()) {
-                System.out.println("Debug: cardNumber: " + cardNumber);
-                System.out.println("Debug: claimAmountText: " + claimAmountText);
-                System.out.println("Debug: insuredPerson: " + insuredPerson);
-                validationMessage.setText("Please fill in all fields");
-                return;
-            }
-
-            validationMessage.setText("Please fill in all field");
+            System.out.println("Debug: cardNumber: " + cardNumber);
+            System.out.println("Debug: claimAmountText: " + claimAmountText);
+            System.out.println("Debug: insuredPerson: " + insuredPerson);
+            validationMessage.setText("Please fill in all fields");
             return;
+
         }
         double claimAmount = Double.parseDouble(claimAmountText);
         DatabaseConnection databaseConnection = new DatabaseConnection();
@@ -225,53 +221,52 @@ public class ClaimController {
         return name.substring(lastIndexOf);
     }
 
-    public static List<Claim> fetchClaim(){
-        //Create new instance of DatabaseConnection class
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        Connection connection = databaseConnection.getConnection();
-        List<Claim> claimList = new ArrayList<Claim>();
-        try {
-            String getClaimsQuery = "SELECT * FROM claims";
-            Statement statement = connection.createStatement();
-            ResultSet queryResult = statement.executeQuery(getClaimsQuery);
-            //Extract result and put it into local arraylist
-            while (queryResult.next()) {
-                Claim claim = new Claim();
-                claim.setId(queryResult.getString("claim_id"));
-                claim.setInsuredPerson(queryResult.getString("insured_person"));
-                claim.setCardNumber(queryResult.getString("card_number"));
-                claim.setExamDate(queryResult.getDate("exam_date"));
-                claim.setClaimDate(queryResult.getDate("claim_date"));
-                claim.setClaimAmount(queryResult.getFloat("claim_amount"));
-                claim.setStatus(queryResult.getString("status"));
-                claim.setBankName(queryResult.getString("bank_name"));
-                claim.setBankUserName(queryResult.getString("bank_user_name"));
-                claim.setBankNumber(queryResult.getString("bank_number"));
-                claimList.add(claim);
-            }
-            System.out.println("Fetch data from database.claim successfully!");
-        } catch (SQLException e) {
-            System.out.println("SQL error: " + e);
-        }
-        return claimList;
-    }
+        public static List<Claim> fetchClaim() {
+            DatabaseConnection databaseConnection = new DatabaseConnection();
+            Connection connection = databaseConnection.getConnection();
+            List<Claim> claimList = new ArrayList<Claim>();
+            try {
+                String getClaimsQuery = "SELECT * FROM claims";
+                Statement statement = connection.createStatement();
+                ResultSet queryResult = statement.executeQuery(getClaimsQuery);
+                while (queryResult.next()) {
+                    Claim claim = new Claim();
+                    claim.setId(queryResult.getString("claim_id"));
+                    claim.setInsuredPerson(queryResult.getString("insured_person"));
+                    claim.setCardNumber(queryResult.getString("card_number"));
+                    claim.setExamDate(queryResult.getDate("exam_date"));
+                    claim.setClaimDate(queryResult.getDate("claim_date"));
+                    claim.setClaimAmount(queryResult.getFloat("claim_amount"));
+                    claim.setStatus(queryResult.getString("status"));
+                    claim.setBankName(queryResult.getString("bank_name"));
+                    claim.setBankUserName(queryResult.getString("bank_user_name"));
+                    claim.setBankNumber(queryResult.getString("bank_number"));
+                    claimList.add(claim);
+                }
+                System.out.println("Fetch data from database.claim successfully!");
+            } catch (SQLException e) {
+                System.out.println("SQL error: " + e);
 
-    public static boolean proposeClaim(String claimID){
-        //Database connection
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        Connection connection = databaseConnection.getConnection();
-        try{
-            String proposeClaim = "UPDATE claims SET status = 'PROCESSING', exam_date = CURRENT_DATE WHERE claim_id = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(proposeClaim);
-            preparedStatement.setString(1,claimID);
-            preparedStatement.execute();
-            System.out.println("Successfully propose claim " + claimID);
-            return true;
-        } catch (SQLException e) {
-            System.out.println("Error in SQL function proposeClaim: " + e);
-            return false;
+            }
+            return claimList;
         }
-    }
+
+        public static boolean proposeClaim (String claimID){
+            DatabaseConnection databaseConnection = new DatabaseConnection();
+            Connection connection = databaseConnection.getConnection();
+            try {
+                String proposeClaim = "UPDATE claims SET status = 'PROCESSING', exam_date = CURRENT_DATE WHERE claim_id = ?";
+                PreparedStatement preparedStatement = connection.prepareStatement(proposeClaim);
+                preparedStatement.setString(1, claimID);
+                preparedStatement.execute();
+                System.out.println("Successfully propose claim " + claimID);
+                return true;
+            } catch (SQLException e) {
+                System.out.println("Error in SQL function proposeClaim: " + e);
+                return false;
+            }
+        }
+
 
     public static boolean resubmitClaim(String claimID){
         //Database connection
@@ -295,7 +290,7 @@ public class ClaimController {
         DatabaseConnection databaseConnection = new DatabaseConnection();
         Connection connection = databaseConnection.getConnection();
         try{
-            String rejectClaim = "UPDATE claims SET status = 'REJECT' WHERE claim_id = ?";
+            String rejectClaim = "UPDATE claims SET status = 'REJECT', claim_date = CURRENT_DATE WHERE claim_id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(rejectClaim);
             preparedStatement.setString(1,claimID);
             preparedStatement.execute();
@@ -323,6 +318,5 @@ public class ClaimController {
             return false;
         }
     }
-
 
 }

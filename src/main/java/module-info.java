@@ -12,4 +12,7 @@ module com.insurancecompany.insurancemanagementgroupproject2 {
     exports com.insurancecompany.insurancemanagementgroupproject2;
     exports com.insurancecompany.insurancemanagementgroupproject2.controller;
     exports com.insurancecompany.insurancemanagementgroupproject2.Views;
+
+    exports com.insurancecompany.insurancemanagementgroupproject2.model;
 }
+
