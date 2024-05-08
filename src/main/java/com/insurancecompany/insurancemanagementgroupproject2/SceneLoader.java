@@ -12,8 +12,16 @@ public class SceneLoader {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(SceneLoader.class.getResource(fxmlPath));
             Parent root = fxmlLoader.load();
-            System.out.println(root);
             stage.setScene(new Scene(root, 800, 600));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void loadSceneWithInput(String fxmlPath, Stage stage, double width, double height) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(SceneLoader.class.getResource(fxmlPath));
+            Parent root = fxmlLoader.load();
+            stage.setScene(new Scene(root, width, height));
         } catch (IOException e) {
             e.printStackTrace();
         }
