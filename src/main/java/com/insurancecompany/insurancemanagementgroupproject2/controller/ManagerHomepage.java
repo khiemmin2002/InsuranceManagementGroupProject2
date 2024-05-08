@@ -1,8 +1,6 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
-import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
-import com.insurancecompany.insurancemanagementgroupproject2.model.Provider;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Surveyor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,10 +10,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.*;
 
 public class ManagerHomepage extends SurveyorHomepage{

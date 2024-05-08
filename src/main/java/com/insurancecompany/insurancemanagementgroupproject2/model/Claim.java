@@ -11,11 +11,8 @@ public class Claim {
     private Date claimDate;
     private double claimAmount;
     private String status;
-
     private String bankName;
-
     private String bankUserName;
-
     private String bankNumber;
 
     public Claim() {
@@ -30,7 +27,6 @@ public class Claim {
         this.bankUserName = "";
         this.bankNumber = "";
     }
-
     public Claim(String insuredPerson, String cardNumber, Date examDate, Date claimDate, double claimAmount, String status, String bankName, String bankUserName, String bankNumber) {
         this.insuredPerson = insuredPerson;
         this.cardNumber = cardNumber;
@@ -42,7 +38,6 @@ public class Claim {
         this.bankUserName = bankUserName;
         this.bankNumber = bankNumber;
     }
-
 
     public String getId() {
         return id;
