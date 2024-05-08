@@ -51,8 +51,6 @@ public class PolicyHolderController {
     @FXML
     private TableView<Claim> claimTable;
 
-    @FXML
-    private MenuItem deleteClaim;
 
     @FXML
     private TableColumn<?, ?> bankName;
@@ -93,37 +91,72 @@ public class PolicyHolderController {
 
 
     private void setUpDeleteColumn() {
-        deleteColumn.setCellFactory(new Callback<TableColumn<Claim, Void>, TableCell<Claim, Void>>() {
+        deleteColumn.setCellFactory(param -> new TableCell<Claim, Void>() {
+            private final Button btn = new Button("Delete");
+            {
+                btn.setOnAction(event -> {
+                    Claim claim = getTableView().getItems().get(getIndex());
+                    if (claim != null) {
+                        deleteClaim(claim);
+                    }
+                });
+            }
             @Override
-            public TableCell<Claim, Void> call(final TableColumn<Claim, Void> param) {
-                return new TableCell<Claim, Void>() {
-                    private final Button btn = new Button("Delete");
-
-                    {
-                        btn.setOnAction((ActionEvent event) -> {
-                            Claim claim = getTableView().getItems().get(getIndex());
-                            deleteClaim(claim);
-                        });
-                    }
-
-                    @Override
-                    public void updateItem(Void item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setGraphic(null);
-                        } else {
-                            setGraphic(btn);
-                        }
-                    }
-                };
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(btn);
+                }
             }
         });
     }
-
-    private void deleteClaim(Claim claim) {
-        ObservableList<Claim> allClaims = claimTable.getItems();
-        allClaims.remove(claim);
+    private void showAlert(boolean success, String message) {
+        Alert.AlertType type = success ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR;
+        Alert alert = new Alert(type);
+        alert.setTitle(success ? "Success" : "Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
+
+    private void deleteClaim(Claim claim)  {
+        if (claim == null) {
+            showAlert(false, "No claim selected for deletion. ");
+            return;
+        }
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        Connection connection = databaseConnection.getConnection();
+        String deleteQuery = "DELETE FROM public.claims WHERE claim_id = ?";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)){
+            preparedStatement.setString(1, claim.getId());
+            int affectedRows = preparedStatement.executeUpdate();
+
+            if (affectedRows > 0) {
+                ObservableList<Claim> allClaims = claimTable.getItems();
+                allClaims.remove(claim);
+                showAlert(true, "Claim deleted successfully. ");
+
+            } else {
+                showAlert(false, "No claim was deleted. Claim might not exist.");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            showAlert(false, "Error deleting claim: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                showAlert(false, "Error closing database connection: " + e.getMessage());
+                System.out.println(e.getMessage());
+                e.printStackTrace();
+            }
+        }
+
+    }
+
 
     @FXML
     private void initialize() {
@@ -163,10 +196,7 @@ public class PolicyHolderController {
 
     }
 
-    @FXML
-    private void deleteClaim() {
 
-    }
     @FXML
     void clearInputData(ActionEvent event) {
         inputClaimId.clear();

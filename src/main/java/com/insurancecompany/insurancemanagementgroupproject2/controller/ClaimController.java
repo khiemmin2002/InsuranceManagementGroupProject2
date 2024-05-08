@@ -128,7 +128,7 @@ public class ClaimController {
             clearInputFields();
         } catch (SQLException e) {
             validationMessage.setText("Error: Unable to add claim. Please try again.");
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
     @FXML
