@@ -26,6 +26,8 @@ public class SurveyorHomepage {
     @FXML
     public Label surveryorName;
     @FXML
+    public Button logout;
+    @FXML
     private TableView<Claim> claimTable;
     @FXML
     private Button fetchAllClaimButton;
@@ -98,6 +100,7 @@ public class SurveyorHomepage {
         sortPerson.setOnAction(sortByPerson);
         sortCard.setOnAction(sortByCard);
         refreshData.setOnAction(refreshClaimData);
+        logout.setOnAction(logoutClick);
         surveryorName.setText("Welcome Insurance Surveyor " + LoginData.usernameLogin);
         //Call API to fetch claim data from database
         fetchClaimData();
@@ -108,7 +111,7 @@ public class SurveyorHomepage {
     EventHandler<ActionEvent> sortByPerson = (ActionEvent ) -> sortByClaimPerson();
     EventHandler<ActionEvent> sortByCard = (ActionEvent ) -> sortByClaimCard();
     EventHandler<ActionEvent> refreshClaimData = (ActionEvent ) -> fetchClaimData();
-
+    EventHandler<ActionEvent> logoutClick = (ActionEvent ) -> LoginData.logOut(logout);
 
     EventHandler<ActionEvent> fetchSingleClaimClick = new EventHandler<>() {
         @Override

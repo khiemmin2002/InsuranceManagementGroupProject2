@@ -230,6 +230,7 @@ public class ClaimController {
                     claimList.add(claim);
                 }
                 System.out.println("Fetch data from database.claim successfully!");
+                connection.close();
             } catch (SQLException e) {
                 System.out.println("SQL error: " + e);
             }
@@ -245,6 +246,7 @@ public class ClaimController {
                 preparedStatement.setString(1, claimID);
                 preparedStatement.execute();
                 System.out.println("Successfully propose claim " + claimID);
+                connection.close();
                 return true;
             } catch (SQLException e) {
                 System.out.println("Error in SQL function proposeClaim: " + e);
@@ -263,6 +265,7 @@ public class ClaimController {
             preparedStatement.setString(1,claimID);
             preparedStatement.execute();
             System.out.println("Successfully resubmit claim " + claimID);
+            connection.close();
             return true;
         } catch (SQLException e) {
             System.out.println("Error in SQL function resubmitClaim: " + e);
@@ -280,6 +283,7 @@ public class ClaimController {
             preparedStatement.setString(1,claimID);
             preparedStatement.execute();
             System.out.println("Successfully reject claim " + claimID);
+            connection.close();
             return true;
         } catch (SQLException e) {
             System.out.println("Error in SQL function rejectClaim: " + e);
@@ -297,6 +301,7 @@ public class ClaimController {
             preparedStatement.setString(1,claimID);
             preparedStatement.execute();
             System.out.println("Successfully approve claim " + claimID);
+            connection.close();
             return true;
         } catch (SQLException e) {
             System.out.println("Error in SQL function approveClaim: " + e);
