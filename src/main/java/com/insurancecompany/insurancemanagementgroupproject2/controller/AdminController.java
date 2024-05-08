@@ -18,10 +18,7 @@ import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -185,7 +182,10 @@ public class AdminController implements Initializable {
     private TextField editFormClaimBankNumber;
     @FXML
     private TextField editFormClaimTotalDocument;
-
+    @FXML
+    private Button editFormClaimConfirmBtn;
+    @FXML
+    private Button editFormClaimCancelBtn;
 
     //Insurance Card Dashboard
     @FXML
@@ -373,6 +373,7 @@ public class AdminController implements Initializable {
     }
 
     //Insurance Card Dashboard
+
     @FXML
     private void deleteInsuranceCardInformation(InsuranceCard selectedInsuranceCard){
         if (selectedInsuranceCard != null) {
@@ -393,9 +394,7 @@ public class AdminController implements Initializable {
             }
         }
     }
-    @FXML
-    private void updateInsuranceCardInformation() throws ParseException {
-        InsuranceCard selectedInsuranceCard = insuranceCardTableView.getSelectionModel().getSelectedItem();
+    private void updateInsuranceCardInformation(InsuranceCard selectedInsuranceCard) throws ParseException {
         if (selectedInsuranceCard != null) {
             String cardNumber = selectedInsuranceCard.getCard_number();
             String expDate = editFormInsuranceExpDate.getText();
@@ -471,6 +470,13 @@ public class AdminController implements Initializable {
                         editButton.setOnAction(event -> {
                             InsuranceCard selectedInsuranceCard = getTableView().getItems().get(getIndex());
                             selectInsuranceCardRow(selectedInsuranceCard);
+                            editFormInsuranceConfirmBtn.setOnAction(event1 -> {
+                                try {
+                                    updateInsuranceCardInformation(selectedInsuranceCard);
+                                } catch (ParseException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            });
                             System.out.println(selectedInsuranceCard.getCard_number());
                         });
 
@@ -512,16 +518,101 @@ public class AdminController implements Initializable {
     }
 
     //Claim Dashboard
+    private void updateClaimInformation(Claim selectedClaim) {
+        String claimId = selectedClaim.getClaimId();
+        String claimDate = editFormClaimDate.getText();
+        String examDate = editFormClaimExam.getText();
+        String amount = editFormClaimAmount.getText();
+        String status = editFormClaimStatus.getText();
+        String bankName = editFormClaimBankName.getText();
+        String bankUser = editFormClaimBankUser.getText();
+        String bankNumber = editFormClaimBankNumber.getText();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date parsedClaimDate = null;
+        java.util.Date parsedExamDate = null;
+        java.sql.Date sqlClaimDate = null;
+        java.sql.Date sqlExamDate = null;
+
+        try {
+            if (claimDate != null && !claimDate.isEmpty()) {
+                parsedClaimDate = sdf.parse(claimDate);
+                sqlClaimDate = new java.sql.Date(parsedClaimDate.getTime());
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        try {
+            if (examDate != null && !examDate.isEmpty()) {
+                parsedExamDate = sdf.parse(examDate);
+                sqlExamDate = new java.sql.Date(parsedExamDate.getTime());
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        float claimAmount;
+        try {
+            claimAmount = Float.parseFloat(amount);
+        } catch (NumberFormatException | NullPointerException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        try {
+            String updateQuery = "UPDATE claims SET claim_date=?, exam_date=?, claim_amount=?, status=?, bank_name=?, bank_user_name=?, bank_number=? WHERE claim_id=?";
+            try (PreparedStatement statement = connection.prepareStatement(updateQuery)) {
+                if (sqlClaimDate != null) statement.setDate(1, sqlClaimDate);
+                else statement.setNull(1, Types.DATE);
+                if (sqlExamDate != null) statement.setDate(2, sqlExamDate);
+                else statement.setNull(2, Types.DATE);
+                statement.setFloat(3, claimAmount);
+                statement.setString(4, status);
+                statement.setString(5, bankName);
+                statement.setString(6, bankUser);
+                statement.setString(7, bankNumber);
+                statement.setString(8, claimId);
+
+                int rowsUpdated = statement.executeUpdate();
+                if (rowsUpdated > 0) {
+                    System.out.println("Claim information updated successfully!");
+                    selectedClaim.setClaimDate(sqlClaimDate);
+                    selectedClaim.setExamDate(sqlExamDate);
+                    selectedClaim.setClaimAmount(claimAmount);
+                    selectedClaim.setStatus(status);
+                    selectedClaim.setBankName(bankName);
+                    selectedClaim.setBankUser(bankUser);
+                    selectedClaim.setBankNumber(bankNumber);
+                    claimTableView.refresh();
+                    if (sqlClaimDate != null) editFormClaimDate.setText(String.valueOf(sqlClaimDate));
+                    if (sqlExamDate != null) editFormClaimExam.setText(String.valueOf(sqlExamDate));
+                    editFormClaimAmount.setText(String.valueOf(claimAmount));
+                    editFormClaimStatus.setText(status);
+                    editFormClaimBankName.setText(bankName);
+                    editFormClaimBankUser.setText(bankUser);
+                    editFormClaimBankNumber.setText(bankNumber);
+                    editFormClaimInformation.setVisible(false);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     void editFormClaimCancelBtnOnAction() {
         editFormClaimInformation.setVisible(false);
     }
+
     private void selectClaimRow(Claim selectedClaim){
         try {
             if (selectedClaim != null) {
                 editFormClaimId.setText(selectedClaim.getClaimId());
-                editFormClaimDate.setText(String.valueOf(selectedClaim.getClaimDate()));
-                editFormClaimExam.setText(String.valueOf(selectedClaim.getExamDate()));
+                editFormClaimDate.setText(selectedClaim.getClaimDate() != null ? selectedClaim.getClaimDate().toString() : null);
+                editFormClaimExam.setText(selectedClaim.getExamDate() != null ? selectedClaim.getExamDate().toString() : null);
                 editFormClaimInsuredPerson.setText(getNameForUser(selectedClaim.getInsuredPerson()));
                 editFormClaimCardNumber.setText(selectedClaim.getCardNumber());
                 editFormClaimAmount.setText(String.valueOf(selectedClaim.getClaimAmount()));
@@ -535,6 +626,7 @@ public class AdminController implements Initializable {
             e.printStackTrace();
         }
     }
+
     private void deleteClaimInformation(Claim selectedClaim) {
         if (selectedClaim != null) {
             try {
@@ -554,6 +646,7 @@ public class AdminController implements Initializable {
             }
         }
     }
+
     private void displayClaimDashboardTableView() {
         claimColClaimId.setCellValueFactory(new PropertyValueFactory<>("claimId"));
         claimColInsuredPerson.setCellValueFactory(cellData -> {
@@ -570,6 +663,7 @@ public class AdminController implements Initializable {
 
         claimTableView.setItems(claimObservableList);
     }
+
     private Callback<TableColumn<Claim, Void>, TableCell<Claim, Void>> createClaimActionCellFactory() {
         return new Callback<TableColumn<Claim, Void>, TableCell<Claim, Void>>() {
             @Override
@@ -580,8 +674,11 @@ public class AdminController implements Initializable {
 
                     {
                         editButton.setOnAction(event -> {
-                            Claim claim = claimTableView.getSelectionModel().getSelectedItem();
-                            selectClaimRow(claim);
+                            Claim selectedClaim = getTableView().getItems().get(getIndex());
+                            selectClaimRow(selectedClaim);
+                            editFormClaimConfirmBtn.setOnAction(event1 -> {
+                                updateClaimInformation(selectedClaim);
+                            });
                         });
 
                         deleteButton.setOnAction(event -> {
@@ -607,7 +704,7 @@ public class AdminController implements Initializable {
 
     //Profile dashboard functions
     @FXML
-    private void editProfileConfirmBtnOnAction(ActionEvent event) {
+    private void editProfileConfirmBtnOnAction() {
         updateProfileDashboardInformation();
     }
 

@@ -44,30 +44,6 @@
                      </children>
                   </AnchorPane>
                </top>
-               <left>
-                  <AnchorPane prefHeight="560.0" prefWidth="180.0" style="-fx-background-color: cyan;" BorderPane.alignment="CENTER">
-                     <children>
-                        <Circle fill="DODGERBLUE" layoutX="90.0" layoutY="62.0" radius="30.0" stroke="BLACK" strokeType="INSIDE" />
-                        <Label layoutX="7.0" layoutY="101.0" text="Admin ID:" />
-                        <Label fx:id="navAdminid" layoutX="75.0" layoutY="101.0" text="C1000101">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="7.0" layoutY="127.0" text="Username:" />
-                        <Label fx:id="navUsername" layoutX="69.0" layoutY="127.0" text="admin1234" />
-                        <Label layoutX="9.0" layoutY="152.0" text="Fullname:" />
-                        <Label fx:id="navFullname" layoutX="65.0" layoutY="152.0" text="Nguyen Van A" />
-                        <Button fx:id="navMainDashboardBtn" layoutX="10.0" layoutY="244.0" mnemonicParsing="false" onAction="#switchDashboard" prefHeight="25.0" prefWidth="160.0" text="Main Dashboard" />
-                        <Button fx:id="navUsersBtn" layoutX="10.0" layoutY="278.0" mnemonicParsing="false" onAction="#switchDashboard" prefHeight="25.0" prefWidth="160.0" text="Users" />
-                        <Button fx:id="navInsuranceCardsBtn" layoutX="10.0" layoutY="315.0" mnemonicParsing="false" onAction="#switchDashboard" prefHeight="25.0" prefWidth="160.0" text="Insurance Cards" />
-                        <Button fx:id="navClaimsBtn" layoutX="10.0" layoutY="350.0" mnemonicParsing="false" onAction="#switchDashboard" prefWidth="160.0" text="Claims" />
-                        <Line endX="61.5" layoutX="109.0" layoutY="207.0" startX="-100.0" strokeWidth="3.0" />
-                        <Label layoutX="7.0" layoutY="218.0" text="Feature:" />
-                        <Label layoutX="9.0" layoutY="450.0" text="Profile:" />
-                        <Button fx:id="navProfileBtn" layoutX="10.0" layoutY="475.0" mnemonicParsing="false" onAction="#switchDashboard" prefWidth="160.0" text="Profile" />
-                     </children></AnchorPane>
-               </left>
                <center>
                   <AnchorPane prefHeight="560.0" prefWidth="785.0" BorderPane.alignment="CENTER">
                      <children>
@@ -349,7 +325,7 @@
                               <Label layoutX="65.0" layoutY="217.0" text="Policy owner ID:" />
                               <TextField fx:id="editFormInsurancePolicyOwnerName" disable="true" editable="false" layoutX="165.0" layoutY="250.0" prefHeight="25.0" prefWidth="300.0" promptText="Nguyen Van A" />
                               <Label layoutX="47.0" layoutY="254.0" text="Policy owner name:" />
-                              <Button fx:id="editFormInsuranceConfirmBtn" layoutX="150.0" layoutY="308.0" mnemonicParsing="false" onAction="#updateInsuranceCardInformation" prefHeight="25.0" prefWidth="200.0" text="Confirm" />
+                              <Button fx:id="editFormInsuranceConfirmBtn" layoutX="150.0" layoutY="308.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="200.0" text="Confirm" />
                               <Button fx:id="editFormInsuranceCancelBtn" layoutX="150.0" layoutY="347.0" mnemonicParsing="false" onAction="#editFormInsuranceCancelBtnOnAction" prefHeight="25.0" prefWidth="200.0" text="Cancel" />
                            </children>
                            <effect>
@@ -395,6 +371,31 @@
                      </children>
                   </AnchorPane>
                </center>
+               <left>
+                  <AnchorPane prefHeight="560.0" prefWidth="180.0" style="-fx-background-color: cyan;" BorderPane.alignment="CENTER">
+                     <children>
+                        <Circle fill="DODGERBLUE" layoutX="90.0" layoutY="62.0" radius="30.0" stroke="BLACK" strokeType="INSIDE" />
+                        <Label layoutX="7.0" layoutY="101.0" text="Admin ID:" />
+                        <Label fx:id="navAdminid" layoutX="75.0" layoutY="101.0" text="C1000101">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="7.0" layoutY="127.0" text="Username:" />
+                        <Label fx:id="navUsername" layoutX="69.0" layoutY="127.0" text="admin1234" />
+                        <Label layoutX="9.0" layoutY="152.0" text="Fullname:" />
+                        <Label fx:id="navFullname" layoutX="65.0" layoutY="152.0" text="Nguyen Van A" />
+                        <Button fx:id="navMainDashboardBtn" layoutX="10.0" layoutY="244.0" mnemonicParsing="false" onAction="#switchDashboard" prefHeight="25.0" prefWidth="160.0" text="Main Dashboard" />
+                        <Button fx:id="navUsersBtn" layoutX="10.0" layoutY="278.0" mnemonicParsing="false" onAction="#switchDashboard" prefHeight="25.0" prefWidth="160.0" text="Users" />
+                        <Button fx:id="navInsuranceCardsBtn" layoutX="10.0" layoutY="315.0" mnemonicParsing="false" onAction="#switchDashboard" prefHeight="25.0" prefWidth="160.0" text="Insurance Cards" />
+                        <Button fx:id="navClaimsBtn" layoutX="10.0" layoutY="350.0" mnemonicParsing="false" onAction="#switchDashboard" prefWidth="160.0" text="Claims" />
+                        <Line endX="61.5" layoutX="109.0" layoutY="207.0" startX="-100.0" strokeWidth="3.0" />
+                        <Label layoutX="7.0" layoutY="218.0" text="Feature:" />
+                        <Label layoutX="9.0" layoutY="450.0" text="Profile:" />
+                        <Button fx:id="navProfileBtn" layoutX="10.0" layoutY="475.0" mnemonicParsing="false" onAction="#switchDashboard" prefWidth="160.0" text="Profile" />
+                     </children>
+                  </AnchorPane>
+               </left>
             </BorderPane>
          </children>
       </AnchorPane>
