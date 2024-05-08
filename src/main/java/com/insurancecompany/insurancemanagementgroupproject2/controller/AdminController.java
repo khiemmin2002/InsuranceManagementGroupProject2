@@ -1,6 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
+import com.insurancecompany.insurancemanagementgroupproject2.SceneLoader;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
 import com.insurancecompany.insurancemanagementgroupproject2.model.InsuranceCard;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
@@ -9,12 +10,14 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.net.URL;
@@ -38,7 +41,7 @@ public class AdminController implements Initializable {
     @FXML
     private Button navProfileBtn;
     @FXML
-    private Button logOutButtonOnAction;
+    private Button btnLogOut;
 
     //AnchorPane define
     @FXML
@@ -247,7 +250,6 @@ public class AdminController implements Initializable {
     private TextField editProfileRole;
     @FXML
     private Button editProfileConfirmBtn;
-
 
     DatabaseConnection databaseConnection = new DatabaseConnection();
     Connection connection = databaseConnection.getConnection();
@@ -1059,5 +1061,6 @@ public class AdminController implements Initializable {
         displayInsuranceCardDashboardTableView();
         displayClaimDashboardTableView();
         displayProfileDashboardInformation();
+        btnLogOut.setOnAction(ActionEvent -> LoginData.logOut(btnLogOut));
     }
 }

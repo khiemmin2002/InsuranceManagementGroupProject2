@@ -9,6 +9,7 @@ import java.sql.*;
 import java.util.*;
 
 public class ManagerController {
+
     private final DatabaseConnection databaseConnection;
     private final Connection connection;
 

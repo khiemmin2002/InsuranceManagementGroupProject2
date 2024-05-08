@@ -11,14 +11,14 @@ public class LoginData {
 
     public static void logOut(Button logoutButton){
         usernameLogin = "";
-        roleId = 0;
+        roleId = -1;
         System.out.println("Delete static variable from LoginData class!");
         logOutFXML(logoutButton);
     }
     @FXML
     public static void logOutFXML(Button logoutButton){
         Stage currentStage = (Stage) logoutButton.getScene().getWindow();
-        currentStage.setTitle("Surveyors Portal");
+        currentStage.setTitle("Insurance Claim Management System");
         SceneLoader.loadSceneWithInput("fxml/login.fxml", currentStage,400,400);
     }
 }

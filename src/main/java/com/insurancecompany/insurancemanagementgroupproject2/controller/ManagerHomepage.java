@@ -15,6 +15,8 @@ import java.util.*;
 
 public class ManagerHomepage extends SurveyorHomepage{
     @FXML
+    private Button btnLogOut;
+    @FXML
     public TableView<Surveyor> surveyorTable;
     @FXML
     public Label managerName;
