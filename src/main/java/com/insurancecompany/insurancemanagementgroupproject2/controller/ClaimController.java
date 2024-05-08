@@ -2,10 +2,17 @@ package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.HelloApplication;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -13,12 +20,26 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+
+import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Random;
 
@@ -34,6 +55,10 @@ public class ClaimController {
 
     @FXML
     private TextField bankUserNameField;
+
+    @FXML
+    private Button btnUploadDocuments;
+
 
 
     @FXML
@@ -54,9 +79,13 @@ public class ClaimController {
     @FXML
     private Label validationMessage;
 
+
+    private String currentClaimId;
+
     @FXML
     void confirmAddClaim(ActionEvent event)  {
         String claimId = generateRandomClaimID();
+
         String cardNumber = cardNumberInput.getText();
         String claimAmountText = claimAmountInput.getText();
         String insuredPerson = insuredPersonInput.getText();
@@ -121,6 +150,67 @@ public class ClaimController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    private void clearInputFields() {
+        cardNumberInput.clear();
+        claimAmountInput.clear();
+        insuredPersonInput.clear();
+        validationMessage.setText("");
+    }
+    private String generateRandomClaimID() {
+        StringBuilder claimId = new StringBuilder("F");
+        Random random = new Random();
+        for (int i = 0; i < 10; i++) {
+            claimId.append(random.nextInt(10));
+        }
+        return claimId.toString();
+    }
+    @FXML
+    void uploadMultipleFiles(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.bmp");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        List<File> files = fileChooser.showOpenMultipleDialog(((Node) event.getSource()).getScene().getWindow());
+        for (File file: files) {
+            String renamedFile = renameAndSaveFile(file);
+
+        }
+    }
+
+    private String renameAndSaveFile(File originalFile) {
+        String claimId = currentClaimId;
+        String newFileName = claimId + " " + System.currentTimeMillis() + getFileExtension(originalFile);
+        File newFile = new File(originalFile.getParent(), newFileName);
+
+        try {
+            Files.copy(originalFile.toPath(), newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("File renamed and saved as: " + newFile.getPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return newFile.getPath();
+    }
+
+    private void saveFileToDatabase(String claimId, String fileName, String filePath) {
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        try(Connection connection = databaseConnection.getConnection()){
+            String insertQuery = "INSERT INTO public.documents (claim_id, document_name";
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String getFileExtension(File file) {
+        String name = file.getName();
+        int lastIndexOf = name.lastIndexOf(".");
+
+        if (lastIndexOf == -1) {
+            return "";
+        }
+        return name.substring(lastIndexOf);
     }
     public static List<Claim> fetchClaim(){
         //Create new instance of DatabaseConnection class
@@ -220,19 +310,4 @@ public class ClaimController {
             return false;
         }
     }
-    private void clearInputFields() {
-        cardNumberInput.clear();
-        claimAmountInput.clear();
-        insuredPersonInput.clear();
-        validationMessage.setText("");
-    }
-    private String generateRandomClaimID() {
-        StringBuilder claimId = new StringBuilder("F");
-        Random random = new Random();
-        for (int i = 0; i < 10; i++) {
-            claimId.append(random.nextInt(10));
-        }
-        return claimId.toString();
-    }
-
 }
