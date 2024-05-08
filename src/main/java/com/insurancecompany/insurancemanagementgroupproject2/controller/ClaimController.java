@@ -85,11 +85,6 @@ public class ClaimController {
     @FXML
     void confirmAddClaim(ActionEvent event)  {
         String claimId = generateRandomClaimID();
-        currentClaimId = claimId;
-
-    @FXML
-    void confirmAddClaim(ActionEvent event)  {
-        String claimId = generateRandomClaimID();
 
         String cardNumber = cardNumberInput.getText();
         String claimAmountText = claimAmountInput.getText();
@@ -216,7 +211,7 @@ public class ClaimController {
             return "";
         }
         return name.substring(lastIndexOf);
-
+    }
     public static List<Claim> fetchClaim(){
         //Create new instance of DatabaseConnection class
         DatabaseConnection databaseConnection = new DatabaseConnection();
@@ -315,20 +310,4 @@ public class ClaimController {
             return false;
         }
     }
-    private void clearInputFields() {
-        cardNumberInput.clear();
-        claimAmountInput.clear();
-        insuredPersonInput.clear();
-        validationMessage.setText("");
-    }
-    private String generateRandomClaimID() {
-        StringBuilder claimId = new StringBuilder("F");
-        Random random = new Random();
-        for (int i = 0; i < 10; i++) {
-            claimId.append(random.nextInt(10));
-        }
-        return claimId.toString();
-
-    }
-
 }
