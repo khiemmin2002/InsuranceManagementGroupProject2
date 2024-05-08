@@ -2,6 +2,7 @@ package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
+import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,6 +23,8 @@ import java.util.Optional;
 public class SurveyorHomepage {
     @FXML
     public ChoiceBox<String> claimChoiceBox;
+    @FXML
+    public Label surveryorName;
     @FXML
     private TableView<Claim> claimTable;
     @FXML
@@ -95,6 +98,7 @@ public class SurveyorHomepage {
         sortPerson.setOnAction(sortByPerson);
         sortCard.setOnAction(sortByCard);
         refreshData.setOnAction(refreshClaimData);
+        surveryorName.setText("Welcome Insurance Surveyor " + LoginData.usernameLogin);
         //Call API to fetch claim data from database
         fetchClaimData();
     }
