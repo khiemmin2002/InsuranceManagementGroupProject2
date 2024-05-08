@@ -21,7 +21,7 @@ import javafx.stage.FileChooser;
 
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
+import javafx.util.Callback;
 
 
 import java.io.File;
@@ -81,11 +81,46 @@ public class PolicyHolderController {
     @FXML
     private Button clearInputButton;
 
+    @FXML
+    private TableColumn<Claim, Void> deleteColumn;
+
 
     @FXML
     private Button btnUploadDocuments;
 
 
+    private void setUpDeleteColumn() {
+        deleteColumn.setCellFactory(new Callback<TableColumn<Claim, Void>, TableCell<Claim, Void>>() {
+            @Override
+            public TableCell<Claim, Void> call(final TableColumn<Claim, Void> param) {
+                return new TableCell<Claim, Void>() {
+                    private final Button btn = new Button("Delete");
+
+                    {
+                        btn.setOnAction((ActionEvent event) -> {
+                            Claim claim = getTableView().getItems().get(getIndex());
+                            deleteClaim(claim);
+                        });
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(btn);
+                        }
+                    }
+                };
+            }
+        });
+    }
+
+    private void deleteClaim(Claim claim) {
+        ObservableList<Claim> allClaims = claimTable.getItems();
+        allClaims.remove(claim);
+    }
 
     @FXML
     private void initialize() {
@@ -103,7 +138,9 @@ public class PolicyHolderController {
             bankName.setPrefWidth(tableWidth * 0.15);
             bankUserName.setPrefWidth(tableWidth * 0.15);
             bankNumber.setPrefWidth(tableWidth * 0.15);
+            deleteColumn.setPrefWidth(tableWidth * 0.15);
         });
+        setUpDeleteColumn();
         fetchClaimData();
     }
 

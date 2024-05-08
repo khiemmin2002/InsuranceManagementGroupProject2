@@ -41,6 +41,7 @@
             <TableColumn fx:id="bankName" maxWidth="1.7976931348623157E308" prefWidth="75.0" text="Bank Name" />
             <TableColumn fx:id="bankUserName" prefWidth="75.0" text="Bank User Name" />
             <TableColumn fx:id="bankNumber" prefWidth="75.0" text="Bank Number" />
+            <TableColumn fx:id="deleteColumn" prefWidth="90.0" text="Delete"/>
         </columns>
       </TableView>
       <TextField fx:id="inputClaimId" layoutX="220.0" layoutY="37.0" onAction="#findClaimId" />
