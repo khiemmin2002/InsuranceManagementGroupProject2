@@ -82,10 +82,7 @@ public class ClaimController {
 
     private String currentClaimId;
 
-    @FXML
-    void confirmAddClaim(ActionEvent event)  {
-        String claimId = generateRandomClaimID();
-        currentClaimId = claimId;
+
 
     @FXML
     void confirmAddClaim(ActionEvent event)  {
@@ -141,19 +138,28 @@ public class ClaimController {
     @FXML
     void backToHomePage(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/policy-holder-homepage.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/insurancecompany/insurancemanagementgroupproject2/fxml/policy-holder-homepage.fxml"));
+
+            if (fxmlLoader.getLocation() == null) {
+                validationMessage.setText("Error: Cannot find FXML file.");
+                return;
+            }
             Parent root = fxmlLoader.load();
 
-            Stage stage = new Stage();
-            stage.setTitle("Policy Holder Homepage");
-            stage.setScene(new Scene(root));
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            currentStage.setTitle("Policy Holder Homepage");
+            currentStage.setScene(new Scene(root));
             PolicyHolderController controller = fxmlLoader.getController();
             controller.fetchClaimData();
-            stage.show();
+            currentStage.show();
 
-            cancelButton.getScene().getWindow().hide();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Unexpected Error");
+            alert.setContentText("An unexpected error occurred: " + e.getMessage());
+            alert.showAndWait();
         }
     }
 
@@ -172,6 +178,7 @@ public class ClaimController {
         }
         return claimId.toString();
     }
+
     @FXML
     void uploadMultipleFiles(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -216,6 +223,7 @@ public class ClaimController {
             return "";
         }
         return name.substring(lastIndexOf);
+    }
 
     public static List<Claim> fetchClaim(){
         //Create new instance of DatabaseConnection class
@@ -315,20 +323,6 @@ public class ClaimController {
             return false;
         }
     }
-    private void clearInputFields() {
-        cardNumberInput.clear();
-        claimAmountInput.clear();
-        insuredPersonInput.clear();
-        validationMessage.setText("");
-    }
-    private String generateRandomClaimID() {
-        StringBuilder claimId = new StringBuilder("F");
-        Random random = new Random();
-        for (int i = 0; i < 10; i++) {
-            claimId.append(random.nextInt(10));
-        }
-        return claimId.toString();
 
-    }
 
 }

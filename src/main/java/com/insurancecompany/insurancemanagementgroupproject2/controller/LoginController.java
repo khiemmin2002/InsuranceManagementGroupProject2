@@ -62,6 +62,7 @@ public class LoginController {
                     case 1 -> loadAdminHomePage();
                     case 2 -> loadSurveyorHomePage();
                     case 3 -> loadManagerHomePage();
+                    case 5 -> loadPolicyHolderHomePage();
                     default -> loginMessageLabel.setText("Unknown role!");
                 }
             } else {
@@ -77,6 +78,10 @@ public class LoginController {
                 e.printStackTrace();
             }
         }
+    }
+    public void loadPolicyHolderHomePage() {
+        Stage currentStage = (Stage) usernameTextField.getScene().getWindow();
+        SceneLoader.loadScene("fxml/policy-holder-homepage.fxml", currentStage);
     }
 
     public void loadAdminHomePage() {
