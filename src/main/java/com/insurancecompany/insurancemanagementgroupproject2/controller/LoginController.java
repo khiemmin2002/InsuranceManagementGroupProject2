@@ -2,6 +2,7 @@ package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.SceneLoader;
+import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -30,7 +31,7 @@ public class LoginController {
     private PasswordField passwordField;
 
     @FXML
-    public void loginButtonOnAction(ActionEvent event) {
+    public void loginButtonOnAction() {
         if (!usernameTextField.getText().isEmpty() && !passwordField.getText().isEmpty()) {
             validateLogin();
         } else {
@@ -59,10 +60,38 @@ public class LoginController {
                 int roleId = resultSet.getInt("role_id");
                 System.out.println(roleId);
                 switch (roleId) {
-                    case 1 -> loadAdminHomePage();
-                    case 2 -> loadSurveyorHomePage();
-                    case 3 -> loadManagerHomePage();
-                    case 6 -> loadDependentHomePage();
+
+                    case 1 -> {
+                        LoginData.usernameLogin = usernameTextField.getText();
+                        LoginData.roleId = roleId;
+                        loadAdminHomePage();
+                        System.out.println(LoginData.usernameLogin);
+                    }
+                    case 2 -> {
+                        LoginData.usernameLogin = usernameTextField.getText();
+                        LoginData.roleId = roleId;
+                        loadSurveyorHomePage();
+                        System.out.println(LoginData.usernameLogin);
+                    }
+                    case 3 -> {
+                        LoginData.usernameLogin = usernameTextField.getText();
+                        LoginData.roleId = roleId;
+                        loadManagerHomePage();
+                        System.out.println(LoginData.usernameLogin);
+                    }
+                    case 5 -> {
+                        LoginData.usernameLogin = usernameTextField.getText();
+                        LoginData.roleId = roleId;
+                        loadPolicyHolderHomePage();
+                        System.out.println(LoginData.usernameLogin);
+                    }
+                    case 6 -> {
+                        LoginData.usernameLogin = usernameTextField.getText();
+                        LoginData.roleId = roleId;
+                        loadDependentHomePage();
+                        System.out.println(LoginData.usernameLogin);
+                    }
+
                     default -> loginMessageLabel.setText("Unknown role!");
                 }
             } else {
@@ -79,19 +108,24 @@ public class LoginController {
             }
         }
     }
+    public void loadPolicyHolderHomePage() {
+        Stage currentStage = (Stage) usernameTextField.getScene().getWindow();
+        SceneLoader.loadScene("fxml/policy-holder-homepage.fxml", currentStage);
+    }
 
     public void loadAdminHomePage() {
         Stage currentStage = (Stage) usernameTextField.getScene().getWindow();
-        SceneLoader.loadScene("fxml/admin-homepage.fxml", currentStage);
+        currentStage.setTitle("Admin Portal");
+        SceneLoader.loadSceneWithInput("fxml/admin-homepage.fxml", currentStage,900,600);
     }
 
     public void loadSurveyorHomePage() {
         Stage currentStage = (Stage) usernameTextField.getScene().getWindow();
-        SceneLoader.loadScene("fxml/surveyor-homepage.fxml", currentStage);
+        SceneLoader.loadSceneWithInput("fxml/surveyor-homepage.fxml", currentStage, 957,461);
     }
     public void loadManagerHomePage() {
         Stage currentStage = (Stage) usernameTextField.getScene().getWindow();
-        SceneLoader.loadScene("fxml/manager-homepage.fxml", currentStage);
+        SceneLoader.loadSceneWithInput("fxml/manager-homepage.fxml", currentStage,944,709);
     }
 
     public void loadDependentHomePage() {

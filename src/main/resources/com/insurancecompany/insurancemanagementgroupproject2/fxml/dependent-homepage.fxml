@@ -17,108 +17,87 @@
       <VBox prefHeight="800.0" prefWidth="280.0" style="-fx-background-color: #6CEB88;" BorderPane.alignment="CENTER">
          <ImageView fitHeight="284.0" fitWidth="280.0" pickOnBounds="true" preserveRatio="true">
             <image>
-               <Image url="@../Images/Health%20Care%20Medical%20Clinic%20Center%20Logo.png"/>
+               <Image url="@../Images/Health%20Care%20Medical%20Clinic%20Center%20Logo.png" />
             </image>
             <viewport>
-               <Rectangle2D/>
+               <Rectangle2D />
             </viewport>
          </ImageView>
-         <Button alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#home"
-                 prefHeight="40.0" prefWidth="280.0" styleClass="menu-button" text="Home">
+         <Button alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#home" prefHeight="40.0" prefWidth="280.0" styleClass="menu-button" text="Home">
             <graphic>
-               <SVGPath
-                       content="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5"
-                       fill="#00adef" scaleX="1.2" scaleY="1.2" styleClass="icon-svg"/>
+               <SVGPath content="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5" fill="#00adef" scaleX="1.2" scaleY="1.2" styleClass="icon-svg" />
             </graphic>
             <VBox.margin>
-               <Insets bottom="15.0"/>
+               <Insets bottom="15.0" />
             </VBox.margin>
             <padding>
-               <Insets left="45.0"/>
+               <Insets left="45.0" />
             </padding>
          </Button>
-         <Button alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#myClaim"
-                 prefHeight="40.0" prefWidth="280.0" styleClass="menu-button" text="My Claim">
+         <Button alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#myClaim" prefHeight="40.0" prefWidth="280.0" styleClass="menu-button" text="My Claim">
             <graphic>
-               <SVGPath
-                       content="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M4.5 9a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 1 0-1h4a.5.5 0 0 1 0 1z"
-                       fill="#00adef" scaleX="1.2" scaleY="1.2" styleClass="icon-svg"/>
+               <SVGPath content="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M4.5 9a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 1 0-1h4a.5.5 0 0 1 0 1z" fill="#00adef" scaleX="1.2" scaleY="1.2" styleClass="icon-svg" />
             </graphic>
             <VBox.margin>
-               <Insets bottom="15.0"/>
+               <Insets bottom="15.0" />
             </VBox.margin>
             <padding>
-               <Insets left="45.0"/>
+               <Insets left="45.0" />
             </padding>
          </Button>
-         <Button alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false"
-                 onMouseClicked="#myPolicyHolder" prefHeight="40.0" prefWidth="280.0" styleClass="menu-button"
-                 text="My Policy Holder">
+         <Button alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#myPolicyHolder" prefHeight="40.0" prefWidth="280.0" styleClass="menu-button" text="My Policy Holder">
             <graphic>
-               <SVGPath
-                       content="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"
-                       fill="#00adef" scaleX="1.2" scaleY="1.2" styleClass="icon-svg"/>
+               <SVGPath content="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5" fill="#00adef" scaleX="1.2" scaleY="1.2" styleClass="icon-svg" />
             </graphic>
             <VBox.margin>
-               <Insets bottom="15.0"/>
+               <Insets bottom="15.0" />
             </VBox.margin>
             <padding>
-               <Insets left="45.0"/>
+               <Insets left="45.0" />
             </padding>
          </Button>
-         <Button alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#myPolicyOwner"
-                 prefHeight="40.0" prefWidth="280.0" styleClass="menu-button" text="My Policy Owner">
+         <Button alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#myPolicyOwner" prefHeight="40.0" prefWidth="280.0" styleClass="menu-button" text="My Policy Owner">
             <graphic>
-               <SVGPath
-                       content="M3 0a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h3v-3.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V16h3a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1zm1 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5M4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM7.5 5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5m2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM4.5 8h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5m2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5"
-                       fill="#00adef" scaleX="1.2" scaleY="1.2" styleClass="icon-svg"/>
+               <SVGPath content="M3 0a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h3v-3.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V16h3a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1zm1 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5M4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM7.5 5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5m2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM4.5 8h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5m2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5" fill="#00adef" scaleX="1.2" scaleY="1.2" styleClass="icon-svg" />
             </graphic>
             <VBox.margin>
-               <Insets bottom="15.0"/>
+               <Insets bottom="15.0" />
             </VBox.margin>
             <padding>
-               <Insets left="45.0"/>
+               <Insets left="45.0" />
             </padding>
          </Button>
-         <Button alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false"
-                 onMouseClicked="#myInsuranceCard" prefHeight="40.0" prefWidth="280.0" styleClass="menu-button"
-                 text="My Insurance Card">
+         <Button alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#myInsuranceCard" prefHeight="40.0" prefWidth="280.0" styleClass="menu-button" text="My Insurance Card">
             <graphic>
-               <SVGPath
-                       content="M2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm6 2.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0m3.5.878c1.482-1.42 4.795 1.392 0 4.622-4.795-3.23-1.482-6.043 0-4.622M2 5.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5"
-                       fill="#00adef" scaleX="1.2" scaleY="1.2" styleClass="icon-svg"/>
+               <SVGPath content="M2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm6 2.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0m3.5.878c1.482-1.42 4.795 1.392 0 4.622-4.795-3.23-1.482-6.043 0-4.622M2 5.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5" fill="#00adef" scaleX="1.2" scaleY="1.2" styleClass="icon-svg" />
             </graphic>
             <VBox.margin>
-               <Insets bottom="15.0"/>
+               <Insets bottom="15.0" />
             </VBox.margin>
             <padding>
-               <Insets left="45.0"/>
+               <Insets left="45.0" />
             </padding>
          </Button>
-         <Button alignment="CENTER" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#myProfile"
-                 prefHeight="40.0" prefWidth="280.0" styleClass="menu-button" text="My Profile">
+         <Button alignment="CENTER" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#myProfile" prefHeight="40.0" prefWidth="280.0" styleClass="menu-button" text="My Profile">
             <graphic>
-               <SVGPath content="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" fill="#00adef"
-                        scaleX="1.2" scaleY="1.2" styleClass="icon-svg"/>
+               <SVGPath content="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" fill="#00adef" scaleX="1.2" scaleY="1.2" styleClass="icon-svg" />
             </graphic>
             <VBox.margin>
-               <Insets bottom="15.0" top="120.0"/>
+               <Insets bottom="15.0" top="120.0" />
             </VBox.margin>
          </Button>
-         <Button alignment="CENTER" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#logout"
-                 prefHeight="40.0" prefWidth="280.0" styleClass="menu-button" text="Logout">
+         <Button fx:id="logoutButton" alignment="CENTER" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#logoutButtonOnAction" prefHeight="40.0" prefWidth="280.0" styleClass="menu-button" text="Logout">
             <graphic>
-               <SVGPath/>
+               <SVGPath />
             </graphic>
          </Button>
       </VBox>
    </left>
    <center>
-      <AnchorPane fx:id="anchorPane" prefHeight="200.0" prefWidth="200.0"
-                  stylesheets="@../Styles/dependent-homepage.css" BorderPane.alignment="CENTER">
+      <AnchorPane fx:id="anchorPane" prefHeight="200.0" prefWidth="200.0" stylesheets="@../Styles/dependent-homepage.css" BorderPane.alignment="CENTER">
          <Text layoutX="328.0" layoutY="412.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Home Dependent">
             <font>
-               <Font name="System Bold" size="36.0"/>
+               <Font name="System Bold" size="36.0" />
             </font>
          </Text>
       </AnchorPane>
