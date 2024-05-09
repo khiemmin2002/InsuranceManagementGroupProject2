@@ -2,6 +2,7 @@ package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
+import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,6 +23,10 @@ import java.util.Optional;
 public class SurveyorHomepage {
     @FXML
     public ChoiceBox<String> claimChoiceBox;
+    @FXML
+    public Label surveryorName;
+    @FXML
+    public Button logout;
     @FXML
     private TableView<Claim> claimTable;
     @FXML
@@ -95,6 +100,8 @@ public class SurveyorHomepage {
         sortPerson.setOnAction(sortByPerson);
         sortCard.setOnAction(sortByCard);
         refreshData.setOnAction(refreshClaimData);
+        logout.setOnAction(logoutClick);
+        surveryorName.setText("Welcome Insurance Surveyor " + LoginData.usernameLogin);
         //Call API to fetch claim data from database
         fetchClaimData();
     }
@@ -104,7 +111,7 @@ public class SurveyorHomepage {
     EventHandler<ActionEvent> sortByPerson = (ActionEvent ) -> sortByClaimPerson();
     EventHandler<ActionEvent> sortByCard = (ActionEvent ) -> sortByClaimCard();
     EventHandler<ActionEvent> refreshClaimData = (ActionEvent ) -> fetchClaimData();
-
+    EventHandler<ActionEvent> logoutClick = (ActionEvent ) -> LoginData.logOut(logout);
 
     EventHandler<ActionEvent> fetchSingleClaimClick = new EventHandler<>() {
         @Override
