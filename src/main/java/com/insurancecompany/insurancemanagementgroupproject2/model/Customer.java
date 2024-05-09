@@ -74,4 +74,14 @@ public abstract class Customer {
         this.address = address;
         this.insurance_card = null;
     }
+
+    public Customer() {
+        this.id = "";
+        this.full_name = "";
+        this.user_name = "";
+        this.email = "";
+        this.phone_number = "";
+        this.address = "";
+        this.insurance_card = null;
+    }
 }
