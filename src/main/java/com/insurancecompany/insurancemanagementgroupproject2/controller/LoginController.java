@@ -60,6 +60,7 @@ public class LoginController {
                 int roleId = resultSet.getInt("role_id");
                 System.out.println(roleId);
                 switch (roleId) {
+
                     case 1 -> {
                         LoginData.usernameLogin = usernameTextField.getText();
                         LoginData.roleId = roleId;
@@ -78,12 +79,19 @@ public class LoginController {
                         loadManagerHomePage();
                         System.out.println(LoginData.usernameLogin);
                     }
+                    case 5 -> {
+                        LoginData.usernameLogin = usernameTextField.getText();
+                        LoginData.roleId = roleId;
+                        loadPolicyHolderHomePage();
+                        System.out.println(LoginData.usernameLogin);
+                    }
                     case 6 -> {
                         LoginData.usernameLogin = usernameTextField.getText();
                         LoginData.roleId = roleId;
                         loadDependentHomePage();
                         System.out.println(LoginData.usernameLogin);
                     }
+
                     default -> loginMessageLabel.setText("Unknown role!");
                 }
             } else {
@@ -99,6 +107,10 @@ public class LoginController {
                 e.printStackTrace();
             }
         }
+    }
+    public void loadPolicyHolderHomePage() {
+        Stage currentStage = (Stage) usernameTextField.getScene().getWindow();
+        SceneLoader.loadScene("fxml/policy-holder-homepage.fxml", currentStage);
     }
 
     public void loadAdminHomePage() {
