@@ -95,7 +95,7 @@ public class ClaimController {
         String bankUserName = bankUserNameField.getText();
         String bankNumber = bankNumberField.getText();
 
-        if (cardNumber.isEmpty() || claimAmountText.isEmpty() || insuredPerson.isEmpty()) {
+        if (cardNumber.isEmpty() || claimAmountText.isEmpty() || insuredPerson.isEmpty() || bankName.isEmpty() || bankUserName.isEmpty() || bankNumber.isEmpty()) {
             System.out.println("Debug: cardNumber: " + cardNumber);
             System.out.println("Debug: claimAmountText: " + claimAmountText);
             System.out.println("Debug: insuredPerson: " + insuredPerson);
