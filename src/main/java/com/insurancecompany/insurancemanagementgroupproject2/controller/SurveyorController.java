@@ -19,17 +19,19 @@ public class SurveyorController extends Thread{
     public List<Surveyor> fetchSurveyor(){
         List<Surveyor> surveyorList = new ArrayList<Surveyor>();
         try {
-            String getSurveyorQuery = "SELECT id,full_name,user_name,email,phone_number FROM users WHERE role_id = 2";
+            String getSurveyorQuery = "SELECT * FROM users WHERE role_id = 2";
             Statement statement = connection.createStatement();
             ResultSet queryResult = statement.executeQuery(getSurveyorQuery);
-            //Extract result and put it into local arraylist
             while (queryResult.next()){
                 Surveyor provider = new Surveyor(
                         queryResult.getString("id"),
                         queryResult.getString("full_name"),
                         queryResult.getString("user_name"),
                         queryResult.getString("email"),
-                        queryResult.getString("phone_number")
+                        queryResult.getString("phone_number"),
+                        queryResult.getString("password"),
+                        queryResult.getString("address"),
+                        queryResult.getInt("role_id")
                 );
                 surveyorList.add(provider);
             }

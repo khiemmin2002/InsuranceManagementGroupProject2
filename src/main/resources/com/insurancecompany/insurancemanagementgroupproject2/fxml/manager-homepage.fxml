@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -9,12 +8,12 @@
         <Button fx:id="fetchAllClaimButton" layoutX="21.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="All claims" />
         <Button fx:id="fetchProposableClaimButton" layoutX="21.0" layoutY="48.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="Sort by proposed" />
         <Label layoutX="37.0" layoutY="281.0" text="Approving claim" />
-        <TextField fx:id="insertID" layoutX="2.0" layoutY="305.0" />
-        <Button fx:id="fetchSingleClaimButton" layoutX="41.0" layoutY="339.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="find" />
+        <Button fx:id="fetchSingleClaimButton" layoutX="41.0" layoutY="347.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="approve" />
         <Label fx:id="errorLabel" layoutX="2.0" layoutY="330.0" prefHeight="17.0" prefWidth="149.0" />
         <Label layoutX="46.0" layoutY="-9.0" text="Sort options" />
         <Button fx:id="sortPerson" layoutX="22.0" layoutY="84.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="Order by person" />
         <Button fx:id="sortCard" layoutX="23.0" layoutY="122.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="Order by card" />
+      <ChoiceBox fx:id="claimChoiceBox" layoutX="2.0" layoutY="305.0" prefWidth="150.0" />
     </Pane>
     <Pane layoutX="162.0" layoutY="13.0" prefHeight="432.0" prefWidth="781.0">
         <TableView fx:id="claimTable" layoutX="14.0" layoutY="29.0" prefHeight="380.0" prefWidth="746.0" AnchorPane.bottomAnchor="28.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-184.0" AnchorPane.topAnchor="29.0">
@@ -31,19 +30,18 @@
                 <TableColumn fx:id="bankNumber" prefWidth="75.0" text="Bank Number" />
             </columns>
         </TableView>
+      <Label fx:id="managerName" layoutX="204.0" layoutY="6.0" prefHeight="17.0" prefWidth="357.0" />
+      <Button fx:id="btnLogOut" layoutX="694.0" layoutY="2.0" mnemonicParsing="false" onAction="#logOutButtonOnAction" text="Logout" />
     </Pane>
-    <Button fx:id="refreshData" contentDisplay="BOTTOM" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" text="Refresh" underline="true"></Button>
+    <Button fx:id="refreshData" contentDisplay="BOTTOM" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" text="Refresh" underline="true" />
     <Pane layoutX="176.0" layoutY="429.0" prefHeight="279.0" prefWidth="746.0">
         <TableView fx:id="surveyorTable" layoutX="14.0" layoutY="14.0" prefHeight="260.0" prefWidth="722.0">
             <columns>
-                <TableColumn fx:id="surveyorID" maxWidth="1.7976931348623157E308" prefWidth="88.0" text="ID"/>
-                <TableColumn fx:id="surveyorFullName" maxWidth="1.7976931348623157E308" prefWidth="165.0"
-                             text="Full Name"/>
-                <TableColumn fx:id="surveyorUserName" maxWidth="1.7976931348623157E308" prefWidth="94.0"
-                             text="User Name"/>
-                <TableColumn fx:id="surveyorEmail" maxWidth="1.7976931348623157E308" prefWidth="196.0" text="Email"/>
-                <TableColumn fx:id="surveyorPhoneNumber" maxWidth="1.7976931348623157E308" prefWidth="178.0"
-                             text="Phone Number"/>
+                <TableColumn fx:id="surveyorID" maxWidth="1.7976931348623157E308" prefWidth="88.0" text="ID" />
+                <TableColumn fx:id="surveyorFullName" maxWidth="1.7976931348623157E308" prefWidth="165.0" text="Full Name" />
+                <TableColumn fx:id="surveyorUserName" maxWidth="1.7976931348623157E308" prefWidth="94.0" text="User Name" />
+                <TableColumn fx:id="surveyorEmail" maxWidth="1.7976931348623157E308" prefWidth="196.0" text="Email" />
+                <TableColumn fx:id="surveyorPhoneNumber" maxWidth="1.7976931348623157E308" prefWidth="178.0" text="Phone Number" />
             </columns>
         </TableView>
     </Pane>

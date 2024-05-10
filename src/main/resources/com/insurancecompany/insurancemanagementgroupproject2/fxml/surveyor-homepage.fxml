@@ -9,13 +9,13 @@
         <children>
           <Button fx:id="fetchAllClaimButton" layoutX="21.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="All claims" />
           <Button fx:id="fetchProposableClaimButton" layoutX="21.0" layoutY="48.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="Sort by propose" />
-          <Label layoutX="41.0" layoutY="281.0" text="Propose claim" />
-          <TextField fx:id="insertID" layoutX="2.0" layoutY="305.0" />
-          <Button fx:id="fetchSingleClaimButton" layoutX="41.0" layoutY="339.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="find" />
-          <Label fx:id="errorLabel" layoutX="2.0" layoutY="330.0" prefHeight="17.0" prefWidth="149.0" />
+          <Label layoutX="39.0" layoutY="239.0" text="Propose claim" />
+          <Button fx:id="fetchSingleClaimButton" layoutX="41.0" layoutY="298.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Propose" />
+          <Label fx:id="errorLabel" layoutX="2.0" layoutY="281.0" prefHeight="17.0" prefWidth="149.0" />
          <Label layoutX="46.0" layoutY="-9.0" text="Sort options" />
          <Button fx:id="sortPerson" layoutX="22.0" layoutY="84.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="Order by person" />
          <Button fx:id="sortCard" layoutX="23.0" layoutY="122.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="Order by card" />
+         <ChoiceBox fx:id="claimChoiceBox" layoutX="4.0" layoutY="256.0" prefWidth="150.0" />
         </children>
     </Pane>
     <Pane layoutX="162.0" layoutY="13.0" prefHeight="432.0" prefWidth="781.0">
@@ -33,10 +33,12 @@
                 <TableColumn fx:id="bankNumber" prefWidth="75.0" text="Bank Number" />
             </columns>
         </TableView>
+      <Label fx:id="surveryorName" layoutX="281.0" layoutY="6.0" prefHeight="17.0" prefWidth="276.0" />
+      <Button fx:id="logout" layoutX="708.0" layoutY="-6.0" mnemonicParsing="false" text="Logout" />
+      <Button fx:id="refreshData" contentDisplay="BOTTOM" mnemonicParsing="false" text="Refresh" underline="true">
+         <cursor>
+            <Cursor fx:constant="OPEN_HAND" />
+         </cursor>
+      </Button>
     </Pane>
-   <Button fx:id="refreshData" contentDisplay="BOTTOM" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" text="Refresh" underline="true">
-      <cursor>
-         <Cursor fx:constant="OPEN_HAND" />
-      </cursor>
-   </Button>
 </AnchorPane>

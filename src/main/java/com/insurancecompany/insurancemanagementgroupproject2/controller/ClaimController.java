@@ -81,10 +81,12 @@ public class ClaimController {
 
 
     private String currentClaimId;
+    
 
     @FXML
     void confirmAddClaim(ActionEvent event)  {
         String claimId = generateRandomClaimID();
+
 
         String cardNumber = cardNumberInput.getText();
         String claimAmountText = claimAmountInput.getText();
@@ -94,16 +96,12 @@ public class ClaimController {
         String bankNumber = bankNumberField.getText();
 
         if (cardNumber.isEmpty() || claimAmountText.isEmpty() || insuredPerson.isEmpty()) {
-            if (cardNumber.isEmpty() || claimAmountText.isEmpty() || insuredPerson.isEmpty()) {
-                System.out.println("Debug: cardNumber: " + cardNumber);
-                System.out.println("Debug: claimAmountText: " + claimAmountText);
-                System.out.println("Debug: insuredPerson: " + insuredPerson);
-                validationMessage.setText("Please fill in all fields");
-                return;
-            }
-
-            validationMessage.setText("Please fill in all field");
+            System.out.println("Debug: cardNumber: " + cardNumber);
+            System.out.println("Debug: claimAmountText: " + claimAmountText);
+            System.out.println("Debug: insuredPerson: " + insuredPerson);
+            validationMessage.setText("Please fill in all fields");
             return;
+
         }
         double claimAmount = Double.parseDouble(claimAmountText);
         DatabaseConnection databaseConnection = new DatabaseConnection();
@@ -130,25 +128,34 @@ public class ClaimController {
             clearInputFields();
         } catch (SQLException e) {
             validationMessage.setText("Error: Unable to add claim. Please try again.");
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
     @FXML
     void backToHomePage(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/policy-holder-homepage.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/insurancecompany/insurancemanagementgroupproject2/fxml/policy-holder-homepage.fxml"));
+
+            if (fxmlLoader.getLocation() == null) {
+                validationMessage.setText("Error: Cannot find FXML file.");
+                return;
+            }
             Parent root = fxmlLoader.load();
 
-            Stage stage = new Stage();
-            stage.setTitle("Policy Holder Homepage");
-            stage.setScene(new Scene(root));
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            currentStage.setTitle("Policy Holder Homepage");
+            currentStage.setScene(new Scene(root));
             PolicyHolderController controller = fxmlLoader.getController();
             controller.fetchClaimData();
-            stage.show();
+            currentStage.show();
 
-            cancelButton.getScene().getWindow().hide();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Unexpected Error");
+            alert.setContentText("An unexpected error occurred: " + e.getMessage());
+            alert.showAndWait();
         }
     }
 
@@ -167,6 +174,7 @@ public class ClaimController {
         }
         return claimId.toString();
     }
+
     @FXML
     void uploadMultipleFiles(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -212,53 +220,55 @@ public class ClaimController {
         }
         return name.substring(lastIndexOf);
     }
-    public static List<Claim> fetchClaim(){
-        //Create new instance of DatabaseConnection class
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        Connection connection = databaseConnection.getConnection();
-        List<Claim> claimList = new ArrayList<Claim>();
-        try {
-            String getClaimsQuery = "SELECT * FROM claims";
-            Statement statement = connection.createStatement();
-            ResultSet queryResult = statement.executeQuery(getClaimsQuery);
-            //Extract result and put it into local arraylist
-            while (queryResult.next()) {
-                Claim claim = new Claim();
-                claim.setId(queryResult.getString("claim_id"));
-                claim.setInsuredPerson(queryResult.getString("insured_person"));
-                claim.setCardNumber(queryResult.getString("card_number"));
-                claim.setExamDate(queryResult.getDate("exam_date"));
-                claim.setClaimDate(queryResult.getDate("claim_date"));
-                claim.setClaimAmount(queryResult.getFloat("claim_amount"));
-                claim.setStatus(queryResult.getString("status"));
-                claim.setBankName(queryResult.getString("bank_name"));
-                claim.setBankUserName(queryResult.getString("bank_user_name"));
-                claim.setBankNumber(queryResult.getString("bank_number"));
-                claimList.add(claim);
-            }
-            System.out.println("Fetch data from database.claim successfully!");
-        } catch (SQLException e) {
-            System.out.println("SQL error: " + e);
-        }
-        return claimList;
-    }
 
-    public static boolean proposeClaim(String claimID){
-        //Database connection
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        Connection connection = databaseConnection.getConnection();
-        try{
-            String proposeClaim = "UPDATE claims SET status = 'PROCESSING', exam_date = CURRENT_DATE WHERE claim_id = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(proposeClaim);
-            preparedStatement.setString(1,claimID);
-            preparedStatement.execute();
-            System.out.println("Successfully propose claim " + claimID);
-            return true;
-        } catch (SQLException e) {
-            System.out.println("Error in SQL function proposeClaim: " + e);
-            return false;
+        public static List<Claim> fetchClaim() {
+            DatabaseConnection databaseConnection = new DatabaseConnection();
+            Connection connection = databaseConnection.getConnection();
+            List<Claim> claimList = new ArrayList<Claim>();
+            try {
+                String getClaimsQuery = "SELECT * FROM claims";
+                Statement statement = connection.createStatement();
+                ResultSet queryResult = statement.executeQuery(getClaimsQuery);
+                while (queryResult.next()) {
+                    Claim claim = new Claim();
+                    claim.setId(queryResult.getString("claim_id"));
+                    claim.setInsuredPerson(queryResult.getString("insured_person"));
+                    claim.setCardNumber(queryResult.getString("card_number"));
+                    claim.setExamDate(queryResult.getDate("exam_date"));
+                    claim.setClaimDate(queryResult.getDate("claim_date"));
+                    claim.setClaimAmount(queryResult.getFloat("claim_amount"));
+                    claim.setStatus(queryResult.getString("status"));
+                    claim.setBankName(queryResult.getString("bank_name"));
+                    claim.setBankUserName(queryResult.getString("bank_user_name"));
+                    claim.setBankNumber(queryResult.getString("bank_number"));
+                    claimList.add(claim);
+                }
+                System.out.println("Fetch data from database.claim successfully!");
+                connection.close();
+            } catch (SQLException e) {
+                System.out.println("SQL error: " + e);
+
+            }
+            return claimList;
         }
-    }
+
+        public static boolean proposeClaim (String claimID){
+            DatabaseConnection databaseConnection = new DatabaseConnection();
+            Connection connection = databaseConnection.getConnection();
+            try {
+                String proposeClaim = "UPDATE claims SET status = 'PROCESSING', exam_date = CURRENT_DATE WHERE claim_id = ?";
+                PreparedStatement preparedStatement = connection.prepareStatement(proposeClaim);
+                preparedStatement.setString(1, claimID);
+                preparedStatement.execute();
+                System.out.println("Successfully propose claim " + claimID);
+                connection.close();
+                return true;
+            } catch (SQLException e) {
+                System.out.println("Error in SQL function proposeClaim: " + e);
+                return false;
+            }
+        }
+
 
     public static boolean resubmitClaim(String claimID){
         //Database connection
@@ -270,6 +280,7 @@ public class ClaimController {
             preparedStatement.setString(1,claimID);
             preparedStatement.execute();
             System.out.println("Successfully resubmit claim " + claimID);
+            connection.close();
             return true;
         } catch (SQLException e) {
             System.out.println("Error in SQL function resubmitClaim: " + e);
@@ -282,11 +293,12 @@ public class ClaimController {
         DatabaseConnection databaseConnection = new DatabaseConnection();
         Connection connection = databaseConnection.getConnection();
         try{
-            String rejectClaim = "UPDATE claims SET status = 'REJECT' WHERE claim_id = ?";
+            String rejectClaim = "UPDATE claims SET status = 'REJECT', claim_date = CURRENT_DATE WHERE claim_id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(rejectClaim);
             preparedStatement.setString(1,claimID);
             preparedStatement.execute();
             System.out.println("Successfully reject claim " + claimID);
+            connection.close();
             return true;
         } catch (SQLException e) {
             System.out.println("Error in SQL function rejectClaim: " + e);
@@ -304,10 +316,12 @@ public class ClaimController {
             preparedStatement.setString(1,claimID);
             preparedStatement.execute();
             System.out.println("Successfully approve claim " + claimID);
+            connection.close();
             return true;
         } catch (SQLException e) {
             System.out.println("Error in SQL function approveClaim: " + e);
             return false;
         }
     }
+
 }

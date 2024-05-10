@@ -2,6 +2,7 @@ package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
+import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,6 +22,12 @@ import java.util.Optional;
 
 public class SurveyorHomepage {
     @FXML
+    public ChoiceBox<String> claimChoiceBox;
+    @FXML
+    public Label surveryorName;
+    @FXML
+    public Button logout;
+    @FXML
     private TableView<Claim> claimTable;
     @FXML
     private Button fetchAllClaimButton;
@@ -30,8 +37,6 @@ public class SurveyorHomepage {
     private Button fetchSingleClaimButton;
     @FXML
     private Label errorLabel;
-    @FXML
-    private TextField insertID;
     @FXML
     private Button sortPerson;
     @FXML
@@ -95,34 +100,44 @@ public class SurveyorHomepage {
         sortPerson.setOnAction(sortByPerson);
         sortCard.setOnAction(sortByCard);
         refreshData.setOnAction(refreshClaimData);
+        logout.setOnAction(logoutClick);
+        surveryorName.setText("Welcome Insurance Surveyor " + LoginData.usernameLogin);
         //Call API to fetch claim data from database
         fetchClaimData();
     }
 
-    EventHandler<ActionEvent> fetchAllClick = _ -> fetchAllClaimData();
-    EventHandler<ActionEvent> fetchProposalClick = _ -> fetchStatusNewClaimData();
-    EventHandler<ActionEvent> sortByPerson = _ -> sortByClaimPerson();
-    EventHandler<ActionEvent> sortByCard = _ -> sortByClaimCard();
-    EventHandler<ActionEvent> refreshClaimData = _ -> fetchClaimData();
+    EventHandler<ActionEvent> fetchAllClick = (ActionEvent ) -> fetchAllClaimData();
+    EventHandler<ActionEvent> fetchProposalClick = (ActionEvent ) -> fetchStatusNewClaimData();
+    EventHandler<ActionEvent> sortByPerson = (ActionEvent ) -> sortByClaimPerson();
+    EventHandler<ActionEvent> sortByCard = (ActionEvent ) -> sortByClaimCard();
+    EventHandler<ActionEvent> refreshClaimData = (ActionEvent ) -> fetchClaimData();
+    EventHandler<ActionEvent> logoutClick = (ActionEvent ) -> LoginData.logOut(logout);
 
     EventHandler<ActionEvent> fetchSingleClaimClick = new EventHandler<>() {
         @Override
         public void handle(ActionEvent actionEvent) {
-            if (insertID.getText().isEmpty()) {
-                errorLabel.setText("Cannot search empty field!");
+            if (claimChoiceBox.getValue() == null) {
+                errorLabel.setText("Empty claim value!");
             } else {
-                fetchSingleClaim(insertID.getText());
+                fetchSingleClaim(claimChoiceBox.getValue());
             }
         }
     };
     public List<Claim> fetchClaimData() {
         //Create ObservableList for TableView
         ObservableList<Claim> claimData = FXCollections.observableArrayList();
+        ObservableList<String> newClaimID = FXCollections.observableArrayList();
         claimList = ClaimController.fetchClaim();
         //Handling SQL exception by surrounding try catch
         claimData.addAll(claimList);
         //Set view table
         claimTable.setItems(claimData);
+        for (Claim claim : claimList){
+            if(claim.getStatus().equals("NEW")){
+                newClaimID.add(claim.getId());
+            }
+        }
+        claimChoiceBox.setItems(newClaimID);
         return claimList;
     }
     public void fetchSingleClaim(String claimID){
@@ -204,18 +219,19 @@ public class SurveyorHomepage {
             //Handle proposing a claim to manager
             boolean success = ClaimController.proposeClaim(claimID);
             System.out.println("Claim " + claimID + " proposed successfully: " + success);
-            insertID.setText("");
+            claimChoiceBox.setValue(null);
             fetchClaimData();
         } else if (result.get() == requestButton) {
             // Handle requesting more information from a claim
             boolean success = ClaimController.resubmitClaim(claimID);
             System.out.println("Claim " + claimID + " request for more information: " + success);
-            insertID.setText("");
+            claimChoiceBox.setValue(null);
             fetchClaimData();
         }else {
             //Handle cancellation of operation
-            insertID.setText("");
+            claimChoiceBox.setValue(null);
             System.out.println("Claim proposing cancelled.");
+            fetchAllClaimData();
         }
     }
 }
