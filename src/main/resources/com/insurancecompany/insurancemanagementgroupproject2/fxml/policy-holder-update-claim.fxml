@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="542.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.UpdateClaimController">
+   <children>
+      <Text layoutX="231.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Update Claim" AnchorPane.topAnchor="10.0">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Text>
+      <Text layoutX="277.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Claim ID" />
+      <TextField fx:id="updateClaimIDField" layoutX="220.0" layoutY="70.0" />
+      <Text layoutX="253.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insured Person ID" />
+      <TextField fx:id="updateInsuredPersonIDField" layoutX="220.0" layoutY="141.0" />
+      <Text layoutX="261.0" layoutY="193.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Claim Amount" />
+      <TextField fx:id="updateClaimAmountField" layoutX="221.0" layoutY="217.0" />
+      <Text layoutX="268.0" layoutY="272.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bank Name" />
+      <TextField fx:id="updateBankNameField" layoutX="221.0" layoutY="288.0" />
+      <Text layoutX="253.0" layoutY="336.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bank User Name" />
+      <TextField fx:id="updateBankUserNameField" layoutX="221.0" layoutY="352.0" />
+      <Text layoutX="240.0" layoutY="402.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bank Account Number" />
+      <TextField fx:id="updateBankNumberField" layoutX="221.0" layoutY="422.0" />
+      <Button layoutX="237.0" layoutY="462.0" mnemonicParsing="false" text="Upload Documents" />
+      <Button fx:id="cancelUpdateBtn" layoutX="210.0" layoutY="503.0" mnemonicParsing="false" text="Cancel" />
+      <Button fx:id="confirmUpdateBtn" layoutX="334.0" layoutY="503.0" mnemonicParsing="false" text="Confirm" />
+   </children>
+</AnchorPane>
