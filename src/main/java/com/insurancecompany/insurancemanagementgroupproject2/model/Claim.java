@@ -1,5 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Claim {
@@ -27,6 +29,7 @@ public class Claim {
         this.bankUserName = "";
         this.bankNumber = "";
     }
+
     public Claim(String insuredPerson, String cardNumber, Date examDate, Date claimDate, double claimAmount, String status, String bankName, String bankUserName, String bankNumber) {
         this.insuredPerson = insuredPerson;
         this.cardNumber = cardNumber;
@@ -118,4 +121,26 @@ public class Claim {
     public void setBankNumber(String bankNumber) {
         this.bankNumber = bankNumber;
     }
+    public java.sql.Date getClaimDateFormat(String claimDate) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date parsedDate = sdf.parse(claimDate);
+            return new java.sql.Date(parsedDate.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public java.sql.Date getExamDateFormat(String examDate) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date parsedDate = sdf.parse(examDate);
+            return new java.sql.Date(parsedDate.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }
