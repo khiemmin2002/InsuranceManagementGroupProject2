@@ -1,6 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
+import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Surveyor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +16,8 @@ import java.util.*;
 public class ManagerHomepage extends SurveyorHomepage{
     @FXML
     public TableView<Surveyor> surveyorTable;
+    @FXML
+    public Label managerName;
     @FXML
     private Button fetchAllClaimButton;
     @FXML
@@ -109,10 +112,11 @@ public class ManagerHomepage extends SurveyorHomepage{
         sortPerson.setOnAction(sortByPerson);
         sortCard.setOnAction(sortByCard);
         refreshData.setOnAction(refreshClaimData);
+        logout.setOnAction(logoutClick);
+        managerName.setText("Welcome Insurance Manager " + LoginData.usernameLogin);
         //Call API to fetch claim data from database
         claimList = fetchClaimData();
         fetchSurveyorData();
-
     }
     EventHandler<ActionEvent> refreshClaimData = new EventHandler<ActionEvent>() {
         @Override

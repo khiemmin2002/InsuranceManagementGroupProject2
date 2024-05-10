@@ -4,6 +4,7 @@ package com.insurancecompany.insurancemanagementgroupproject2.controller;
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.HelloApplication;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
+import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Manager;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -21,7 +22,7 @@ import javafx.stage.FileChooser;
 
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
+import javafx.util.Callback;
 
 
 import java.io.File;
@@ -50,8 +51,6 @@ public class PolicyHolderController {
     @FXML
     private TableView<Claim> claimTable;
 
-    @FXML
-    private MenuItem deleteClaim;
 
     @FXML
     private TableColumn<?, ?> bankName;
@@ -81,10 +80,82 @@ public class PolicyHolderController {
     @FXML
     private Button clearInputButton;
 
+    @FXML
+    private TableColumn<Claim, Void> deleteColumn;
+
 
     @FXML
     private Button btnUploadDocuments;
 
+    private String userName;
+
+
+    private void setUpDeleteColumn() {
+        deleteColumn.setCellFactory(param -> new TableCell<Claim, Void>() {
+            private final Button btn = new Button("Delete");
+            {
+                btn.setOnAction(event -> {
+                    Claim claim = getTableView().getItems().get(getIndex());
+                    if (claim != null) {
+                        deleteClaim(claim);
+                    }
+                });
+            }
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(btn);
+                }
+            }
+        });
+    }
+    private void showAlert(boolean success, String message) {
+        Alert.AlertType type = success ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR;
+        Alert alert = new Alert(type);
+        alert.setTitle(success ? "Success" : "Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void deleteClaim(Claim claim)  {
+        if (claim == null) {
+            showAlert(false, "No claim selected for deletion. ");
+            return;
+        }
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        Connection connection = databaseConnection.getConnection();
+        String deleteQuery = "DELETE FROM public.claims WHERE claim_id = ?";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)){
+            preparedStatement.setString(1, claim.getId());
+            int affectedRows = preparedStatement.executeUpdate();
+
+            if (affectedRows > 0) {
+                ObservableList<Claim> allClaims = claimTable.getItems();
+                allClaims.remove(claim);
+                showAlert(true, "Claim deleted successfully. ");
+
+            } else {
+                showAlert(false, "No claim was deleted. Claim might not exist.");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            showAlert(false, "Error deleting claim: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                showAlert(false, "Error closing database connection: " + e.getMessage());
+                System.out.println(e.getMessage());
+                e.printStackTrace();
+            }
+        }
+
+    }
 
 
     @FXML
@@ -103,7 +174,10 @@ public class PolicyHolderController {
             bankName.setPrefWidth(tableWidth * 0.15);
             bankUserName.setPrefWidth(tableWidth * 0.15);
             bankNumber.setPrefWidth(tableWidth * 0.15);
+            deleteColumn.setPrefWidth(tableWidth * 0.15);
         });
+        this.userName = LoginData.usernameLogin;
+        setUpDeleteColumn();
         fetchClaimData();
     }
 
@@ -122,10 +196,7 @@ public class PolicyHolderController {
 
     }
 
-    @FXML
-    private void deleteClaim() {
 
-    }
     @FXML
     void clearInputData(ActionEvent event) {
         inputClaimId.clear();
@@ -177,9 +248,11 @@ public class PolicyHolderController {
         ObservableList<Claim> claimData = FXCollections.observableArrayList();
 
         try {
-            String getClaimsQuery = "SELECT * FROM public.claims";
-            Statement statement = connection.createStatement();
-            ResultSet queryResult = statement.executeQuery(getClaimsQuery);
+            String getClaimsQuery = "SELECT * FROM public.claims WHERE insured_person = " +
+                    "(SELECT id FROM public.users WHERE user_name = ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(getClaimsQuery);
+            preparedStatement.setString(1, this.userName);
+            ResultSet queryResult = preparedStatement.executeQuery();
 
             while (queryResult.next()) {
                 Claim claim = new Claim();
@@ -206,6 +279,7 @@ public class PolicyHolderController {
             bankName.setCellValueFactory(new PropertyValueFactory<>("bankName"));
             bankUserName.setCellValueFactory(new PropertyValueFactory<>("bankUserName"));
             bankNumber.setCellValueFactory(new PropertyValueFactory<>("bankNumber"));
+
 
             claimTable.setItems(claimData); // Set the items to the TableView
         } catch (SQLException e) {

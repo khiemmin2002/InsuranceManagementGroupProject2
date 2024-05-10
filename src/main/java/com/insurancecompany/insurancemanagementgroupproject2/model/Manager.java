@@ -1,7 +1,5 @@
 package com.insurancecompany.insurancemanagementgroupproject2.model;
 
-import java.util.Date;
-
 public class Manager extends User {
     public Manager() {
     }

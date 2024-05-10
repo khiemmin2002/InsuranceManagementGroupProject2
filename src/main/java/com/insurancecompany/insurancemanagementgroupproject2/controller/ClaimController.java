@@ -81,10 +81,13 @@ public class ClaimController {
 
 
     private String currentClaimId;
+    
 
     @FXML
     void confirmAddClaim(ActionEvent event)  {
         String claimId = generateRandomClaimID();
+
+
         String cardNumber = cardNumberInput.getText();
         String claimAmountText = claimAmountInput.getText();
         String insuredPerson = insuredPersonInput.getText();
@@ -125,25 +128,34 @@ public class ClaimController {
             clearInputFields();
         } catch (SQLException e) {
             validationMessage.setText("Error: Unable to add claim. Please try again.");
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
     @FXML
     void backToHomePage(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/policy-holder-homepage.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/insurancecompany/insurancemanagementgroupproject2/fxml/policy-holder-homepage.fxml"));
+
+            if (fxmlLoader.getLocation() == null) {
+                validationMessage.setText("Error: Cannot find FXML file.");
+                return;
+            }
             Parent root = fxmlLoader.load();
 
-            Stage stage = new Stage();
-            stage.setTitle("Policy Holder Homepage");
-            stage.setScene(new Scene(root));
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            currentStage.setTitle("Policy Holder Homepage");
+            currentStage.setScene(new Scene(root));
             PolicyHolderController controller = fxmlLoader.getController();
             controller.fetchClaimData();
-            stage.show();
+            currentStage.show();
 
-            cancelButton.getScene().getWindow().hide();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Unexpected Error");
+            alert.setContentText("An unexpected error occurred: " + e.getMessage());
+            alert.showAndWait();
         }
     }
 
@@ -162,6 +174,7 @@ public class ClaimController {
         }
         return claimId.toString();
     }
+
     @FXML
     void uploadMultipleFiles(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -207,6 +220,7 @@ public class ClaimController {
         }
         return name.substring(lastIndexOf);
     }
+
         public static List<Claim> fetchClaim() {
             DatabaseConnection databaseConnection = new DatabaseConnection();
             Connection connection = databaseConnection.getConnection();
@@ -230,8 +244,10 @@ public class ClaimController {
                     claimList.add(claim);
                 }
                 System.out.println("Fetch data from database.claim successfully!");
+                connection.close();
             } catch (SQLException e) {
                 System.out.println("SQL error: " + e);
+
             }
             return claimList;
         }
@@ -245,6 +261,7 @@ public class ClaimController {
                 preparedStatement.setString(1, claimID);
                 preparedStatement.execute();
                 System.out.println("Successfully propose claim " + claimID);
+                connection.close();
                 return true;
             } catch (SQLException e) {
                 System.out.println("Error in SQL function proposeClaim: " + e);
@@ -263,6 +280,7 @@ public class ClaimController {
             preparedStatement.setString(1,claimID);
             preparedStatement.execute();
             System.out.println("Successfully resubmit claim " + claimID);
+            connection.close();
             return true;
         } catch (SQLException e) {
             System.out.println("Error in SQL function resubmitClaim: " + e);
@@ -280,6 +298,7 @@ public class ClaimController {
             preparedStatement.setString(1,claimID);
             preparedStatement.execute();
             System.out.println("Successfully reject claim " + claimID);
+            connection.close();
             return true;
         } catch (SQLException e) {
             System.out.println("Error in SQL function rejectClaim: " + e);
@@ -297,10 +316,12 @@ public class ClaimController {
             preparedStatement.setString(1,claimID);
             preparedStatement.execute();
             System.out.println("Successfully approve claim " + claimID);
+            connection.close();
             return true;
         } catch (SQLException e) {
             System.out.println("Error in SQL function approveClaim: " + e);
             return false;
         }
     }
+
 }

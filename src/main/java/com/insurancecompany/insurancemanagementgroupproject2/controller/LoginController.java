@@ -60,6 +60,7 @@ public class LoginController {
                 int roleId = resultSet.getInt("role_id");
                 System.out.println(roleId);
                 switch (roleId) {
+
                     case 1 -> {
                         LoginData.usernameLogin = usernameTextField.getText();
                         LoginData.roleId = roleId;
@@ -78,12 +79,19 @@ public class LoginController {
                         loadManagerHomePage();
                         System.out.println(LoginData.usernameLogin);
                     }
+                    case 5 -> {
+                        LoginData.usernameLogin = usernameTextField.getText();
+                        LoginData.roleId = roleId;
+                        loadPolicyHolderHomePage();
+                        System.out.println(LoginData.usernameLogin);
+                    }
                     case 6 -> {
                         LoginData.usernameLogin = usernameTextField.getText();
                         LoginData.roleId = roleId;
                         loadDependentHomePage();
                         System.out.println(LoginData.usernameLogin);
                     }
+
                     default -> loginMessageLabel.setText("Unknown role!");
                 }
             } else {
@@ -100,20 +108,24 @@ public class LoginController {
             }
         }
     }
+    public void loadPolicyHolderHomePage() {
+        Stage currentStage = (Stage) usernameTextField.getScene().getWindow();
+        SceneLoader.loadScene("fxml/policy-holder-homepage.fxml", currentStage);
+    }
 
     public void loadAdminHomePage() {
         Stage currentStage = (Stage) usernameTextField.getScene().getWindow();
         currentStage.setTitle("Admin Portal");
-        SceneLoader.loadScene("fxml/admin-homepage.fxml", currentStage);
+        SceneLoader.loadSceneWithInput("fxml/admin-homepage.fxml", currentStage,900,600);
     }
 
     public void loadSurveyorHomePage() {
         Stage currentStage = (Stage) usernameTextField.getScene().getWindow();
-        SceneLoader.loadScene("fxml/surveyor-homepage.fxml", currentStage);
+        SceneLoader.loadSceneWithInput("fxml/surveyor-homepage.fxml", currentStage, 957,461);
     }
     public void loadManagerHomePage() {
         Stage currentStage = (Stage) usernameTextField.getScene().getWindow();
-        SceneLoader.loadScene("fxml/manager-homepage.fxml", currentStage);
+        SceneLoader.loadSceneWithInput("fxml/manager-homepage.fxml", currentStage,944,709);
     }
 
     public void loadDependentHomePage() {
