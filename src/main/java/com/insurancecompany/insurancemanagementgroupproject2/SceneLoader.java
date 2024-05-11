@@ -17,6 +17,7 @@ public class SceneLoader {
             e.printStackTrace();
         }
     }
+
     public static void loadSceneWithInput(String fxmlPath, Stage stage, double width, double height) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(SceneLoader.class.getResource(fxmlPath));
