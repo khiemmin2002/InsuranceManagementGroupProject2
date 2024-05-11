@@ -1,6 +1,5 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
-import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import javafx.collections.FXCollections;
@@ -11,16 +10,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-public class SurveyorHomepage {
+public class SurveyorPageController {
     @FXML
     public ChoiceBox<String> claimChoiceBox;
     @FXML
