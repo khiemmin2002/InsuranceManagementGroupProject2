@@ -106,7 +106,7 @@ public class SurveyorHomepage {
         fetchClaimData();
     }
 
-    EventHandler<ActionEvent> fetchAllClick = (ActionEvent ) -> fetchAllClaimData();
+    EventHandler<ActionEvent> fetchAllClick = (ActionEvent ) -> fetchAllClaimData(claimList);
     EventHandler<ActionEvent> fetchProposalClick = (ActionEvent ) -> fetchStatusNewClaimData();
     EventHandler<ActionEvent> sortByPerson = (ActionEvent ) -> sortByClaimPerson();
     EventHandler<ActionEvent> sortByCard = (ActionEvent ) -> sortByClaimCard();
@@ -128,7 +128,6 @@ public class SurveyorHomepage {
         ObservableList<Claim> claimData = FXCollections.observableArrayList();
         ObservableList<String> newClaimID = FXCollections.observableArrayList();
         claimList = ClaimController.fetchClaim();
-        //Handling SQL exception by surrounding try catch
         claimData.addAll(claimList);
         //Set view table
         claimTable.setItems(claimData);
@@ -156,9 +155,9 @@ public class SurveyorHomepage {
         if(statusCheck){createProposeAlert(claimID);
         }
     }
-    public void fetchAllClaimData() {
+    public void fetchAllClaimData(List<Claim> claim) {
         ObservableList<Claim> claimData = FXCollections.observableArrayList();
-        claimData.addAll(claimList);
+        claimData.addAll(claim);
         claimTable.setItems(claimData);
     }
     public void fetchStatusNewClaimData() {
@@ -231,7 +230,7 @@ public class SurveyorHomepage {
             //Handle cancellation of operation
             claimChoiceBox.setValue(null);
             System.out.println("Claim proposing cancelled.");
-            fetchAllClaimData();
+            fetchAllClaimData(claimList);
         }
     }
 }
