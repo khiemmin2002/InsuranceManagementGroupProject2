@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 
 import java.util.*;
 
-public class ManagerPageController extends SurveyorHomepage{
+public class ManagerPageController extends SurveyorPageController {
     @FXML
     public Button createButton;
     @FXML
@@ -114,7 +114,7 @@ public class ManagerPageController extends SurveyorHomepage{
         managerName.setText("Welcome Insurance Manager " + LoginData.usernameLogin);
         createButton.setOnAction(ActionEvent -> SceneLoader.loadSceneWithInput("fxml/create-surveyor.fxml",thisStage(),382,487));
         editButton.setOnAction(ActionEvent -> SceneLoader.loadSceneWithInput("fxml/edit-surveyor.fxml",thisStage(),382,487));
-//        deleteButton.setOnAction();
+        deleteButton.setOnAction(ActionEvent -> SceneLoader.loadSceneWithInput("fxml/delete-surveyor.fxml",thisStage(),261,141));
         //Call API to fetch claim data from database
         claimList = fetchClaimData();
         fetchSurveyorData();
@@ -138,15 +138,13 @@ public class ManagerPageController extends SurveyorHomepage{
         }
     };
     public Stage thisStage(){
-        Stage currentStage = (Stage) createButton.getScene().getWindow();
-        return currentStage;
+        return (Stage) createButton.getScene().getWindow();
     }
-    public List<Surveyor> fetchSurveyorData(){
+    public void fetchSurveyorData(){
         ObservableList<Surveyor> surveyorObservableList = FXCollections.observableArrayList();
         surveyorList = surveyorController.fetchSurveyor();
         surveyorObservableList.addAll(surveyorList);
         surveyorTable.setItems(surveyorObservableList);
-        return surveyorList;
     }
 
     @Override

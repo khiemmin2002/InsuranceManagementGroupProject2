@@ -58,7 +58,6 @@ public class EditSurveyorController {
     EventHandler<ActionEvent> fillForm = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent actionEvent) {
-            String id = idBox.getValue();
             for(Surveyor surveyor : surveyorList){
                 if(surveyor.getId().equals(idBox.getValue())){
                     full_name.setText(surveyor.getFullName());
@@ -79,7 +78,6 @@ public class EditSurveyorController {
         }
         return id;
     }
-
     private void editSurveyor(String id){
         //Validate field is not empty
         if (full_name.getText().isEmpty() ||  email.getText().isEmpty()
