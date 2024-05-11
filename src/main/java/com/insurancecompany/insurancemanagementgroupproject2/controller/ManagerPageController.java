@@ -13,7 +13,21 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.*;
 
-public class ManagerHomepage extends SurveyorHomepage{
+public class ManagerPageController extends SurveyorHomepage{
+    @FXML
+    public TextField full_name;
+    @FXML
+    public PasswordField password;
+    @FXML
+    public TextField username;
+    @FXML
+    public TextField email;
+    @FXML
+    public TextField phone_number;
+    @FXML
+    public TextField address;
+    @FXML
+    public Button submitSurveyor;
     @FXML
     private Button btnLogOut;
     @FXML
@@ -70,6 +84,7 @@ public class ManagerHomepage extends SurveyorHomepage{
     private TableColumn<?, ?> surveyorPhoneNumber;
     private List<Claim> claimList = new ArrayList<Claim>();
     private SurveyorController surveyorController;
+    private List<Surveyor> surveyorList = new ArrayList<Surveyor>();
     @FXML
     private void initialize() {
         surveyorController = new SurveyorController();
@@ -115,7 +130,9 @@ public class ManagerHomepage extends SurveyorHomepage{
         sortCard.setOnAction(sortByCard);
         refreshData.setOnAction(refreshClaimData);
         logout.setOnAction(logoutClick);
+        submitSurveyor.setOnAction(ActionEvent -> createSurveyor());
         managerName.setText("Welcome Insurance Manager " + LoginData.usernameLogin);
+
         //Call API to fetch claim data from database
         claimList = fetchClaimData();
         fetchSurveyorData();
@@ -127,6 +144,7 @@ public class ManagerHomepage extends SurveyorHomepage{
             fetchSurveyorData();
         }
     };
+
     EventHandler<ActionEvent> approveClaimClick = new EventHandler<>() {
         @Override
         public void handle(ActionEvent actionEvent) {
@@ -139,7 +157,8 @@ public class ManagerHomepage extends SurveyorHomepage{
     };
     public void fetchSurveyorData(){
         ObservableList<Surveyor> surveyorObservableList = FXCollections.observableArrayList();
-        surveyorObservableList.addAll(surveyorController.fetchSurveyor());
+        surveyorList = surveyorController.fetchSurveyor();
+        surveyorObservableList.addAll(surveyorList);
         surveyorTable.setItems(surveyorObservableList);
     }
 
@@ -210,5 +229,45 @@ public class ManagerHomepage extends SurveyorHomepage{
             System.out.println("Claim proposing cancelled.");
             fetchAllClaimData();
         }
+    }
+    private String createSurveyorID(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("T");
+
+        Random random = new Random();
+        for (int i = 0; i < 6; i++) {
+            sb.append(random.nextInt(10)); // Append random digit (0-9)
+        }
+        String id = sb.toString();
+        for(Surveyor surveyor : surveyorList){
+            if(surveyor.getId().equals(id)){
+                createSurveyor();
+            }
+        }
+        return id;
+    }
+    private void createSurveyor(){
+        if (full_name.getText().isEmpty() || username.getText().isEmpty() || password.getText().isEmpty() || email.getText().isEmpty()
+                || phone_number.getText().isEmpty() || address.getText().isEmpty()) {
+            errorLabel.setText("Please fill in all fields");
+            return;
+        }
+
+        if (!ValidateInput.isValidEmail(email.getText())) {
+            errorLabel.setText("Invalid email format");
+            return;
+        }
+
+        // Validate phone number
+        if (!ValidateInput.isValidPhoneNumber(phone_number.getText())) {
+            errorLabel.setText("Invalid phone number format");
+            return;
+        }
+
+        surveyorController.createNewSurveyor(
+            createSurveyorID(),full_name.getText(),username.getText(),password.getText(),email.getText(),
+                phone_number.getText(),address.getText());
+
+        System.out.println("Created surveyor " + full_name.getText() + " successfully!");
     }
 }

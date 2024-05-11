@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="709.0" prefWidth="944.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.ManagerHomepage">
+<AnchorPane prefHeight="709.0" prefWidth="944.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.ManagerPageController">
     <Pane layoutX="14.0" layoutY="49.0" prefHeight="380.0" prefWidth="152.0">
         <Button fx:id="fetchAllClaimButton" layoutX="21.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="All claims" />
         <Button fx:id="fetchProposableClaimButton" layoutX="21.0" layoutY="48.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="Sort by proposed" />
@@ -31,7 +31,7 @@
             </columns>
         </TableView>
       <Label fx:id="managerName" layoutX="204.0" layoutY="6.0" prefHeight="17.0" prefWidth="357.0" />
-      <Button fx:id="btnLogOut" layoutX="694.0" layoutY="2.0" mnemonicParsing="false" onAction="#logOutButtonOnAction" text="Logout" />
+      <Button fx:id="logout" layoutX="694.0" layoutY="2.0" mnemonicParsing="false" text="Logout" />
     </Pane>
     <Button fx:id="refreshData" contentDisplay="BOTTOM" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" text="Refresh" underline="true" />
     <Pane layoutX="176.0" layoutY="429.0" prefHeight="279.0" prefWidth="746.0">
