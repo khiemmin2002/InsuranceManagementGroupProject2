@@ -8,7 +8,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class CreateFormController {
+public class CreateSurveyorController {
     @FXML
     public TextField full_name;
     @FXML

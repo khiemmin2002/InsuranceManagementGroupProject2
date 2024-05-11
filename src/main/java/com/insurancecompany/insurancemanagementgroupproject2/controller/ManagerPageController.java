@@ -113,7 +113,7 @@ public class ManagerPageController extends SurveyorHomepage{
         logout.setOnAction(logoutClick);
         managerName.setText("Welcome Insurance Manager " + LoginData.usernameLogin);
         createButton.setOnAction(ActionEvent -> SceneLoader.loadSceneWithInput("fxml/create-surveyor.fxml",thisStage(),382,487));
-//        editButton.setOnAction();
+        editButton.setOnAction(ActionEvent -> SceneLoader.loadSceneWithInput("fxml/edit-surveyor.fxml",thisStage(),382,487));
 //        deleteButton.setOnAction();
         //Call API to fetch claim data from database
         claimList = fetchClaimData();
@@ -141,11 +141,12 @@ public class ManagerPageController extends SurveyorHomepage{
         Stage currentStage = (Stage) createButton.getScene().getWindow();
         return currentStage;
     }
-    public void fetchSurveyorData(){
+    public List<Surveyor> fetchSurveyorData(){
         ObservableList<Surveyor> surveyorObservableList = FXCollections.observableArrayList();
         surveyorList = surveyorController.fetchSurveyor();
         surveyorObservableList.addAll(surveyorList);
         surveyorTable.setItems(surveyorObservableList);
+        return surveyorList;
     }
 
     @Override
@@ -219,7 +220,6 @@ public class ManagerPageController extends SurveyorHomepage{
     public String createSurveyorID(){
         StringBuilder sb = new StringBuilder();
         sb.append("T");
-
         Random random = new Random();
         for (int i = 0; i < 6; i++) {
             sb.append(random.nextInt(10)); // Append random digit (0-9)
