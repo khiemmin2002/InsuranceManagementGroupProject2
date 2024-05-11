@@ -3,16 +3,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="709.0" prefWidth="944.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.ManagerHomepage">
+<AnchorPane prefHeight="709.0" prefWidth="944.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.ManagerPageController">
     <Pane layoutX="14.0" layoutY="49.0" prefHeight="380.0" prefWidth="152.0">
-        <Button fx:id="fetchAllClaimButton" layoutX="21.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="All claims" />
-        <Button fx:id="fetchProposableClaimButton" layoutX="21.0" layoutY="48.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="Sort by proposed" />
         <Label layoutX="37.0" layoutY="281.0" text="Approving claim" />
         <Button fx:id="fetchSingleClaimButton" layoutX="41.0" layoutY="347.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="approve" />
         <Label fx:id="errorLabel" layoutX="2.0" layoutY="330.0" prefHeight="17.0" prefWidth="149.0" />
-        <Label layoutX="46.0" layoutY="-9.0" text="Sort options" />
-        <Button fx:id="sortPerson" layoutX="22.0" layoutY="84.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="Order by person" />
-        <Button fx:id="sortCard" layoutX="23.0" layoutY="122.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="Order by card" />
       <ChoiceBox fx:id="claimChoiceBox" layoutX="2.0" layoutY="305.0" prefWidth="150.0" />
     </Pane>
     <Pane layoutX="162.0" layoutY="13.0" prefHeight="432.0" prefWidth="781.0">
@@ -31,7 +26,7 @@
             </columns>
         </TableView>
       <Label fx:id="managerName" layoutX="204.0" layoutY="6.0" prefHeight="17.0" prefWidth="357.0" />
-      <Button fx:id="btnLogOut" layoutX="694.0" layoutY="2.0" mnemonicParsing="false" onAction="#logOutButtonOnAction" text="Logout" />
+      <Button fx:id="logout" layoutX="694.0" layoutY="2.0" mnemonicParsing="false" text="Logout" />
     </Pane>
     <Button fx:id="refreshData" contentDisplay="BOTTOM" layoutX="14.0" layoutY="13.0" mnemonicParsing="false" text="Refresh" underline="true" />
     <Pane layoutX="176.0" layoutY="429.0" prefHeight="279.0" prefWidth="746.0">
@@ -45,5 +40,11 @@
             </columns>
         </TableView>
     </Pane>
-   <Pane layoutX="9.0" layoutY="445.0" prefHeight="254.0" prefWidth="167.0" />
+   <Pane layoutX="9.0" layoutY="445.0" prefHeight="254.0" prefWidth="167.0">
+      <children>
+         <Button fx:id="createButton" layoutX="52.0" layoutY="33.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="65.0" text="Create" />
+         <Label layoutX="43.0" layoutY="6.0" text="Surveyor Menu" />
+         <Button fx:id="deleteButton" layoutX="51.0" layoutY="115.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="65.0" text="Delete" />
+         <Button fx:id="editButton" layoutX="52.0" layoutY="73.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="65.0" text="Edit" />
+      </children></Pane>
 </AnchorPane>

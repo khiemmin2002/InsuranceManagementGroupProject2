@@ -27,9 +27,9 @@ public class SurveyorController extends Thread{
                         queryResult.getString("id"),
                         queryResult.getString("full_name"),
                         queryResult.getString("user_name"),
+                        queryResult.getString("password"),
                         queryResult.getString("email"),
                         queryResult.getString("phone_number"),
-                        queryResult.getString("password"),
                         queryResult.getString("address"),
                         queryResult.getInt("role_id")
                 );
