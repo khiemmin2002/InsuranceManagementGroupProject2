@@ -1,287 +1,65 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
-import com.insurancecompany.insurancemanagementgroupproject2.SceneLoader;
-import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
-import com.insurancecompany.insurancemanagementgroupproject2.model.InsuranceCard;
-import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
-import com.insurancecompany.insurancemanagementgroupproject2.model.User;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
-import javafx.util.Callback;
+import com.insurancecompany.insurancemanagementgroupproject2.model.*;
 
-import java.net.URL;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.ResourceBundle;
 
-public class AdminController implements Initializable {
-
-    //Button Define
-    @FXML
-    private Button navMainDashboardBtn;
-    @FXML
-    private Button navUsersBtn;
-    @FXML
-    private Button navInsuranceCardsBtn;
-    @FXML
-    private Button navClaimsBtn;
-    @FXML
-    private Button navProfileBtn;
-    @FXML
-    private Button btnLogOut;
-
-    //AnchorPane define
-    @FXML
-    private AnchorPane mainDashboard;
-    @FXML
-    private AnchorPane userInformationDashboard;
-    @FXML
-    private AnchorPane insuranceCardDashboard;
-    @FXML
-    private AnchorPane claimDashboard;
-    @FXML
-    private AnchorPane profileDashboard;
-
-    //navbar define
-    @FXML
-    private Label navAdminid;
-    @FXML
-    private Label navUsername;
-    @FXML
-    private Label navFullname;
-    @FXML
-    private Label topUsername;
-
-    //main dashboard define
-    @FXML
-    private Label totalProviders;
-    @FXML
-    private Label totalCustomers;
-    @FXML
-    private Label totalInsuranceCards;
-    @FXML
-    private Label totalClaims;
-    @FXML
-    private TableView<Claim> mainDashboardTableView;
-
-    @FXML
-    private TableColumn<Claim, String> mainDashboardColClaimId;
-
-    @FXML
-    private TableColumn<Claim, String> mainDashboardColInsuredPerson;
-
-    @FXML
-    private TableColumn<Claim, Date> mainDashboardColClaimDate;
-
-    @FXML
-    private TableColumn<Claim, Float> mainDashboardColAmount;
-
-    @FXML
-    private TableColumn<Claim, String> mainDashboardColStatus;
-    private ObservableList<Claim> claimObservableList = FXCollections.observableArrayList();
-
-    //User dashboard
-    @FXML
-    private TableView<User> userTableView;
-    @FXML
-    private TableColumn<User, String> userColId;
-    @FXML
-    private TableColumn<User, String> userColFullname;
-    @FXML
-    private TableColumn<User, String> userColUsername;
-    @FXML
-    private TableColumn<User, String> userColPassword;
-    @FXML
-    private TableColumn<User, String> userColEmail;
-    @FXML
-    private TableColumn<User, String> userColPhonenumber;
-    @FXML
-    private TableColumn<User, String> userColAddress;
-    @FXML
-    private TableColumn<User, Integer> userColRole;
-    private ObservableList<User> userObservableList = FXCollections.observableArrayList();
-    @FXML
-    private AnchorPane editFormUserInformation;
-    @FXML
-    private TextField editFormUserId;
-    @FXML
-    private TextField editFormUserFullName;
-    @FXML
-    private TextField editFormUserName;
-    @FXML
-    private TextField editFormUserPassword;
-    @FXML
-    private TextField editFormUserEmail;
-    @FXML
-    private TextField editFormUserPhoneNumber;
-    @FXML
-    private TextArea editFormUserAddress;
-    @FXML
-    private TextField editFormUserRole;
-
-    @FXML
-    private Button editFormUserConfirmBtn;
-    @FXML
-    private Button editFormUserDeleteBtn;
-
-    //Claim dashboard
-    @FXML
-    private TableView<Claim> claimTableView;
-
-    @FXML
-    private TableColumn<Claim, String> claimColClaimId;
-
-    @FXML
-    private TableColumn<Claim, String> claimColInsuredPerson;
-
-    @FXML
-    private TableColumn<Claim, String> claimColCardNumber;
-
-    @FXML
-    private TableColumn<Claim, String> claimColClaimDate;
-
-    @FXML
-    private TableColumn<Claim, Float> claimColAmount;
-
-    @FXML
-    private TableColumn<Claim, String> claimColStatus;
-
-    @FXML
-    private TableColumn<Claim, Void> claimColAction;
-    @FXML
-    private AnchorPane editFormClaimInformation;
-    @FXML
-    private TextField editFormClaimId;
-    @FXML
-    private TextField editFormClaimInsuredPerson;
-    @FXML
-    private TextField editFormClaimCardNumber;
-    @FXML
-    private TextField editFormClaimDate;
-    @FXML
-    private TextField editFormClaimExam;
-    @FXML
-    private TextField editFormClaimAmount;
-    @FXML
-    private TextField editFormClaimStatus;
-    @FXML
-    private TextField editFormClaimBankName;
-    @FXML
-    private TextField editFormClaimBankUser;
-    @FXML
-    private TextField editFormClaimBankNumber;
-    @FXML
-    private TextField editFormClaimTotalDocument;
-    @FXML
-    private Button editFormClaimConfirmBtn;
-    @FXML
-    private Button editFormClaimCancelBtn;
-
-    //Insurance Card Dashboard
-    @FXML
-    private TableView<InsuranceCard> insuranceCardTableView;
-    @FXML
-    private TableColumn<InsuranceCard, String> insuranceCardColCardNumber;
-    @FXML
-    private TableColumn<InsuranceCard, Date> insuranceCardColExpDate;
-    @FXML
-    private TableColumn<InsuranceCard, String> insuranceCardColCardHolder;
-    @FXML
-    private TableColumn<InsuranceCard, String> insuranceCardColPolicyOwner;
-    @FXML
-    private TableColumn<InsuranceCard, Void> insuranceCardColAction;
-    private ObservableList<InsuranceCard> insuranceCardObservableList = FXCollections.observableArrayList();
-    @FXML
-    private AnchorPane editFormInsuranceCardInformation;
-    @FXML
-    private TextField editFormInsuranceCardNumber;
-    @FXML
-    private TextField editFormInsuranceExpDate;
-    @FXML
-    private TextField editFormInsuranceCardHolderId;
-    @FXML
-    private TextField editFormInsuranceCardHolderName;
-    @FXML
-    private TextField editFormInsurancePolicyOwnerId;
-    @FXML
-    private TextField editFormInsurancePolicyOwnerName;
-    @FXML
-    private Button editFormInsuranceConfirmBtn;
-    @FXML
-    private Button editFormInsuranceCancelBtn;
-
-    //Profile Dashboard
-    @FXML
-    private Label profileDashboardId;
-    @FXML
-    private Label profileDashboardUsername;
-    @FXML
-    private Label profileDashboardEmail;
-    @FXML
-    private Label profileDashboardFullname;
-    @FXML
-    private TextField editProfileId;
-    @FXML
-    private TextField editProfileFullName;
-    @FXML
-    private TextField editProfileUserName;
-    @FXML
-    private TextField editProfilePassword;
-    @FXML
-    private TextField editProfileEmail;
-    @FXML
-    private TextField editProfilePhoneNumber;
-    @FXML
-    private TextArea editProfileAddress;
-    @FXML
-    private TextField editProfileRole;
-    @FXML
-    private Button editProfileConfirmBtn;
+public class AdminController {
 
     DatabaseConnection databaseConnection = new DatabaseConnection();
     Connection connection = databaseConnection.getConnection();
 
-    //User Dashboard functions
-    @FXML
-    private void selectUserRow() {
-        User selectedUser = userTableView.getSelectionModel().getSelectedItem();
-        if (selectedUser != null) {
-            editFormUserId.setText(selectedUser.getId());
-            editFormUserFullName.setText(selectedUser.getFullName());
-            editFormUserName.setText(selectedUser.getUserName());
-            editFormUserPassword.setText(selectedUser.getPassword());
-            editFormUserEmail.setText(selectedUser.getEmail());
-            editFormUserPhoneNumber.setText(selectedUser.getPhoneNumber());
-            editFormUserAddress.setText(selectedUser.getAddress());
-            editFormUserRole.setText(getRoleName(selectedUser.getRoleId()));
-            editFormUserInformation.setVisible(true);
+    //Role Functions
+    public ArrayList<Role> fetchRolesFromDatabase(){
+        ArrayList<Role> roleArrayList = new ArrayList<>();
+        try {
+            String queryRoles = "SELECT * FROM roles";
+            PreparedStatement statement = connection.prepareStatement(queryRoles);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String roleName = resultSet.getString("role");
+                Role role = new Role(id, roleName);
+                roleArrayList.add(role);
+            }
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
+        return roleArrayList;
     }
 
-    @FXML
-    private void updateUserInformation() {
-        User selectedUser = userTableView.getSelectionModel().getSelectedItem();
+    //User functions
+    public boolean addUser(User user){
         try {
-            if (selectedUser != null) {
-                String id = selectedUser.getId();
-                String fullName = editFormUserFullName.getText();
-                String password = editFormUserPassword.getText();
-                String email = editFormUserEmail.getText();
-                String phoneNumber = editFormUserPhoneNumber.getText();
-                String address = editFormUserAddress.getText();
+            String insertQuery = "INSERT INTO users (id,full_name, user_name, password, email, phone_number, address, role_id) VALUES (?,?, ?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
+                statement.setString(1,user.getId());
+                statement.setString(2, user.getFullName());
+                statement.setString(3, user.getUserName());
+                statement.setString(4, user.getPassword());
+                statement.setString(5, user.getEmail());
+                statement.setString(6, user.getPhoneNumber());
+                statement.setString(7, user.getAddress());
+                statement.setInt(8, user.getRoleId());
+
+                int rowsInserted = statement.executeUpdate();
+                return rowsInserted > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public boolean updateUser(String id, String fullName, String password, String email, String phoneNumber, String address) {
+        try {
                 String updateProfileQuery = "UPDATE users SET full_name = ?, password = ?, email = ?, phone_number = ?, address = ? WHERE id = ?";
                 try (PreparedStatement statement = connection.prepareStatement(updateProfileQuery)) {
                     statement.setString(1, fullName);
@@ -293,63 +71,37 @@ public class AdminController implements Initializable {
                     int rowsUpdated = statement.executeUpdate();
                     if (rowsUpdated > 0) {
                         System.out.println("User Information updated successfully!");
-                        editFormUserFullName.setText(fullName);
-                        editFormUserPassword.setText(password);
-                        editFormUserEmail.setText(email);
-                        editFormUserPhoneNumber.setText(phoneNumber);
-                        editFormUserAddress.setText(address);
-                        selectedUser.setFullName(fullName);
-                        selectedUser.setPassword(password);
-                        selectedUser.setEmail(email);
-                        selectedUser.setPhoneNumber(phoneNumber);
-                        selectedUser.setAddress(address);
-                        userTableView.refresh();
+                        return true;
                     }
                 }
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
-    @FXML
-    private void deleteUserInformation() {
-        User selectedUser = userTableView.getSelectionModel().getSelectedItem();
-        if (selectedUser != null) {
+    public boolean deleteUser(String id) {
             try {
-                String id = selectedUser.getId();
                 String deleteQuery = "DELETE FROM users WHERE id = ?";
                 try (PreparedStatement statement = connection.prepareStatement(deleteQuery)) {
                     statement.setString(1, id);
                     int rowDeleted = statement.executeUpdate();
                     if (rowDeleted > 0) {
                         System.out.println("User deleted successfully!");
-                        userObservableList.remove(selectedUser);
-                        editFormUserInformation.setVisible(false);
-                        userTableView.refresh();
+                        return true;
+//                        userObservableList.remove(selectedUser);
+//                        editFormUserInformation.setVisible(false);
+//                        userTableView.refresh();s
                     }
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }
+            return false;
     }
 
-    private void displayUsersDashboardTableView() {
-        userColId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        userColFullname.setCellValueFactory(new PropertyValueFactory<>("fullName"));
-        userColUsername.setCellValueFactory(new PropertyValueFactory<>("userName"));
-        userColPassword.setCellValueFactory(new PropertyValueFactory<>("password"));
-        userColEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        userColPhonenumber.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-        userColAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
-        userColRole.setCellValueFactory(new PropertyValueFactory<>("roleId"));
-        fetchUsersFromDatabase();
-
-        userTableView.setItems(userObservableList);
-    }
-
-    private void fetchUsersFromDatabase() {
+    public ArrayList<User> fetchUsersFromDatabase() {
+        ArrayList<User> userArrayList = new ArrayList<>();
         try {
             String queryAllUsers = "SELECT * FROM users WHERE role_id = 2 OR role_id = 3 OR role_id = 4 OR role_id = 5 OR role_id =6";
             PreparedStatement statement = connection.prepareStatement(queryAllUsers);
@@ -364,7 +116,8 @@ public class AdminController implements Initializable {
                 user.setPhoneNumber(resultSet.getString("phone_number"));
                 user.setAddress(resultSet.getString("address"));
                 user.setRoleId(resultSet.getInt("role_id"));
-                userObservableList.add(user);
+//                userObservableList.add(user);
+                userArrayList.add(user);
             }
             resultSet.close();
             statement.close();
@@ -372,34 +125,27 @@ public class AdminController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return userArrayList;
     }
 
     //Insurance Card Dashboard
-
-    @FXML
-    private void deleteInsuranceCardInformation(InsuranceCard selectedInsuranceCard){
-        if (selectedInsuranceCard != null) {
+    public boolean deleteInsuranceCardInformation(String cardNumber){
             try {
-                String card_number = selectedInsuranceCard.getCardNumber();
                 String deleteQuery = "DELETE FROM insurance_card WHERE card_number = ?";
                 try (PreparedStatement statement = connection.prepareStatement(deleteQuery)) {
-                    statement.setString(1, card_number);
+                    statement.setString(1, cardNumber);
                     int rowDeleted = statement.executeUpdate();
                     if (rowDeleted > 0) {
                         System.out.println("Insurance Card deleted successfully!");
-                        insuranceCardObservableList.remove(selectedInsuranceCard);
-                        insuranceCardTableView.refresh();
+                        return true;
                     }
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
-            }
         }
+            return false;
     }
-    private void updateInsuranceCardInformation(InsuranceCard selectedInsuranceCard) throws ParseException {
-        if (selectedInsuranceCard != null) {
-            String cardNumber = selectedInsuranceCard.getCardNumber();
-            String expDate = editFormInsuranceExpDate.getText();
+    public boolean updateInsuranceCardInformation(String cardNumber, String expDate) throws ParseException {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date parsedDate = sdf.parse(expDate);
             java.sql.Date sqlDate = new java.sql.Date(parsedDate.getTime());
@@ -409,99 +155,21 @@ public class AdminController implements Initializable {
                 statement.setDate(1, sqlDate);
                 statement.setString(2, cardNumber);
                 int rowsUpdated = statement.executeUpdate();
-                System.out.println("Rows Updated: " + rowsUpdated);
-
                 if (rowsUpdated > 0) {
                     System.out.println("Insurance Card Information updated successfully!");
-                    selectedInsuranceCard.setExpirationDate(sqlDate);
-                    insuranceCardTableView.refresh();
-                    editFormInsuranceExpDate.setText(String.valueOf(sqlDate));
-                    editFormInsuranceCardInformation.setVisible(false);
+                    return true;
+//                    selectedInsuranceCard.setExpirationDate(sqlDate);
+//                    insuranceCardTableView.refresh();
+//                    editFormInsuranceExpDate.setText(String.valueOf(sqlDate));
+//                    editFormInsuranceCardInformation.setVisible(false);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }
+            return false;
     }
-    @FXML
-    void editFormInsuranceCancelBtnOnAction() {
-        editFormInsuranceCardInformation.setVisible(false);
-    }
-    @FXML
-    private void selectInsuranceCardRow(InsuranceCard selectedInsuranceCard) {
-        try {
-            if (selectedInsuranceCard != null) {
-                editFormInsuranceCardNumber.setText(selectedInsuranceCard.getCardNumber());
-                editFormInsuranceExpDate.setText(String.valueOf(selectedInsuranceCard.getExpirationDate()));
-                editFormInsuranceCardHolderId.setText(selectedInsuranceCard.getCardHolderId());
-                editFormInsuranceCardHolderName.setText(getNameForUser(selectedInsuranceCard.getCardHolderId()));
-                editFormInsurancePolicyOwnerId.setText(selectedInsuranceCard.getPolicyOwnerId());
-                editFormInsurancePolicyOwnerName.setText(getNameForUser(selectedInsuranceCard.getPolicyOwnerId()));
-                editFormInsuranceCardInformation.setVisible(true);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    private void displayInsuranceCardDashboardTableView() {
-        insuranceCardColCardNumber.setCellValueFactory(new PropertyValueFactory<>("cardNumber"));
-        insuranceCardColExpDate.setCellValueFactory(new PropertyValueFactory<>("expirationDate"));
-        insuranceCardColCardHolder.setCellValueFactory(cellData -> {
-            String cardHolderId = cellData.getValue().getCardHolderId();
-            String name = getNameForUser(cardHolderId);
-            return new SimpleStringProperty(name);
-        });
-        insuranceCardColPolicyOwner.setCellValueFactory(cellData -> {
-            String policyOwnerId = cellData.getValue().getPolicyOwnerId();
-            String name = getNameForUser(policyOwnerId);
-            return new SimpleStringProperty(name);
-        });
-        insuranceCardColAction.setCellFactory(createInsuranceCardActionCellFactory());
-        fetchInsuranceCardsFromDatabase();
-        insuranceCardTableView.setItems(insuranceCardObservableList);
-    }
-    private Callback<TableColumn<InsuranceCard, Void>, TableCell<InsuranceCard, Void>> createInsuranceCardActionCellFactory() {
-        return new Callback<TableColumn<InsuranceCard, Void>, TableCell<InsuranceCard, Void>>() {
-            @Override
-            public TableCell<InsuranceCard, Void> call(TableColumn<InsuranceCard, Void> param) {
-                return new TableCell<InsuranceCard, Void>() {
-                    final Button editButton = new Button("Edit");
-                    final Button deleteButton = new Button("Delete");
-
-                    {
-                        editButton.setOnAction(event -> {
-                            InsuranceCard selectedInsuranceCard = getTableView().getItems().get(getIndex());
-                            selectInsuranceCardRow(selectedInsuranceCard);
-                            editFormInsuranceConfirmBtn.setOnAction(event1 -> {
-                                try {
-                                    updateInsuranceCardInformation(selectedInsuranceCard);
-                                } catch (ParseException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            });
-                            System.out.println(selectedInsuranceCard.getCardNumber());
-                        });
-
-                        deleteButton.setOnAction(event -> {
-                            InsuranceCard insuranceCard = getTableView().getItems().get(getIndex());
-                            deleteInsuranceCardInformation(insuranceCard);
-                        });
-                    }
-
-                    @Override
-                    protected void updateItem(Void item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setGraphic(null);
-                        } else {
-                            setGraphic(new HBox(10, editButton, deleteButton));
-                        }
-                    }
-                };
-            }
-        };
-    }
-    private void fetchInsuranceCardsFromDatabase() {
+    public ArrayList<InsuranceCard> fetchInsuranceCardsFromDatabase() {
+        ArrayList<InsuranceCard> insuranceCardArrayList = new ArrayList<>();
         try (Connection connection = new DatabaseConnection().getConnection();
              PreparedStatement statement = connection.prepareStatement("SELECT * FROM insurance_card");
              ResultSet resultSet = statement.executeQuery()) {
@@ -512,24 +180,17 @@ public class AdminController implements Initializable {
                 insuranceCard.setExpirationDate(resultSet.getDate("expiration_date"));
                 insuranceCard.setCardHolderId(resultSet.getString("card_holder_id"));
                 insuranceCard.setPolicyOwnerId(resultSet.getString("policy_owner_id"));
-                insuranceCardObservableList.add(insuranceCard);
+//                insuranceCardObservableList.add(insuranceCard);
+                insuranceCardArrayList.add(insuranceCard);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return insuranceCardArrayList;
     }
 
     //Claim Dashboard
-    private void updateClaimInformation(Claim selectedClaim) {
-        String claimId = selectedClaim.getId();
-        String claimDate = editFormClaimDate.getText();
-        String examDate = editFormClaimExam.getText();
-        String amount = editFormClaimAmount.getText();
-        String status = editFormClaimStatus.getText();
-        String bankName = editFormClaimBankName.getText();
-        String bankUser = editFormClaimBankUser.getText();
-        String bankNumber = editFormClaimBankNumber.getText();
-
+    public boolean updateClaimInformation(String claimId, String claimDate, String examDate, String amount, String status, String bankName, String bankUser, String bankNumber) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date parsedClaimDate = null;
         java.util.Date parsedExamDate = null;
@@ -543,7 +204,7 @@ public class AdminController implements Initializable {
             }
         } catch (ParseException e) {
             e.printStackTrace();
-            return;
+            return false;
         }
 
         try {
@@ -553,15 +214,15 @@ public class AdminController implements Initializable {
             }
         } catch (ParseException e) {
             e.printStackTrace();
-            return;
+            return false;
         }
 
-        float claimAmount;
+        double claimAmount;
         try {
-            claimAmount = Float.parseFloat(amount);
+            claimAmount = Double.parseDouble(amount);
         } catch (NumberFormatException | NullPointerException e) {
             e.printStackTrace();
-            return;
+            return false;
         }
 
         try {
@@ -571,66 +232,25 @@ public class AdminController implements Initializable {
                 else statement.setNull(1, Types.DATE);
                 if (sqlExamDate != null) statement.setDate(2, sqlExamDate);
                 else statement.setNull(2, Types.DATE);
-                statement.setFloat(3, claimAmount);
+                statement.setDouble(3, claimAmount);
                 statement.setString(4, status);
                 statement.setString(5, bankName);
                 statement.setString(6, bankUser);
                 statement.setString(7, bankNumber);
                 statement.setString(8, claimId);
-
                 int rowsUpdated = statement.executeUpdate();
                 if (rowsUpdated > 0) {
                     System.out.println("Claim information updated successfully!");
-                    selectedClaim.setClaimDate(sqlClaimDate);
-                    selectedClaim.setExamDate(sqlExamDate);
-                    selectedClaim.setClaimAmount(claimAmount);
-                    selectedClaim.setStatus(status);
-                    selectedClaim.setBankName(bankName);
-                    selectedClaim.setBankUserName(bankUser);
-                    selectedClaim.setBankNumber(bankNumber);
-                    claimTableView.refresh();
-                    if (sqlClaimDate != null) editFormClaimDate.setText(String.valueOf(sqlClaimDate));
-                    if (sqlExamDate != null) editFormClaimExam.setText(String.valueOf(sqlExamDate));
-                    editFormClaimAmount.setText(String.valueOf(claimAmount));
-                    editFormClaimStatus.setText(status);
-                    editFormClaimBankName.setText(bankName);
-                    editFormClaimBankUser.setText(bankUser);
-                    editFormClaimBankNumber.setText(bankNumber);
-                    editFormClaimInformation.setVisible(false);
+                    return true;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
-    @FXML
-    void editFormClaimCancelBtnOnAction() {
-        editFormClaimInformation.setVisible(false);
-    }
-
-    private void selectClaimRow(Claim selectedClaim){
-        try {
-            if (selectedClaim != null) {
-                editFormClaimId.setText(selectedClaim.getId());
-                editFormClaimDate.setText(selectedClaim.getClaimDate() != null ? selectedClaim.getClaimDate().toString() : null);
-                editFormClaimExam.setText(selectedClaim.getExamDate() != null ? selectedClaim.getExamDate().toString() : null);
-                editFormClaimInsuredPerson.setText(getNameForUser(selectedClaim.getInsuredPerson()));
-                editFormClaimCardNumber.setText(selectedClaim.getCardNumber());
-                editFormClaimAmount.setText(String.valueOf(selectedClaim.getClaimAmount()));
-                editFormClaimStatus.setText(selectedClaim.getStatus());
-                editFormClaimBankName.setText(selectedClaim.getBankName());
-                editFormClaimBankUser.setText(selectedClaim.getBankUserName());
-                editFormClaimBankNumber.setText(selectedClaim.getBankNumber());
-                editFormClaimInformation.setVisible(true);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void deleteClaimInformation(Claim selectedClaim) {
-        if (selectedClaim != null) {
+    public boolean deleteClaimInformation(Claim selectedClaim) {
             try {
                 String claimId = selectedClaim.getId();
                 String deleteQuery = "DELETE FROM claims WHERE claim_id = ?";
@@ -639,116 +259,20 @@ public class AdminController implements Initializable {
                     int rowsDeleted = statement.executeUpdate();
                     if (rowsDeleted > 0) {
                         System.out.println("Claim deleted successfully!");
-                        claimObservableList.remove(selectedClaim);
-                        claimTableView.refresh();
+                        return true;
+//                        claimObservableList.remove(selectedClaim);
+//                        claimTableView.refresh();
                     }
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }
+        return false;
     }
 
-    private void displayClaimDashboardTableView() {
-        claimColClaimId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        claimColInsuredPerson.setCellValueFactory(cellData -> {
-            String insuredPersonId = cellData.getValue().getInsuredPerson();
-            String name = getNameForUser(insuredPersonId);
-            return new SimpleStringProperty(name);
-        });
-        claimColCardNumber.setCellValueFactory(new PropertyValueFactory<>("cardNumber"));
-        claimColClaimDate.setCellValueFactory(new PropertyValueFactory<>("claimDate"));
-        claimColAmount.setCellValueFactory(new PropertyValueFactory<>("claimAmount"));
-        claimColStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
-
-        claimColAction.setCellFactory(createClaimActionCellFactory());
-
-        claimTableView.setItems(claimObservableList);
-    }
-
-    private Callback<TableColumn<Claim, Void>, TableCell<Claim, Void>> createClaimActionCellFactory() {
-        return new Callback<TableColumn<Claim, Void>, TableCell<Claim, Void>>() {
-            @Override
-            public TableCell<Claim, Void> call(TableColumn<Claim, Void> param) {
-                return new TableCell<Claim, Void>() {
-                    final Button editButton = new Button("Edit");
-                    final Button deleteButton = new Button("Delete");
-
-                    {
-                        editButton.setOnAction(event -> {
-                            Claim selectedClaim = getTableView().getItems().get(getIndex());
-                            selectClaimRow(selectedClaim);
-                            editFormClaimConfirmBtn.setOnAction(event1 -> {
-                                updateClaimInformation(selectedClaim);
-                            });
-                        });
-
-                        deleteButton.setOnAction(event -> {
-                            Claim claim = getTableView().getItems().get(getIndex());
-                            System.out.println("Deleting claim: " + claim.getId());
-                            deleteClaimInformation(claim);
-                        });
-                    }
-
-                    @Override
-                    protected void updateItem(Void item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setGraphic(null);
-                        } else {
-                            setGraphic(new HBox(10, editButton, deleteButton));
-                        }
-                    }
-                };
-            }
-        };
-    }
 
     //Profile dashboard functions
-    @FXML
-    private void editProfileConfirmBtnOnAction() {
-        updateProfileDashboardInformation();
-    }
-
-    private void updateProfileDashboardInformation() {
-        try {
-            String id = editProfileId.getText();
-            String fullName = editProfileFullName.getText();
-            String password = editProfilePassword.getText();
-            String email = editProfileEmail.getText();
-            String phoneNumber = editProfilePhoneNumber.getText();
-            String address = editProfileAddress.getText();
-
-            String updateProfileQuery = "UPDATE users SET full_name = ?, password = ?, email = ?, phone_number = ?, address = ? WHERE id = ?";
-            try (PreparedStatement statement = connection.prepareStatement(updateProfileQuery)) {
-                statement.setString(1, fullName);
-                statement.setString(2, password);
-                statement.setString(3, email);
-                statement.setString(4, phoneNumber);
-                statement.setString(5, address);
-                statement.setString(6, id);
-                int rowsUpdated = statement.executeUpdate();
-                if (rowsUpdated > 0) {
-                    System.out.println("Profile updated successfully!");
-                    editProfileFullName.setText(fullName);
-                    editProfilePassword.setText(password);
-                    editProfileEmail.setText(email);
-                    editProfilePhoneNumber.setText(phoneNumber);
-                    editProfileAddress.setText(address);
-                    navFullname.setText(fullName);
-                    profileDashboardFullname.setText(fullName);
-                    profileDashboardEmail.setText(email);
-                    topUsername.setText(fullName);
-                } else {
-                    System.out.println("Failed to update profile!");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void displayProfileDashboardInformation() {
+    public User getProfileDashboardInformation() {
         try {
             String queryProfileInformation = "SELECT * FROM users WHERE user_name = ? AND role_id = ?";
             try (PreparedStatement statement = connection.prepareStatement(queryProfileInformation)) {
@@ -756,20 +280,16 @@ public class AdminController implements Initializable {
                 statement.setInt(2, LoginData.roleId);
                 try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
-                        profileDashboardId.setText(resultSet.getString("id"));
-                        profileDashboardUsername.setText(resultSet.getString("user_name"));
-                        profileDashboardEmail.setText(resultSet.getString("email"));
-                        profileDashboardFullname.setText(resultSet.getString("full_name"));
-                        editProfileId.setText(resultSet.getString("id"));
-                        editProfileFullName.setText(resultSet.getString("full_name"));
-                        editProfileUserName.setText(resultSet.getString("user_name"));
-                        editProfilePassword.setText(resultSet.getString("password"));
-                        editProfileEmail.setText(resultSet.getString("email"));
-                        editProfilePhoneNumber.setText(resultSet.getString("phone_number"));
-                        editProfileAddress.setText(resultSet.getString("address"));
-                        int roleId = resultSet.getInt("role_id");
-                        String roleName = getRoleName(roleId);
-                        editProfileRole.setText(roleName);
+                        User user = new User();
+                        user.setId(resultSet.getString("id"));
+                        user.setUserName(resultSet.getString("user_name"));
+                        user.setEmail(resultSet.getString("email"));
+                        user.setFullName(resultSet.getString("full_name"));
+                        user.setRoleId(resultSet.getInt("role_id"));
+                        user.setPassword(resultSet.getString("password"));
+                        user.setPhoneNumber(resultSet.getString("phone_number"));
+                        user.setAddress(resultSet.getString("address"));
+                        return user;
                     }
                 }
             }
@@ -777,24 +297,13 @@ public class AdminController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     //Main Dash board
-    private void displayMainDashboardTableView() {
-        mainDashboardColClaimId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        mainDashboardColClaimDate.setCellValueFactory(new PropertyValueFactory<>("claimDate"));
-        mainDashboardColAmount.setCellValueFactory(new PropertyValueFactory<>("claimAmount"));
-        mainDashboardColStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
-        mainDashboardColInsuredPerson.setCellValueFactory(cellData -> {
-            String insuredPersonId = cellData.getValue().getInsuredPerson();
-            String name = getNameForUser(insuredPersonId);
-            return new SimpleStringProperty(name);
-        });
-        mainDashboardTableView.setItems(claimObservableList);
-    }
 
-    private void fetchClaimsFromDatabase() {
-
+    public ArrayList<Claim> fetchClaimsFromDatabase() {
+        ArrayList<Claim> claimList = new ArrayList<>();
         try {
             String queryClaims = "SELECT * FROM claims";
             PreparedStatement statement = connection.prepareStatement(queryClaims);
@@ -811,7 +320,7 @@ public class AdminController implements Initializable {
                 claim.setBankName(resultSet.getString("bank_name"));
                 claim.setBankUserName(resultSet.getString("bank_user_name"));
                 claim.setBankNumber(resultSet.getString("bank_number"));
-                claimObservableList.add(claim);
+                claimList.add(claim);
             }
             resultSet.close();
             statement.close();
@@ -819,9 +328,10 @@ public class AdminController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return claimList;
     }
 
-    private String getNameForUser(String userId) {
+    public String getNameForUser(String userId) {
         String name = "";
         try {
             String query = "SELECT full_name FROM users WHERE id = ?";
@@ -840,7 +350,7 @@ public class AdminController implements Initializable {
         return name;
     }
 
-    private String getRoleName(int roleId) {
+    public String getRoleName(int roleId) {
         String roleName = "";
         try {
             String queryRoleName = "SELECT role FROM roles WHERE id = ?";
@@ -859,34 +369,8 @@ public class AdminController implements Initializable {
         return roleName;
     }
 
-    public void displayAdminInformation() {
-        try {
-            String queryAdminInformation = "SELECT * FROM users WHERE user_name = ? AND role_id = ?";
-            try (PreparedStatement statement = connection.prepareStatement(queryAdminInformation)) {
-                statement.setString(1, LoginData.usernameLogin);
-                statement.setInt(2, LoginData.roleId);
-                try (ResultSet resultSet = statement.executeQuery()) {
-                    if (resultSet.next()) {
-                        String adminId = resultSet.getString("id");
-                        String fullName = resultSet.getString("full_name");
-
-                        navAdminid.setText(adminId);
-                        navUsername.setText(LoginData.usernameLogin);
-                        navFullname.setText(fullName);
-                        topUsername.setText(fullName);
-                    } else {
-                        System.out.println("Admin not found!");
-                    }
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void displayTotalProviders() {
-
+    public int displayTotalProviders() {
+        int totalProvider = 0;
         try {
             String queryManagerCount = "SELECT COUNT(*) AS managerCount FROM users WHERE role_id = ?";
             String querySurveyorCount = "SELECT COUNT(*) AS surveyorCount FROM users WHERE role_id = ?";
@@ -906,17 +390,18 @@ public class AdminController implements Initializable {
                         surveyorCount = surveyorResultSet.getInt("surveyorCount");
                     }
                 }
-                int totalProvider = managerCount + surveyorCount;
-                totalProviders.setText(String.valueOf(totalProvider));
+                totalProvider = managerCount + surveyorCount;
+//                totalProviders.setText(String.valueOf(totalProvider));
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return totalProvider;
     }
 
-    public void displayTotalCustomers() {
-
+    public int displayTotalCustomers() {
+        int totalCustomer = 0;
         try {
             String queryPolicyOwnerCount = "SELECT COUNT(*) as policyOwnerCount FROM users WHERE role_id = ?";
             String queryPolicyHolderCount = "SELECT COUNT(*) as policyHolderCount FROM users WHERE role_id = ?";
@@ -948,24 +433,25 @@ public class AdminController implements Initializable {
                     }
                 }
 
-                int totalCustomer = policyOwnerCount + policyHolderCount + dependentCount;
-                totalCustomers.setText(String.valueOf(totalCustomer));
+                totalCustomer = policyOwnerCount + policyHolderCount + dependentCount;
+//                totalCustomers.setText(String.valueOf(totalCustomer));
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return totalCustomer;
     }
 
-    public void displayTotalInsuranceCards() {
-
+    public int displayTotalInsuranceCards() {
+        int cardCount = 0;
         try {
             String queryInsuranceCardCount = "SELECT COUNT(*) AS cardCount FROM insurance_card";
             try (PreparedStatement statement = connection.prepareStatement(queryInsuranceCardCount)) {
                 try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
-                        int cardCount = resultSet.getInt("cardCount");
-                        totalInsuranceCards.setText(String.valueOf(cardCount));
+                        cardCount = resultSet.getInt("cardCount");
+//                        totalInsuranceCards.setText(String.valueOf(cardCount));
                     }
                 }
             }
@@ -973,17 +459,19 @@ public class AdminController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return cardCount;
     }
 
-    public void displayTotalClaims() {
+    public int displayTotalClaims() {
 
+        int claimCount = 0;
         try {
             String queryClaimCount = "SELECT COUNT(*) AS claimCount FROM claims";
             try (PreparedStatement statement = connection.prepareStatement(queryClaimCount)) {
                 try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
-                        int claimCount = resultSet.getInt("claimCount");
-                        totalClaims.setText(String.valueOf(claimCount));
+                        claimCount = resultSet.getInt("claimCount");
+//                        totalClaims.setText(String.valueOf(claimCount));
                     }
                 }
             }
@@ -991,76 +479,6 @@ public class AdminController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    public void switchDashboard(ActionEvent event) {
-        if (event.getSource() == navMainDashboardBtn) {
-            showMainDashboard();
-        } else if (event.getSource() == navUsersBtn) {
-            showUserDashboard();
-        } else if (event.getSource() == navInsuranceCardsBtn) {
-            showInsuranceCardDashboard();
-        } else if (event.getSource() == navClaimsBtn) {
-            showClaimDashboard();
-        } else if (event.getSource() == navProfileBtn) {
-            showProfileDashboard();
-        }
-    }
-
-    private void showMainDashboard() {
-        mainDashboard.setVisible(true);
-        userInformationDashboard.setVisible(false);
-        insuranceCardDashboard.setVisible(false);
-        claimDashboard.setVisible(false);
-        profileDashboard.setVisible(false);
-    }
-
-    private void showUserDashboard() {
-        mainDashboard.setVisible(false);
-        userInformationDashboard.setVisible(true);
-        insuranceCardDashboard.setVisible(false);
-        claimDashboard.setVisible(false);
-        profileDashboard.setVisible(false);
-    }
-
-    private void showInsuranceCardDashboard() {
-        mainDashboard.setVisible(false);
-        userInformationDashboard.setVisible(false);
-        insuranceCardDashboard.setVisible(true);
-        claimDashboard.setVisible(false);
-        profileDashboard.setVisible(false);
-    }
-
-    private void showClaimDashboard() {
-        mainDashboard.setVisible(false);
-        userInformationDashboard.setVisible(false);
-        insuranceCardDashboard.setVisible(false);
-        claimDashboard.setVisible(true);
-        profileDashboard.setVisible(false);
-    }
-
-    private void showProfileDashboard() {
-        mainDashboard.setVisible(false);
-        userInformationDashboard.setVisible(false);
-        insuranceCardDashboard.setVisible(false);
-        claimDashboard.setVisible(false);
-        profileDashboard.setVisible(true);
-    }
-
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        fetchClaimsFromDatabase();
-        displayAdminInformation();
-        displayTotalProviders();
-        displayTotalCustomers();
-        displayTotalInsuranceCards();
-        displayTotalClaims();
-        displayMainDashboardTableView();
-        displayUsersDashboardTableView();
-        displayInsuranceCardDashboardTableView();
-        displayClaimDashboardTableView();
-        displayProfileDashboardInformation();
-        btnLogOut.setOnAction(ActionEvent -> LoginData.logOut(btnLogOut));
+        return claimCount;
     }
 }
