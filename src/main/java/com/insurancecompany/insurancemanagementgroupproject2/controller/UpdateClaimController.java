@@ -50,7 +50,7 @@ public class UpdateClaimController {
     private Label validationMessage;
 
     @FXML
-    void confirmAddClaim(ActionEvent event) {
+    void confirmUpdateClaim(ActionEvent event) {
         String claimId = updateClaimIDField.getText();
         String insuredPersonID = updateInsuredPersonIDField.getText();
         String cardNumber = updateCardNumberField.getText();
@@ -105,30 +105,8 @@ public class UpdateClaimController {
 
     @FXML
     void cancelUpdateClaim(ActionEvent event) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/insurancecompany/insurancemanagementgroupproject2/fxml/policy-holder-homepage.fxml"));
-
-            if (fxmlLoader.getLocation() == null) {
-                validationMessage.setText("Error: Cannot find FXML file.");
-                return;
-            }
-            Parent root = fxmlLoader.load();
-
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            currentStage.setTitle("Policy Holder Homepage");
-            currentStage.setScene(new Scene(root));
-            PolicyHolderController controller = fxmlLoader.getController();
-            controller.fetchClaimData();
-            currentStage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Unexpected Error");
-            alert.setContentText("An unexpected error occurred: " + e.getMessage());
-            alert.showAndWait();
-        }
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.close();
     }
 
 }

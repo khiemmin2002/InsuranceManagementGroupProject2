@@ -192,8 +192,15 @@ public class PolicyHolderController {
     }
 
     @FXML
-    private void updateClaim() {
+    private void updateClaim() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/policy-holder-update-claim.fxml"));
+        Parent root = fxmlLoader.load();
 
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Update Claim");
+        stage.setScene(new Scene(root));
+        stage.showAndWait();
     }
 
 
@@ -248,10 +255,16 @@ public class PolicyHolderController {
         ObservableList<Claim> claimData = FXCollections.observableArrayList();
 
         try {
-            String getClaimsQuery = "SELECT * FROM public.claims WHERE insured_person = " +
-                    "(SELECT id FROM public.users WHERE user_name = ?)";
+            String getClaimsQuery = "SELECT * FROM public.claims " +
+                    "WHERE insured_person IN " +
+                    "    (SELECT id FROM public.users WHERE user_name = ?) " +
+                    "OR insured_person IN " +
+                    "    (SELECT dependent_id FROM public.dependent WHERE policy_holder_id = " +
+                    "     (SELECT id FROM public.users WHERE user_name = ?))";
+
             PreparedStatement preparedStatement = connection.prepareStatement(getClaimsQuery);
             preparedStatement.setString(1, this.userName);
+            preparedStatement.setString(2, this.userName);
             ResultSet queryResult = preparedStatement.executeQuery();
 
             while (queryResult.next()) {
