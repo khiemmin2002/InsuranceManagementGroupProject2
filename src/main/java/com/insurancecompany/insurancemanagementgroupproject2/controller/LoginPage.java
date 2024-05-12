@@ -26,7 +26,7 @@ public class LoginPage {
     @FXML
     private void loginButtonOnAction() {
         if (!usernameTextField.getText().isEmpty() && !passwordField.getText().isEmpty()) {
-            int roleIdLogIn = loginController.validateLogin(usernameTextField, passwordField);
+            int roleIdLogIn = loginController.validateLogin(usernameTextField.getText(), passwordField.getText());
             System.out.println(roleIdLogIn);
             switch (roleIdLogIn) {
                 case 1 -> {

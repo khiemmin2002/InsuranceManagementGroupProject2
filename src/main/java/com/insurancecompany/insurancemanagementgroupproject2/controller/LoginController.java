@@ -11,21 +11,21 @@ import java.sql.SQLException;
 public class LoginController {
     BcryptPassword bcryptPassword = new BcryptPassword();
 
-    public int validateLogin(TextField usernameTextField, TextField passwordField) {
+    public int validateLogin(String usernameTextField, String passwordField) {
         DatabaseConnection databaseConnection = new DatabaseConnection();
         Connection connection = databaseConnection.getConnection();
 
         try {
             String verifyLoginQuery = "SELECT password, role_id FROM users WHERE user_name = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(verifyLoginQuery);
-            preparedStatement.setString(1, usernameTextField.getText());
+            preparedStatement.setString(1, usernameTextField);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
                 String hashedPasswordFromDB = resultSet.getString("password");
                 int roleId = resultSet.getInt("role_id");
 
-                boolean passwordMatch = bcryptPassword.verifyHashedPassword(hashedPasswordFromDB, passwordField.getText());
+                boolean passwordMatch = bcryptPassword.verifyHashedPassword(hashedPasswordFromDB, passwordField);
 
                 if (passwordMatch) {
                     return roleId;
