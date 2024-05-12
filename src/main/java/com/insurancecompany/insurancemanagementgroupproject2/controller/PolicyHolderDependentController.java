@@ -40,7 +40,7 @@ public class PolicyHolderDependentController {
     private MenuItem exitBtn;
 
     @FXML
-    private TextField inputUserId;
+    private TextField inputUserName;;
 
     @FXML
     private MenuItem openClaimBtn;
@@ -58,24 +58,69 @@ public class PolicyHolderDependentController {
 
     @FXML
     private void initialize() {
+        dependentTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        dependentTable.widthProperty().addListener((observable, oldValue, newValue) -> {
+            double tableWidth = dependentTable.getWidth();
+            policyHolderIDCol.setPrefWidth(tableWidth * 0.1);
+            policyHolderUserNameCol.setPrefWidth(tableWidth * 0.15);
+            dependentIDCol.setPrefWidth(tableWidth * 0.1);
+            dependentUserNameCol.setPrefWidth(tableWidth * 0.15);
+        });
         this.userName = LoginData.usernameLogin;
         fetchDependentData();
     }
 
     @FXML
     void clearInputData(ActionEvent event) {
-
+        inputUserName.clear();
+        fetchDependentData();
     }
 
     @FXML
     void exitProgram(ActionEvent event) {
-
+        inputUserName.clear();
+        fetchDependentData();
     }
 
     @FXML
-    void findUserID(ActionEvent event) {
+    void findDependentUserName(ActionEvent event) {
+        String dependentUserName = inputUserName.getText();
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        Connection connection = databaseConnection.getConnection();
 
+        try {
+            String findQuery = "SELECT d.*, u.user_name AS dependent_name, p.user_name AS policy_holder_name  " +
+                    "FROM dependent d " +
+                    "JOIN users u ON d.dependent_id = u.id " +
+                    "JOIN users p ON d.policy_holder_id = p.id " +
+                    "WHERE u.user_name = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(findQuery);
+            preparedStatement.setString(1, dependentUserName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            ObservableList<Dependent> foundDependents = FXCollections.observableArrayList();
+            while (resultSet.next()) {
+                Dependent dependent = new Dependent();
+                dependent.setPolicyHolderId(resultSet.getString("policy_holder_id"));
+                dependent.setPolicyHolderUserName(resultSet.getString("policy_holder_name"));
+                dependent.setDependentId(resultSet.getString("dependent_id"));
+                dependent.setDependentUserName(resultSet.getString("dependent_name"));
+
+                foundDependents.add(dependent);
+
+            }
+            if(foundDependents.isEmpty()) {
+                System.out.println("No dependents found.");  // Debug output
+            }
+
+            dependentTable.setItems(foundDependents);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
+
 
     @FXML
     void openAddDependentModal(ActionEvent event) {

@@ -28,7 +28,7 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <TableView fx:id="dependentTable" layoutY="64.0" prefHeight="323.0" prefWidth="600.0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="64.0">
+        <TableView fx:id="dependentTable" layoutY="78.0" prefHeight="306.0" prefWidth="600.0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="78.0">
             <columns>
                 <TableColumn fx:id="policyHolderIDCol" maxWidth="1.7976931348623157E308" prefWidth="102.0" text="Policy Holder ID" />
                 <TableColumn fx:id="policyHolderUserNameCol" maxWidth="1.7976931348623157E308" prefWidth="150.0" text="Policy Holder Username" />
@@ -36,8 +36,8 @@
                 <TableColumn fx:id="dependentUserNameCol" maxWidth="1.7976931348623157E308" prefWidth="214.0" text="Dependent Username" />
             </columns>
         </TableView>
-        <TextField fx:id="inputUserId" layoutX="220.0" layoutY="37.0" onAction="#findUserID" />
-        <Text layoutX="164.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="User ID" />
+        <TextField fx:id="inputUserName" layoutX="220.0" layoutY="37.0" onAction="#findDependentUserName" />
+        <Text layoutX="90.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dependent Username" />
         <Button fx:id="clearInputButton" layoutX="395.0" layoutY="38.0" mnemonicParsing="false" onAction="#clearInputData" text="Clear" />
     </children>
 </AnchorPane>
