@@ -1,17 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.DependentController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="598.0" prefWidth="751.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.PolicyOwnerMyPolicyHolderController">
    <children>
-      <TableView layoutX="56.0" layoutY="29.0" prefHeight="343.0" prefWidth="506.0">
-        <columns>
-          <TableColumn prefWidth="75.0" text="Customer ID" />
-          <TableColumn prefWidth="75.0" text="Full Name" />
-            <TableColumn prefWidth="96.0" text="Insurance Card" />
-        </columns>
-      </TableView>
+      <StackPane prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <AnchorPane prefHeight="605.0" prefWidth="775.0">
+               <children>
+                  <Line endX="-100.0" endY="30.0" layoutX="125.0" layoutY="10.0" startX="-100.0" strokeWidth="3.0" />
+                  <Label layoutX="35.0" layoutY="16.0" text="Policy Holder Information">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Label>
+                  <TableView fx:id="policyHolderTableView" layoutX="23.0" layoutY="50.0" prefHeight="281.0" prefWidth="703.0">
+                     <columns>
+                        <TableColumn fx:id="policyHolderIDCol" prefWidth="55.0" text="ID" />
+                        <TableColumn fx:id="policyHolderFullNameCol" prefWidth="74.0" text="Full Name" />
+                        <TableColumn fx:id="policyHolderUsernameCol" prefWidth="71.0" text="Username" />
+                        <TableColumn fx:id="policyHolderPasswordCol" prefWidth="67.0" text="Password" />
+                        <TableColumn fx:id="policyHolderEmailCol" prefWidth="65.0" text="Email" />
+                        <TableColumn fx:id="policyHolderPhoneNumCol" prefWidth="94.0" text="Phone number" />
+                        <TableColumn fx:id="policyHolderAddressCol" prefWidth="197.0" text="Address" />
+                        <TableColumn fx:id="policyHolderRoleCol" prefWidth="79.0" text="Role" />
+                     </columns>
+                  </TableView>
+                  <AnchorPane layoutX="23.0" layoutY="351.0" prefHeight="210.0" prefWidth="704.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 5;">
+                     <children>
+                        <Button layoutX="388.0" layoutY="159.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="122.0" text="Confirm" />
+                        <Button layoutX="224.0" layoutY="159.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="122.0" text="Delete" />
+                        <TextField fx:id="editFieldPolicyHolderRole" disable="true" editable="false" layoutX="521.0" layoutY="105.0" prefHeight="25.0" prefWidth="140.0" promptText="System Admin" />
+                        <Label layoutX="487.0" layoutY="109.0" text="Role:" />
+                        <Label layoutX="31.0" layoutY="25.0" text="Customer ID:" />
+                        <TextField fx:id="editFieldPolicyHolderID" disable="true" editable="false" layoutX="108.0" layoutY="21.0" prefHeight="25.0" prefWidth="120.0" promptText="C1000101" />
+                        <Label layoutX="45.0" layoutY="67.0" text="Full Name:" />
+                        <TextField fx:id="editFieldPolicyHolderFullName" layoutX="108.0" layoutY="63.0" prefHeight="25.0" prefWidth="120.0" promptText="Nguyen Van A" />
+                        <TextField fx:id="editFieldPolicyHolderUsername" disable="true" layoutX="108.0" layoutY="105.0" prefHeight="25.0" prefWidth="120.0" promptText="admin1234" />
+                        <Label layoutX="43.0" layoutY="109.0" text="Username:" />
+                        <TextField fx:id="editFieldPolicyHolderPassword" layoutX="328.0" layoutY="21.0" prefHeight="25.0" prefWidth="120.0" promptText="password1233" />
+                        <Label layoutX="266.0" layoutY="25.0" text="Password:" />
+                        <TextField fx:id="editFieldPolicyHolderEmail" layoutX="328.0" layoutY="63.0" prefHeight="25.0" prefWidth="120.0" promptText="email@gmail.com" />
+                        <Label layoutX="290.0" layoutY="67.0" text="Email:" />
+                        <TextField fx:id="editFieldPolicyHolderPhoneNumber" layoutX="329.0" layoutY="105.0" prefHeight="25.0" prefWidth="120.0" promptText="096482892" />
+                        <Label layoutX="240.0" layoutY="109.0" text="Phone number:" />
+                        <Label layoutX="466.0" layoutY="25.0" text="Address:" />
+                        <TextArea fx:id="editFieldPolicyHolderAddress" layoutX="521.0" layoutY="19.0" prefHeight="68.0" prefWidth="150.0" promptText="702 Đ. Nguyễn Văn Linh, Tân Hưng, Quận 7, Thành phố Hồ Chí Minh" />
+                     </children>
+                  </AnchorPane>
+                  <Button fx:id="addNewPolicyHolderBtn" layoutX="558.0" layoutY="12.0" mnemonicParsing="false" onAction="#addNewPolicyHolderBtnOnAction" prefHeight="26.0" prefWidth="150.0" text="Add New Policy Holder" />
+               </children>
+            </AnchorPane>
+         </children>
+      </StackPane>
+      <AnchorPane fx:id="addNewPolicyHolderForm" layoutX="110.0" layoutY="31.0" prefHeight="519.0" prefWidth="523.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 5; -fx-background-color: white;" visible="false">
+         <children>
+            <Button fx:id="editFormCreateUserConfirm" layoutX="91.0" layoutY="467.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="122.0" text="Confirm" />
+            <Label layoutX="118.0" layoutY="418.0" text="Role:" />
+            <Label layoutX="75.0" layoutY="97.0" text="Customer ID:" />
+            <TextField fx:id="editFormCreateUserId" layoutX="152.0" layoutY="93.0" prefHeight="25.0" prefWidth="281.0" promptText="C1000101" />
+            <Label layoutX="88.0" layoutY="130.0" text="Full Name:" />
+            <TextField fx:id="editFormCreateUserFullName" layoutX="153.0" layoutY="126.0" prefHeight="25.0" prefWidth="280.0" promptText="Nguyen Van A" />
+            <TextField fx:id="editFormCreateUserName" layoutX="153.0" layoutY="168.0" prefHeight="25.0" prefWidth="280.0" promptText="admin1234" />
+            <Label layoutX="86.0" layoutY="172.0" text="Username:" />
+            <TextField fx:id="editFormCreateUserPassword" layoutX="153.0" layoutY="209.0" prefHeight="25.0" prefWidth="280.0" promptText="password1233" />
+            <Label layoutX="88.0" layoutY="213.0" text="Password:" />
+            <TextField fx:id="editFormCreateUserEmail" layoutX="153.0" layoutY="251.0" prefHeight="25.0" prefWidth="280.0" promptText="email@gmail.com" />
+            <Label layoutX="112.0" layoutY="255.0" text="Email:" />
+            <TextField fx:id="editFormCreateUserPhone" layoutX="154.0" layoutY="293.0" prefHeight="25.0" prefWidth="280.0" promptText="096482892" />
+            <Label layoutX="62.0" layoutY="297.0" text="Phone Number:" />
+            <Label layoutX="97.0" layoutY="335.0" text="Address:" />
+            <TextArea fx:id="editFormCreateUserAddress" layoutX="154.0" layoutY="335.0" prefHeight="68.0" prefWidth="280.0" promptText="702 Đ. Nguyễn Văn Linh, Tân Hưng, Quận 7, Thành phố Hồ Chí Minh" />
+            <Button fx:id="policyHolderFormCancelBtn" layoutX="304.0" layoutY="467.0" mnemonicParsing="false" onAction="#policyHolderFormCancelBtnOnAction" prefHeight="25.0" prefWidth="122.0" text="Cancel" />
+            <ComboBox fx:id="editFormCreateUserRoleId" layoutX="154.0" layoutY="414.0" prefWidth="150.0" />
+            <Label layoutX="100.0" layoutY="31.0" text="Create New Policy Holder Form">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
