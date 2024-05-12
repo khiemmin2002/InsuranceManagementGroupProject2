@@ -79,6 +79,12 @@ public class LoginController {
                         loadManagerHomePage();
                         System.out.println(LoginData.usernameLogin);
                     }
+                    case 4 -> {
+                        LoginData.usernameLogin = usernameTextField.getText();
+                        LoginData.roleId = roleId;
+                        loadPolicyOwnerHomePage();
+                        System.out.println(LoginData.usernameLogin);
+                    }
                     case 5 -> {
                         LoginData.usernameLogin = usernameTextField.getText();
                         LoginData.roleId = roleId;
@@ -131,5 +137,10 @@ public class LoginController {
     public void loadDependentHomePage() {
         Stage currentStage = (Stage) usernameTextField.getScene().getWindow();
         SceneLoader.loadScene("fxml/dependent-homepage.fxml", currentStage);
+    }
+
+    public void loadPolicyOwnerHomePage() {
+        Stage currentStage = (Stage) usernameTextField.getScene().getWindow();
+        SceneLoader.loadScene("fxml/policy-owner-homepage.fxml", currentStage);
     }
 }
