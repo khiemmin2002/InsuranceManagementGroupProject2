@@ -1,7 +1,6 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
 import com.insurancecompany.insurancemanagementgroupproject2.SceneLoader;
-import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Surveyor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -78,6 +77,7 @@ public class EditSurveyorController {
         }
         return id;
     }
+    ValidateInput validateInput = new ValidateInput();
     private void editSurveyor(String id){
         //Validate field is not empty
         if (full_name.getText().isEmpty() ||  email.getText().isEmpty()
@@ -86,13 +86,13 @@ public class EditSurveyorController {
             return;
         }
         //Validate email
-        if (!ValidateInput.isValidEmail(email.getText())) {
+        if (validateInput.isValidEmail(email.getText())) {
             errorLabel.setText("Invalid email format");
             return;
         }
 
         // Validate phone number
-        if (!ValidateInput.isValidPhoneNumber(phone_number.getText())) {
+        if (validateInput.isValidPhoneNumber(phone_number.getText())) {
             errorLabel.setText("Invalid phone number format");
             return;
         }

@@ -292,52 +292,54 @@ public class AdminHomepage implements Initializable {
             System.out.println("Role Observable List is empty or null.");
         }
     }
+    ValidateInput validateInput = new ValidateInput();
     @FXML
-    private void addNewUserFormAdminBtnOnAction(){
-        boolean isIdUnique = userObservableList.stream().noneMatch(user -> user.getId().equals(editFormCreateUserId.getText()));
-        boolean isUsernameUnique = userObservableList.stream().noneMatch(user -> user.getUserName().equals(editFormCreateUserName.getText()));
+    private void addNewUserFormAdminBtnOnAction() {
+        boolean isUsernameUnique = validateInput.isUserNameUnique(userObservableList, editFormCreateUserName.getText());
+        boolean isValidEmail = validateInput.isValidEmail(editFormCreateUserEmail.getText());
+        boolean isValidPhoneNumber = validateInput.isValidPhoneNumber(editFormCreateUserPhone.getText());
 
-        if (isIdUnique && isUsernameUnique) {
-            Role selectedRole = null;
-            String selectedRoleName = editFormCreateUserRoleId.getValue();
-            for (Role role : roleObservableList) {
-                if (Objects.equals(role.getRoleName().toLowerCase(), selectedRoleName.toLowerCase())) {
-                    selectedRole = role;
-                    break;
-                }
-            }
-            if (selectedRole != null) {
-                ManagerPageController managerPageController = new ManagerPageController();
-                User newUser = new User();
-                if(selectedRole.getId() == 2 || selectedRole.getId() == 3){
-                    newUser.setId(managerPageController.createSurveyorID());
-                } else if (selectedRole.getId() != 1){
-                    newUser.setId(managerPageController.createCustomerID());
-                }
-                newUser.setUserName(editFormCreateUserName.getText());
-                newUser.setFullName(editFormCreateUserFullName.getText());
-                newUser.setPassword(editFormCreateUserPassword.getText());
-                newUser.setEmail(editFormCreateUserEmail.getText());
-                newUser.setPhoneNumber(editFormCreateUserPhone.getText());
-                newUser.setAddress(editFormCreateUserAddress.getText());
-                newUser.setRoleId(selectedRole.getId());
-                boolean isSuccess = adminController.addUser(newUser);
-                if (isSuccess) {
-                    userObservableList.add(newUser);
-                    clearNewUserFormFields();
-                } else {
-                    System.out.println("Failed to add new user.");
-                }
+        if (isUsernameUnique) {
+            if (!isValidEmail || !isValidPhoneNumber) {
+                System.out.println("Please check your Email or Phone Number again");
             } else {
-                System.out.println("Error: Please select a role.");
+                Role selectedRole = null;
+                String selectedRoleName = editFormCreateUserRoleId.getValue();
+                for (Role role : roleObservableList) {
+                    if (Objects.equals(role.getRoleName().toLowerCase(), selectedRoleName.toLowerCase())) {
+                        selectedRole = role;
+                        break;
+                    }
+                }
+
+                if (selectedRole != null) {
+                    ManagerPageController managerPageController = new ManagerPageController();
+                    User newUser = new User();
+                    if (selectedRole.getId() == 2 || selectedRole.getId() == 3) {
+                        newUser.setId(managerPageController.createSurveyorID());
+                    } else if (selectedRole.getId() != 1) {
+                        newUser.setId(managerPageController.createCustomerID());
+                    }
+                    newUser.setUserName(editFormCreateUserName.getText());
+                    newUser.setFullName(editFormCreateUserFullName.getText());
+                    newUser.setPassword(editFormCreateUserPassword.getText());
+                    newUser.setEmail(editFormCreateUserEmail.getText());
+                    newUser.setPhoneNumber(editFormCreateUserPhone.getText());
+                    newUser.setAddress(editFormCreateUserAddress.getText());
+                    newUser.setRoleId(selectedRole.getId());
+                    boolean isSuccess = adminController.addUser(newUser);
+                    if (isSuccess) {
+                        userObservableList.add(newUser);
+                        clearNewUserFormFields();
+                    } else {
+                        System.out.println("Failed to add new user.");
+                    }
+                } else {
+                    System.out.println("Error: Please select a role.");
+                }
             }
         } else {
-            if (!isIdUnique) {
-                System.out.println("Error: ID already exists.");
-            }
-            if (!isUsernameUnique) {
-                System.out.println("Error: Username already exists.");
-            }
+            System.out.println("Error: Username already exists.");
         }
     }
 

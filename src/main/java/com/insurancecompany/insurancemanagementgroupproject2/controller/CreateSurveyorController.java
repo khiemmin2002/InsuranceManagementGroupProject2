@@ -35,6 +35,7 @@ public class CreateSurveyorController {
         id = managerPageController.createSurveyorID();
     }
 
+    ValidateInput validateInput = new ValidateInput();
     private void createSurveyor(){
         if (full_name.getText().isEmpty() || username.getText().isEmpty() || password.getText().isEmpty() || email.getText().isEmpty()
                 || phone_number.getText().isEmpty() || address.getText().isEmpty()) {
@@ -42,13 +43,13 @@ public class CreateSurveyorController {
             return;
         }
 
-        if (!ValidateInput.isValidEmail(email.getText())) {
+        if (validateInput.isValidEmail(email.getText())) {
             errorLabel.setText("Invalid email format");
             return;
         }
 
         // Validate phone number
-        if (!ValidateInput.isValidPhoneNumber(phone_number.getText())) {
+        if (validateInput.isValidPhoneNumber(phone_number.getText())) {
             errorLabel.setText("Invalid phone number format");
             return;
         }

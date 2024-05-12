@@ -86,8 +86,6 @@ public class ClaimController {
     @FXML
     void confirmAddClaim(ActionEvent event)  {
         String claimId = generateRandomClaimID();
-
-
         String cardNumber = cardNumberInput.getText();
         String claimAmountText = claimAmountInput.getText();
         String insuredPerson = insuredPersonInput.getText();
