@@ -95,7 +95,7 @@ public class ClaimController {
         String bankUserName = bankUserNameField.getText();
         String bankNumber = bankNumberField.getText();
 
-        if (cardNumber.isEmpty() || claimAmountText.isEmpty() || insuredPerson.isEmpty()) {
+        if (cardNumber.isEmpty() || claimAmountText.isEmpty() || insuredPerson.isEmpty() || bankName.isEmpty() || bankUserName.isEmpty() || bankNumber.isEmpty()) {
             System.out.println("Debug: cardNumber: " + cardNumber);
             System.out.println("Debug: claimAmountText: " + claimAmountText);
             System.out.println("Debug: insuredPerson: " + insuredPerson);
@@ -133,30 +133,8 @@ public class ClaimController {
     }
     @FXML
     void backToHomePage(ActionEvent event) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/insurancecompany/insurancemanagementgroupproject2/fxml/policy-holder-homepage.fxml"));
-
-            if (fxmlLoader.getLocation() == null) {
-                validationMessage.setText("Error: Cannot find FXML file.");
-                return;
-            }
-            Parent root = fxmlLoader.load();
-
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            currentStage.setTitle("Policy Holder Homepage");
-            currentStage.setScene(new Scene(root));
-            PolicyHolderController controller = fxmlLoader.getController();
-            controller.fetchClaimData();
-            currentStage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Unexpected Error");
-            alert.setContentText("An unexpected error occurred: " + e.getMessage());
-            alert.showAndWait();
-        }
+       Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+       currentStage.close();
     }
 
 
