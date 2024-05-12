@@ -28,16 +28,26 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <TableView fx:id="dependentTable" layoutY="78.0" prefHeight="306.0" prefWidth="600.0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="78.0">
+        <TableView fx:id="dependentTable" layoutY="78.0" prefHeight="229.0" prefWidth="600.0" AnchorPane.bottomAnchor="93.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="78.0">
             <columns>
-                <TableColumn fx:id="policyHolderIDCol" maxWidth="1.7976931348623157E308" prefWidth="102.0" text="Policy Holder ID" />
-                <TableColumn fx:id="policyHolderUserNameCol" maxWidth="1.7976931348623157E308" prefWidth="150.0" text="Policy Holder Username" />
-                <TableColumn fx:id="dependentIDCol" maxWidth="1.7976931348623157E308" prefWidth="133.0" text="Dependent ID" />
-                <TableColumn fx:id="dependentUserNameCol" maxWidth="1.7976931348623157E308" prefWidth="214.0" text="Dependent Username" />
+                <TableColumn fx:id="userNameCol" maxWidth="1.7976931348623157E308" prefWidth="102.0" text="UserName" />
+                <TableColumn fx:id="fullNameCol" maxWidth="1.7976931348623157E308" prefWidth="119.0" text="FullName" />
+                <TableColumn fx:id="dependentIDCol" maxWidth="1.7976931348623157E308" prefWidth="111.0" text="Dependent ID" />
+                <TableColumn fx:id="passwordCol" maxWidth="1.7976931348623157E308" prefWidth="118.0" text="Password" />
+                <TableColumn fx:id="phoneNumberCol" prefWidth="75.0" text="Phone Number" />
+                <TableColumn fx:id="emailCol" prefWidth="75.0" text="Email" />
+                <TableColumn fx:id="addressCol" prefWidth="75.0" text="Address" />
             </columns>
         </TableView>
         <TextField fx:id="inputUserName" layoutX="220.0" layoutY="37.0" onAction="#findDependentUserName" />
         <Text layoutX="90.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dependent Username" />
         <Button fx:id="clearInputButton" layoutX="395.0" layoutY="38.0" mnemonicParsing="false" onAction="#clearInputData" text="Clear" />
+        <TextField fx:id="addDependentIDField" layoutX="234.0" layoutY="317.0" />
+        <TextField fx:id="addPolicyHolderField" layoutX="234.0" layoutY="354.0" />
+        <Button fx:id="confirmAddBtn" layoutX="418.0" layoutY="318.0" mnemonicParsing="false" text="Confirm" />
+        <Button fx:id="clearAddInputBtn" layoutX="426.0" layoutY="354.0" mnemonicParsing="false" onAction="#clearAddFields" text="Clear" />
+        <Text layoutX="136.0" layoutY="336.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dependent ID:" />
+        <Text layoutX="131.0" layoutY="372.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Policy Holder ID:" />
     </children>
 </AnchorPane>
+

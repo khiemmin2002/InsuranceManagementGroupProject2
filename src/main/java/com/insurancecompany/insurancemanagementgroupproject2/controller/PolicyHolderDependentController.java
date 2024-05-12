@@ -25,16 +25,46 @@ public class PolicyHolderDependentController {
     private MenuItem addDependent;
 
     @FXML
+    private TableColumn<?, ?> addressCol;
+
+    @FXML
     private TableView<Dependent> dependentTable;
 
     @FXML
     private Button clearInputButton;
 
     @FXML
-    private TableColumn<?,?> dependentIDCol;
+    private Button clearAddInputBtn;
 
     @FXML
-    private TableColumn<?,?> dependentUserNameCol;
+    private Button confirmAddBtn;
+
+    @FXML
+    private TableColumn<?, ?> dependentIDCol;
+
+    @FXML
+    private TableColumn<?, ?> emailCol;
+
+
+    @FXML
+    private TableColumn<?, ?> fullNameCol;
+
+
+    @FXML
+    private TableColumn<?, ?> userNameCol;
+
+    @FXML
+    private TableColumn<?, ?> passwordCol;
+
+    @FXML
+    private TextField addDependentIDField;
+
+    @FXML
+    private TextField addPolicyHolderField;
+
+    @FXML
+    private TableColumn<?, ?> phoneNumberCol;
+
 
     @FXML
     private MenuItem exitBtn;
@@ -45,11 +75,6 @@ public class PolicyHolderDependentController {
     @FXML
     private MenuItem openClaimBtn;
 
-    @FXML
-    private TableColumn<?, ?> policyHolderIDCol;
-
-    @FXML
-    private TableColumn<?,?> policyHolderUserNameCol;
 
     @FXML
     private MenuItem updateDependent;
@@ -61,10 +86,13 @@ public class PolicyHolderDependentController {
         dependentTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         dependentTable.widthProperty().addListener((observable, oldValue, newValue) -> {
             double tableWidth = dependentTable.getWidth();
-            policyHolderIDCol.setPrefWidth(tableWidth * 0.1);
-            policyHolderUserNameCol.setPrefWidth(tableWidth * 0.15);
+            userNameCol.setPrefWidth(tableWidth * 0.15);
+            fullNameCol.setPrefWidth(tableWidth * 0.2);
             dependentIDCol.setPrefWidth(tableWidth * 0.1);
-            dependentUserNameCol.setPrefWidth(tableWidth * 0.15);
+            passwordCol.setPrefWidth(tableWidth * 0.15);
+            phoneNumberCol.setPrefWidth(tableWidth * 0.15);
+            emailCol.setPrefWidth(tableWidth * 0.15);
+
         });
         this.userName = LoginData.usernameLogin;
         fetchDependentData();
@@ -89,11 +117,9 @@ public class PolicyHolderDependentController {
         Connection connection = databaseConnection.getConnection();
 
         try {
-            String findQuery = "SELECT d.*, u.user_name AS dependent_name, p.user_name AS policy_holder_name  " +
-                    "FROM dependent d " +
-                    "JOIN users u ON d.dependent_id = u.id " +
-                    "JOIN users p ON d.policy_holder_id = p.id " +
-                    "WHERE u.user_name = ?";
+            String findQuery = "SELECT id, full_name, user_name, password, email, phone_number, address" +
+                    "FROM users" +
+                    "WHERE userName = ?" ;
             PreparedStatement preparedStatement = connection.prepareStatement(findQuery);
             preparedStatement.setString(1, dependentUserName);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -101,11 +127,13 @@ public class PolicyHolderDependentController {
             ObservableList<Dependent> foundDependents = FXCollections.observableArrayList();
             while (resultSet.next()) {
                 Dependent dependent = new Dependent();
-                dependent.setPolicyHolderId(resultSet.getString("policy_holder_id"));
-                dependent.setPolicyHolderUserName(resultSet.getString("policy_holder_name"));
-                dependent.setDependentId(resultSet.getString("dependent_id"));
-                dependent.setDependentUserName(resultSet.getString("dependent_name"));
-
+                dependent.setId(resultSet.getString("id"));
+                dependent.setFullName(resultSet.getString("full_name"));
+                dependent.setUserName(resultSet.getString("user_name"));
+                dependent.setPassword(resultSet.getString("password"));
+                dependent.setEmail(resultSet.getString("email"));
+                dependent.setPhoneNumber(resultSet.getString("phone_number"));
+                dependent.setAddress(resultSet.getString("address"));
                 foundDependents.add(dependent);
 
             }
@@ -119,6 +147,12 @@ public class PolicyHolderDependentController {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+
+    @FXML
+    void clearAddFields(ActionEvent event) {
+
     }
 
 
@@ -143,26 +177,37 @@ public class PolicyHolderDependentController {
         ObservableList<Dependent> dependentData = FXCollections.observableArrayList();
 
         try {
-            String getDependetQuery = "SELECT d.*, u.user_name AS dependent_name, p.user_name AS policy_holder_name  " +
-                    "FROM dependent d " +
-                    "JOIN users u ON d.dependent_id = u.id " +
-                    "JOIN users p ON d.policy_holder_id = p.id " +
+            String getDependentQuery = "SELECT d.id, d.full_name, d.user_name,d.password, d.email, d.phone_number, d.address " +
+                    "FROM users d " +
+                    "JOIN dependent dep " +
+                    "ON d.id = dep.dependent_id " +
+                    "JOIN users p " +
+                    "ON p.id = dep.policy_holder_id " +
                     "WHERE p.user_name = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(getDependetQuery);
+
+            PreparedStatement preparedStatement = connection.prepareStatement(getDependentQuery);
             preparedStatement.setString(1, userName);
             ResultSet queryResult = preparedStatement.executeQuery();
             while (queryResult.next()) {
                 Dependent dependent = new Dependent();
-                dependent.setDependentId(queryResult.getString("dependent_id"));
-                dependent.setDependentUserName(queryResult.getString("dependent_name"));
-                dependent.setPolicyHolderId(queryResult.getString("policy_holder_id"));
-                dependent.setPolicyHolderUserName(queryResult.getString("policy_holder_name"));
+                dependent.setId(queryResult.getString("id"));
+                dependent.setFullName(queryResult.getString("full_name"));
+                dependent.setUserName(queryResult.getString("user_name"));
+                dependent.setPassword(queryResult.getString("password"));
+                dependent.setEmail(queryResult.getString("email"));
+                dependent.setPhoneNumber(queryResult.getString("phone_number"));
+                dependent.setAddress(queryResult.getString("address"));
+
                 dependentData.add(dependent);
             }
-            dependentIDCol.setCellValueFactory(new PropertyValueFactory<>("dependentId"));
-            dependentUserNameCol.setCellValueFactory(new PropertyValueFactory<>("dependentUserName"));
-            policyHolderIDCol.setCellValueFactory(new PropertyValueFactory<>("policyHolderId"));
-            policyHolderUserNameCol.setCellValueFactory(new PropertyValueFactory<>("policyHolderUserName"));
+            dependentIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            userNameCol.setCellValueFactory(new PropertyValueFactory<>("userName"));
+            fullNameCol.setCellValueFactory(new PropertyValueFactory<>("fullName"));
+            passwordCol.setCellValueFactory(new PropertyValueFactory<>("password"));
+            phoneNumberCol.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+            emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
+            addressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
+
 
             dependentTable.setItems(dependentData);
         } catch (SQLException e) {
@@ -171,3 +216,4 @@ public class PolicyHolderDependentController {
     };
 
 }
+
