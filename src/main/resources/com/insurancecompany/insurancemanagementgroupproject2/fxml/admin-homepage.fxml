@@ -379,7 +379,7 @@
                               <Button fx:id="editFormCreateUserConfirm" layoutX="114.0" layoutY="467.0" mnemonicParsing="false" onAction="#addNewUserFormAdminBtnOnAction" prefHeight="25.0" prefWidth="122.0" text="Confirm" />
                               <Label layoutX="118.0" layoutY="418.0" text="Role:" />
                               <Label layoutX="102.0" layoutY="97.0" text="User ID:" />
-                              <TextField fx:id="editFormCreateUserId" layoutX="152.0" layoutY="93.0" prefHeight="25.0" prefWidth="281.0" promptText="C1000101" />
+                              <TextField fx:id="editFormCreateUserId" disable="true" layoutX="152.0" layoutY="93.0" prefHeight="25.0" prefWidth="281.0" promptText="Xxxxxxxx" />
                               <Label layoutX="89.0" layoutY="130.0" text="Full name:" />
                               <TextField fx:id="editFormCreateUserFullName" layoutX="153.0" layoutY="126.0" prefHeight="25.0" prefWidth="280.0" promptText="Nguyen Van A" />
                               <TextField fx:id="editFormCreateUserName" layoutX="153.0" layoutY="168.0" prefHeight="25.0" prefWidth="280.0" promptText="admin1234" />

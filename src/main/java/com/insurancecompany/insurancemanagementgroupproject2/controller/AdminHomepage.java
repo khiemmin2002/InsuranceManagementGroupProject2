@@ -307,8 +307,13 @@ public class AdminHomepage implements Initializable {
                 }
             }
             if (selectedRole != null) {
+                ManagerPageController managerPageController = new ManagerPageController();
                 User newUser = new User();
-                newUser.setId(editFormCreateUserId.getText());
+                if(selectedRole.getId() == 2 || selectedRole.getId() == 3){
+                    newUser.setId(managerPageController.createSurveyorID());
+                } else if (selectedRole.getId() != 1){
+                    newUser.setId(managerPageController.createCustomerID());
+                }
                 newUser.setUserName(editFormCreateUserName.getText());
                 newUser.setFullName(editFormCreateUserFullName.getText());
                 newUser.setPassword(editFormCreateUserPassword.getText());

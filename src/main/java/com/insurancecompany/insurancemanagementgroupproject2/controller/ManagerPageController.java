@@ -230,4 +230,20 @@ public class ManagerPageController extends SurveyorPageController {
         }
         return id;
     }
+
+    public String createCustomerID(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("C");
+        Random random = new Random();
+        for (int i = 0; i < 6; i++) {
+            sb.append(random.nextInt(10)); // Append random digit (0-9)
+        }
+        String id = sb.toString();
+        for(Surveyor surveyor : surveyorList){
+            if(surveyor.getId().equals(id)){
+                createSurveyorID();
+            }
+        }
+        return id;
+    }
 }
