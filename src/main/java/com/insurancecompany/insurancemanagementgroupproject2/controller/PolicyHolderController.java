@@ -78,6 +78,9 @@ public class PolicyHolderController {
     private TextField inputClaimId;
 
     @FXML
+    private MenuItem openDependentBtn;
+
+    @FXML
     private Button clearInputButton;
 
     @FXML
@@ -182,8 +185,17 @@ public class PolicyHolderController {
     }
 
     @FXML
-    private void openDependents() {
+    private void openDependents() throws IOException {
+        Stage currentStage = (Stage) claimTable.getScene().getWindow();
+        currentStage.close();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/policy-holder-dependent.fxml"));
+        Parent root = fxmlLoader.load();
 
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Dependent");
+        stage.setScene(new Scene(root));
+        stage.showAndWait();
     }
 
     @FXML
