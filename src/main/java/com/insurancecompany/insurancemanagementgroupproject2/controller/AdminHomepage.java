@@ -681,12 +681,16 @@ public class AdminHomepage implements Initializable {
 
     public void switchDashboard(ActionEvent event) {
         if (event.getSource() == navMainDashboardBtn) {
+            claimTableView.refresh();
             showMainDashboard();
         } else if (event.getSource() == navUsersBtn) {
+            userTableView.refresh();
             showUserDashboard();
         } else if (event.getSource() == navInsuranceCardsBtn) {
+            insuranceCardTableView.refresh();
             showInsuranceCardDashboard();
         } else if (event.getSource() == navClaimsBtn) {
+            claimTableView.refresh();
             showClaimDashboard();
         } else if (event.getSource() == navProfileBtn) {
             showProfileDashboard();

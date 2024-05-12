@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="461.0" prefWidth="957.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.SurveyorHomepage">
+<AnchorPane prefHeight="461.0" prefWidth="957.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.SurveyorPageController">
     <Pane layoutX="14.0" layoutY="49.0" prefHeight="380.0" prefWidth="152.0">
         <children>
           <Button fx:id="fetchAllClaimButton" layoutX="21.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="All claims" />

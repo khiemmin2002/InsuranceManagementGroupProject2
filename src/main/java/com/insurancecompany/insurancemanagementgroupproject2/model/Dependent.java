@@ -25,6 +25,7 @@ public class Dependent extends User{
         this.policyHolderID = policyHolderID;
     }
 
+
     public String getPolicyHolderUserName() {
         return policyHolderUserName;
     }
@@ -48,4 +49,5 @@ public class Dependent extends User{
     public void setDependentUserName(String dependentUserName) {
         this.dependentUserName = dependentUserName;
     }
+
 }

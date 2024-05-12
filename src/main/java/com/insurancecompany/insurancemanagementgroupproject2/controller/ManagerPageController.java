@@ -1,5 +1,6 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
+import com.insurancecompany.insurancemanagementgroupproject2.SceneLoader;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Surveyor;
@@ -10,30 +11,27 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 import java.util.*;
 
-public class ManagerHomepage extends SurveyorHomepage{
+public class ManagerPageController extends SurveyorPageController {
+    @FXML
+    public Button createButton;
+    @FXML
+    public Button deleteButton;
+    @FXML
+    public Button editButton;
     @FXML
     public TableView<Surveyor> surveyorTable;
     @FXML
     public Label managerName;
     @FXML
-    private Button fetchAllClaimButton;
-    @FXML
-    private Button fetchProposableClaimButton;
-    @FXML
     private Button fetchSingleClaimButton;
     @FXML
     private Button refreshData;
     @FXML
-    private Label errorLabel;
-    @FXML
     private ChoiceBox<String> claimChoiceBox;
-    @FXML
-    private Button sortPerson;
-    @FXML
-    private Button sortCard;
     @FXML
     private TableView<Claim> claimTable;
     @FXML
@@ -65,11 +63,15 @@ public class ManagerHomepage extends SurveyorHomepage{
     @FXML
     private TableColumn<?, ?> surveyorEmail;
     @FXML
+    private Label errorLabel;
+    @FXML
     private TableColumn<?, ?> surveyorPhoneNumber;
-    private List<Claim> claimList = new ArrayList<Claim>();
+    private List<Claim> claimList = new ArrayList<>();
     private SurveyorController surveyorController;
+    private List<Surveyor> surveyorList = new ArrayList<Surveyor>();
     @FXML
     private void initialize() {
+        //Setup controller
         surveyorController = new SurveyorController();
         // Set up column widths and cell value factories
         claimTable.widthProperty().addListener((observable, oldValue, newValue) -> {
@@ -106,14 +108,13 @@ public class ManagerHomepage extends SurveyorHomepage{
                     surveyorPhoneNumber.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         });
         // Set event handlers for buttons
-        fetchAllClaimButton.setOnAction(fetchAllClick);
-        fetchProposableClaimButton.setOnAction(fetchProposalClick);
         fetchSingleClaimButton.setOnAction(approveClaimClick);
-        sortPerson.setOnAction(sortByPerson);
-        sortCard.setOnAction(sortByCard);
         refreshData.setOnAction(refreshClaimData);
         logout.setOnAction(logoutClick);
         managerName.setText("Welcome Insurance Manager " + LoginData.usernameLogin);
+        createButton.setOnAction(ActionEvent -> SceneLoader.loadSceneWithInput("fxml/create-surveyor.fxml",thisStage(),382,487));
+        editButton.setOnAction(ActionEvent -> SceneLoader.loadSceneWithInput("fxml/edit-surveyor.fxml",thisStage(),382,487));
+        deleteButton.setOnAction(ActionEvent -> SceneLoader.loadSceneWithInput("fxml/delete-surveyor.fxml",thisStage(),261,141));
         //Call API to fetch claim data from database
         claimList = fetchClaimData();
         fetchSurveyorData();
@@ -125,6 +126,7 @@ public class ManagerHomepage extends SurveyorHomepage{
             fetchSurveyorData();
         }
     };
+
     EventHandler<ActionEvent> approveClaimClick = new EventHandler<>() {
         @Override
         public void handle(ActionEvent actionEvent) {
@@ -135,9 +137,13 @@ public class ManagerHomepage extends SurveyorHomepage{
             }
         }
     };
+    public Stage thisStage(){
+        return (Stage) createButton.getScene().getWindow();
+    }
     public void fetchSurveyorData(){
         ObservableList<Surveyor> surveyorObservableList = FXCollections.observableArrayList();
-        surveyorObservableList.addAll(surveyorController.fetchSurveyor());
+        surveyorList = surveyorController.fetchSurveyor();
+        surveyorObservableList.addAll(surveyorList);
         surveyorTable.setItems(surveyorObservableList);
     }
 
@@ -206,7 +212,22 @@ public class ManagerHomepage extends SurveyorHomepage{
             //Handle cancellation of operation
             claimChoiceBox.setValue(null);
             System.out.println("Claim proposing cancelled.");
-            fetchAllClaimData();
+            fetchAllClaimData(claimList);
         }
+    }
+    public String createSurveyorID(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("T");
+        Random random = new Random();
+        for (int i = 0; i < 6; i++) {
+            sb.append(random.nextInt(10)); // Append random digit (0-9)
+        }
+        String id = sb.toString();
+        for(Surveyor surveyor : surveyorList){
+            if(surveyor.getId().equals(id)){
+                createSurveyorID();
+            }
+        }
+        return id;
     }
 }

@@ -4,6 +4,7 @@ module com.insurancecompany.insurancemanagementgroupproject2 {
     requires javafx.graphics;
     requires java.sql;
     requires org.postgresql.jdbc;
+    requires bcrypt;
 
     opens com.insurancecompany.insurancemanagementgroupproject2.model to javafx.base;
     opens com.insurancecompany.insurancemanagementgroupproject2 to javafx.fxml;
