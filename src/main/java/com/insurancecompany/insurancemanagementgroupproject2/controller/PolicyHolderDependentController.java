@@ -117,9 +117,9 @@ public class PolicyHolderDependentController {
         Connection connection = databaseConnection.getConnection();
 
         try {
-            String findQuery = "SELECT id, full_name, user_name, password, email, phone_number, address" +
-                    "FROM users" +
-                    "WHERE userName = ?" ;
+            String findQuery = "SELECT id, full_name, user_name, password, email, phone_number, address " +
+                    "FROM users " +
+                    "WHERE user_name = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(findQuery);
             preparedStatement.setString(1, dependentUserName);
             ResultSet resultSet = preparedStatement.executeQuery();
