@@ -102,6 +102,9 @@ public class PolicyHolderDependentController {
     private MenuItem exitBtn;
 
     @FXML
+    private Button refreshBtn;
+
+    @FXML
     private TextField inputUserName;;
 
     @FXML
@@ -217,6 +220,11 @@ public class PolicyHolderDependentController {
     @FXML
     void openDeleteModalDependent(ActionEvent event) {
 
+    }
+
+    @FXML
+    void refreshData(ActionEvent event) {
+        fetchDependentData();
     }
 
     @FXML
