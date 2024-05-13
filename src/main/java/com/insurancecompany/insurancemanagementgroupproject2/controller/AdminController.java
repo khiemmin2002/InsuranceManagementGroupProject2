@@ -249,6 +249,22 @@ public class AdminController {
         return false;
     }
 
+    public int calculateTotalDocumentsOfClaim(String claimId){
+        int totalCount = 0;
+        String query = "SELECT COUNT(*) AS total FROM documents WHERE claim_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, claimId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    totalCount = resultSet.getInt("total");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return totalCount;
+    }
     public boolean deleteClaimInformation(Claim selectedClaim) {
             try {
                 String claimId = selectedClaim.getId();

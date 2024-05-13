@@ -39,4 +39,14 @@ public class InsuranceCard {
     public void setPolicyOwnerId(String policyOwnerId) {
         this.policyOwnerId = policyOwnerId;
     }
+
+    public InsuranceCard() {
+    }
+
+    public InsuranceCard(String cardNumber, String cardHolderId, Date expirationDate, String policyOwnerId) {
+        this.cardNumber = cardNumber;
+        this.cardHolderId = cardHolderId;
+        this.expirationDate = expirationDate;
+        this.policyOwnerId = policyOwnerId;
+    }
 }

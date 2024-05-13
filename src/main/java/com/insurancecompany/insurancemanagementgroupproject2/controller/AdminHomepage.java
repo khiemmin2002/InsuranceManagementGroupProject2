@@ -531,6 +531,7 @@ public class AdminHomepage implements Initializable {
                 editFormClaimBankName.setText(selectedClaim.getBankName());
                 editFormClaimBankUser.setText(selectedClaim.getBankUserName());
                 editFormClaimBankNumber.setText(selectedClaim.getBankNumber());
+                editFormClaimTotalDocument.setText(String.valueOf(adminController.calculateTotalDocumentsOfClaim(selectedClaim.getId())));
                 editFormClaimInformation.setVisible(true);
             }
         } catch (Exception e) {
