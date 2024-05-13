@@ -12,11 +12,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
-import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -313,12 +311,12 @@ public class AdminHomepage implements Initializable {
                 }
 
                 if (selectedRole != null) {
-                    ManagerPageController managerPageController = new ManagerPageController();
+                    ManagerHomePage managerHomePage = new ManagerHomePage();
                     User newUser = new User();
                     if (selectedRole.getId() == 2 || selectedRole.getId() == 3) {
-                        newUser.setId(managerPageController.createSurveyorID());
+                        newUser.setId(managerHomePage.createSurveyorID());
                     } else if (selectedRole.getId() != 1) {
-                        newUser.setId(managerPageController.createCustomerID());
+                        newUser.setId(managerHomePage.createCustomerID());
                     }
                     newUser.setUserName(editFormCreateUserName.getText());
                     newUser.setFullName(editFormCreateUserFullName.getText());

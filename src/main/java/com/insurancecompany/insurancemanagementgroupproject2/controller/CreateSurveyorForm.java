@@ -33,8 +33,8 @@ public class CreateSurveyorForm {
         DatabaseConnection databaseConnection = new DatabaseConnection();
         surveyorController = new SurveyorController(databaseConnection,databaseConnection.getConnection());
         submitSurveyor.setOnAction(ActionEvent -> createSurveyor());
-        ManagerPageController managerPageController = new ManagerPageController();
-        id = managerPageController.createSurveyorID();
+        ManagerHomePage managerHomePage = new ManagerHomePage();
+        id = managerHomePage.createSurveyorID();
     }
 
     ValidateInput validateInput = new ValidateInput();

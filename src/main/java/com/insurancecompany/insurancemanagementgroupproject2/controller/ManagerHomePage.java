@@ -10,14 +10,13 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.util.*;
 
-public class ManagerPageController extends SurveyorPageController {
+public class ManagerHomePage extends SurveyorHomepage {
     @FXML
     public Button createButton;
     @FXML
