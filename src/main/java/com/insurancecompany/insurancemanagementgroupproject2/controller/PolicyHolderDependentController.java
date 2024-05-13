@@ -72,8 +72,8 @@ public class PolicyHolderDependentController {
     @FXML
     private TableColumn<?, ?> dependentIDCol;
 
-    @FXML
-    private MenuItem deleteDependentMenu;
+
+
 
 
     @FXML
@@ -112,16 +112,80 @@ public class PolicyHolderDependentController {
 
 
 
+
+
     private String userName;
 
     BcryptPassword bcryptPassword = new BcryptPassword();
 
+    private void setUpDeleteColumn() {
+        TableColumn<Dependent, Void> deleteCol = new TableColumn<>("Delete");
+        deleteCol.setMinWidth(100);
+        deleteCol.setCellFactory(param -> new TableCell<Dependent, Void>() {
+            private final Button deleteBtn = new Button("Delete");
 
+            {
+                deleteBtn.setOnAction(event -> {
+                    Dependent dependent = getTableView().getItems().get(getIndex());
+                    if (dependent != null) {
+                        deleteDependent(dependent);
+                    }
+                });
+            }
 
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(deleteBtn);
+                }
+            }
+        });
+        dependentTable.getColumns().add(deleteCol);
+    }
+    private void deleteDependent(Dependent dependent) {
+        System.out.println("Attempting to delete dependent with ID: " + dependent.getId());
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this dependent?", ButtonType.YES, ButtonType.NO);
+        confirmationAlert.showAndWait().ifPresent(respone -> {
+            if (respone == ButtonType.YES) {
+                DatabaseConnection databaseConnection = new DatabaseConnection();
+                try (Connection connection = databaseConnection.getConnection()) {
+                    String deleteRelationQuery = "DELETE FROM dependent WHERE dependent_id = ?";
+                    PreparedStatement relationStatement = connection.prepareStatement(deleteRelationQuery);
+                    relationStatement.setString(1, dependent.getId());
+                    int result = relationStatement.executeUpdate();
+                    if (result > 0) {
+                        String deleteQuery = "DELETE FROm users WHERE id = ?";
+                        PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery);
+                        preparedStatement.setString(1, dependent.getId());
+                        int deleteResult = preparedStatement.executeUpdate();
 
+                        if (deleteResult > 0) {
+                            dependentTable.getItems().remove(dependent);
+                            showAlert(Alert.AlertType.INFORMATION, "Dependent deleted successfully");
+                        } else {
+                            showAlert(Alert.AlertType.ERROR, "Failed to delete dependent");
+                        }
+
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    showAlert(Alert.AlertType.ERROR, "Error deleting dependent: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void showAlert(Alert.AlertType alertType, String message) {
+        Alert alert = new Alert(alertType, message);
+        alert.showAndWait();
+    }
 
     @FXML
     private void initialize() {
+
         dependentTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         dependentTable.widthProperty().addListener((observable, oldValue, newValue) -> {
             double tableWidth = dependentTable.getWidth();
@@ -133,9 +197,10 @@ public class PolicyHolderDependentController {
             emailCol.setPrefWidth(tableWidth * 0.15);
 
         });
+
         dependentTable.prefWidthProperty().bind(dependentPane.widthProperty());
         dependentTable.prefHeightProperty().bind(dependentPane.heightProperty().subtract(100));
-
+        setUpDeleteColumn();
         this.userName = LoginData.usernameLogin;
         fetchDependentData();
     }
@@ -217,10 +282,7 @@ public class PolicyHolderDependentController {
 
     }
 
-    @FXML
-    void openDeleteModalDependent(ActionEvent event) {
 
-    }
 
     @FXML
     void refreshData(ActionEvent event) {
