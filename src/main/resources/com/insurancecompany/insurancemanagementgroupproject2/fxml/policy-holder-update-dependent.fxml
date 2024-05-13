@@ -21,7 +21,7 @@
       <TextField fx:id="updatePassWordField" layoutX="399.0" layoutY="135.0" />
       <TextField fx:id="updateAddressField" layoutX="399.0" layoutY="200.0" />
       <Button fx:id="cancelUpdateButton" layoutX="202.0" layoutY="312.0" mnemonicParsing="false" onAction="#cancelUpdate" text="Cancel" />
-      <Button fx:id="confirmUpdateBtn" layoutX="350.0" layoutY="312.0" mnemonicParsing="false" text="Confirm" />
+      <Button fx:id="confirmUpdateBtn" layoutX="350.0" layoutY="312.0" mnemonicParsing="false" onAction="#confirmUpdate" text="Confirm" />
       <Label fx:id="validationMessage" layoutX="285.0" layoutY="258.0" />
       <Text layoutX="206.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter the updated dependent's ID: " />
       <Text layoutX="14.0" layoutY="152.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Phone Num: " />
