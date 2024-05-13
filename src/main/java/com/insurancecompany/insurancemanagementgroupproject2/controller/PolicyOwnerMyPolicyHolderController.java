@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.net.URL;
@@ -88,6 +89,30 @@ public class PolicyOwnerMyPolicyHolderController implements Initializable {
     @FXML
     private TableColumn<PolicyHolder, String> policyHolderUsernameCol;
 
+    // Create new PolicyHolder form
+
+    @FXML
+    private TextArea addNewPolicyHolderAddressField;
+
+    @FXML
+    private TextField addNewPolicyHolderCardExpriedDateField;
+
+    @FXML
+    private TextField addNewPolicyHolderEmailField;
+
+    @FXML
+    private TextField addNewPolicyHolderFullNameField;
+
+    @FXML
+    private TextField addNewPolicyHolderPassword;
+
+    @FXML
+    private TextField addNewPolicyHolderPhoneNumField;
+
+    @FXML
+    private TextField addNewPolicyHolderUsernameField;
+
+
     private ObservableList<PolicyHolder> policyHolderObservableList = FXCollections.observableArrayList();
 
     @Override
@@ -96,15 +121,15 @@ public class PolicyOwnerMyPolicyHolderController implements Initializable {
         policyHolderFormCancelBtnOnAction();
         policyHolderObservableList.addAll(fetchPolicyHoldersFromDatabase());
         displayPolicyHolders();
-
     }
 
+    // Button for opening the form to add a new policyholder
     @FXML
     private void addNewPolicyHolderBtnOnAction() {
         addNewPolicyHolderForm.setVisible(true);
     }
 
-
+    // Button for canceling the form to add a new policyholder
     @FXML
     private void policyHolderFormCancelBtnOnAction() {
         addNewPolicyHolderForm.setVisible(false);
@@ -142,29 +167,6 @@ public class PolicyOwnerMyPolicyHolderController implements Initializable {
             e.printStackTrace();
         }
         return policyHolderArrayList;
-    }
-
-    // Fetch roles from the database
-    //Role Functions
-    public ArrayList<Role> fetchRolesFromDatabase(){
-        ArrayList<Role> roleArrayList = new ArrayList<>();
-        try {
-            String queryRoles = "SELECT * FROM roles";
-            PreparedStatement statement = connection.prepareStatement(queryRoles);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String roleName = resultSet.getString("role");
-                Role role = new Role(id, roleName);
-                roleArrayList.add(role);
-            }
-            resultSet.close();
-            statement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return roleArrayList;
     }
 
     // Display all policyholders in the TableView
@@ -227,6 +229,7 @@ public class PolicyOwnerMyPolicyHolderController implements Initializable {
         }
     }
 
+    // Adding delete function to the delete button
     @FXML
     private void editFieldPolicyHolderDeleteBtnOnAction(ActionEvent event) {
         boolean isSuccess = deletePolicyHolder(editFieldPolicyHolderID.getText());
@@ -242,6 +245,53 @@ public class PolicyOwnerMyPolicyHolderController implements Initializable {
         } else {
             System.out.println("isSuccess: " + false);
         }
+    }
+
+    @FXML
+    private void policyHolderFormConfirmBtnOnAction(ActionEvent event) {
+        String newPolicyHolderID = generatePolicyHolderID();
+        String newInsuranceCardNum = generateInsuranceCardNum();
+        String expirationDateString = addNewPolicyHolderCardExpriedDateField.getText(); // Assume you have a TextField for date input
+
+        boolean isIdUnique = policyHolderObservableList.stream().noneMatch(policyHolder -> policyHolder.getId().equals(newPolicyHolderID));
+        boolean isUsernameUnique = policyHolderObservableList.stream().noneMatch(policyHolder -> policyHolder.getUserName().equals(addNewPolicyHolderUsernameField.getText()));
+
+        if (isIdUnique && isUsernameUnique) {
+            PolicyHolder newPolicyHolder = new PolicyHolder();
+            newPolicyHolder.setId(newPolicyHolderID);
+            newPolicyHolder.setUserName(addNewPolicyHolderUsernameField.getText());
+            newPolicyHolder.setFullName(addNewPolicyHolderFullNameField.getText());
+            newPolicyHolder.setPassword(addNewPolicyHolderPassword.getText());
+            newPolicyHolder.setEmail(addNewPolicyHolderEmailField.getText());
+            newPolicyHolder.setPhoneNumber(addNewPolicyHolderPhoneNumField.getText());
+            newPolicyHolder.setAddress(addNewPolicyHolderAddressField.getText());
+            newPolicyHolder.setRoleId(5);  // Setting role id for policy holder
+
+            // Parse the expiration date
+            java.sql.Date expirationDate = java.sql.Date.valueOf(expirationDateString);
+
+            boolean isSuccess = addNewPolicyHolderAndCard(newPolicyHolder, newInsuranceCardNum, expirationDate);
+            if (isSuccess) {
+                policyHolderObservableList.add(newPolicyHolder);
+                clearNewPolicyFolderFormFields();
+            } else {
+                System.out.println("Failed to add new user and insurance card.");
+            }
+        } else {
+            if (!isIdUnique) System.out.println("Error: ID already exists.");
+            if (!isUsernameUnique) System.out.println("Error: Username already exists.");
+        }
+    }
+
+    // Clear the fields in the form to add a new policyholder
+    private void clearNewPolicyFolderFormFields() {
+        addNewPolicyHolderUsernameField.clear();
+        addNewPolicyHolderFullNameField.clear();
+        addNewPolicyHolderPassword.clear();
+        addNewPolicyHolderEmailField.clear();
+        addNewPolicyHolderPhoneNumField.clear();
+        addNewPolicyHolderAddressField.clear();
+        addNewPolicyHolderCardExpriedDateField.clear();
     }
 
     // Update the policyholder in the database
@@ -323,28 +373,62 @@ public class PolicyOwnerMyPolicyHolderController implements Initializable {
         }
     }
 
-    // Add a new policyholder to the database
-    public boolean addNewPolicyHolder(String fullName, String userName, String password, String email, String phoneNumber, String address, int roleId) {
+    private boolean addNewPolicyHolderAndCard(PolicyHolder policyHolder, String cardNumber, java.sql.Date expirationDate) {
+        Connection conn = null;
+        PreparedStatement insertUserStmt = null;
+        PreparedStatement insertCardStmt = null;
+
         try {
-            String insertPolicyHolderQuery = "INSERT INTO users (full_name, user_name, password, email, phone_number, address, role_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            try (PreparedStatement statement = connection.prepareStatement(insertPolicyHolderQuery)) {
-                statement.setString(1, fullName);
-                statement.setString(2, userName);
-                statement.setString(3, password);
-                statement.setString(4, email);
-                statement.setString(5, phoneNumber);
-                statement.setString(6, address);
-                statement.setInt(7, roleId);
-                int rowsInserted = statement.executeUpdate();
-                if (rowsInserted > 0) {
-                    System.out.println("A new Policy Holder was inserted successfully!");
-                    return true;
+            conn = databaseConnection.getConnection();
+            conn.setAutoCommit(false); // Start transaction
+
+            // Insert the new policyHolder
+            String insertUserQuery = "INSERT INTO users (id, full_name, user_name, password, email, phone_number, address, role_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            insertUserStmt = conn.prepareStatement(insertUserQuery);
+            insertUserStmt.setString(1, policyHolder.getId());
+            insertUserStmt.setString(2, policyHolder.getFullName());
+            insertUserStmt.setString(3, policyHolder.getUserName());
+            insertUserStmt.setString(4, policyHolder.getPassword());
+            insertUserStmt.setString(5, policyHolder.getEmail());
+            insertUserStmt.setString(6, policyHolder.getPhoneNumber());
+            insertUserStmt.setString(7, policyHolder.getAddress());
+            insertUserStmt.setInt(8, policyHolder.getRoleId());
+            insertUserStmt.executeUpdate();
+
+            // Insert the corresponding insurance card
+            String insertCardQuery = "INSERT INTO insurance_card (card_number, card_holder_id, policy_owner_id, expiration_date) VALUES (?, ?, ?, ?)";
+            insertCardStmt = conn.prepareStatement(insertCardQuery);
+            insertCardStmt.setString(1, cardNumber);
+            insertCardStmt.setString(2, policyHolder.getId());
+            insertCardStmt.setString(3, getIDFromUserName(LoginData.usernameLogin)); // Owner ID from login data
+            insertCardStmt.setDate(4, expirationDate);
+            insertCardStmt.executeUpdate();
+
+            conn.commit(); // Commit the transaction
+            return true;
+        } catch (SQLException e) {
+            if (conn != null) {
+                try {
+                    conn.rollback(); // Rollback transaction on error
+                } catch (SQLException ex) {
+                    System.out.println("Error rolling back transaction");
+                    ex.printStackTrace();
                 }
             }
-        } catch (SQLException e) {
             e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (insertUserStmt != null) insertUserStmt.close();
+                if (insertCardStmt != null) insertCardStmt.close();
+                if (conn != null) {
+                    conn.setAutoCommit(true); // Reset auto-commit to true
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
-        return false;
     }
 
     private String getIDFromUserName(String username) {
@@ -380,5 +464,24 @@ public class PolicyOwnerMyPolicyHolderController implements Initializable {
             e.printStackTrace();
         }
         return roleName;
+    }
+
+    // Function to create a random ID for the new policyholder
+    private static String generatePolicyHolderID() {
+        StringBuilder policyNumber = new StringBuilder("C");
+        for (int i = 0; i < 7; i++) {
+            policyNumber.append((int) (Math.random() * 10));
+        }
+        return policyNumber.toString();
+    }
+
+    // Function to create a random insurance card number for the new policyholder
+    private static String generateInsuranceCardNum() {
+        // Print a random insurance card number with format like of 10-digits using StringBuilder
+        StringBuilder insuranceCardNumber = new StringBuilder();
+        for (int i = 0; i < 10; i++) {
+            insuranceCardNumber.append((int) (Math.random() * 10));
+        }
+        return insuranceCardNumber.toString();
     }
 }

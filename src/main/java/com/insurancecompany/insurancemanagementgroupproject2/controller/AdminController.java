@@ -39,7 +39,7 @@ public class AdminController {
     //User functions
     public boolean addUser(User user){
         try {
-            String insertQuery = "INSERT INTO users (id,full_name, user_name, password, email, phone_number, address, role_id) VALUES (?,?, ?, ?, ?, ?, ?, ?)";
+            String insertQuery = "INSERT INTO users (id, full_name, user_name, password, email, phone_number, address, role_id) VALUES (?,?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
                 statement.setString(1,user.getId());
                 statement.setString(2, user.getFullName());

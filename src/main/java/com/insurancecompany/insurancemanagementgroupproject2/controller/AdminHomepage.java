@@ -293,6 +293,7 @@ public class AdminHomepage implements Initializable {
             System.out.println("Role Observable List is empty or null.");
         }
     }
+
     @FXML
     private void addNewUserFormAdminBtnOnAction(){
         boolean isIdUnique = userObservableList.stream().noneMatch(user -> user.getId().equals(editFormCreateUserId.getText()));

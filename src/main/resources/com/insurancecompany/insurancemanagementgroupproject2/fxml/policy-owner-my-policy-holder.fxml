@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -63,10 +62,9 @@
             </AnchorPane>
          </children>
       </StackPane>
-      <AnchorPane fx:id="addNewPolicyHolderForm" layoutX="106.0" layoutY="31.0" prefHeight="521.0" prefWidth="498.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 5; -fx-background-color: white;">
+      <AnchorPane fx:id="addNewPolicyHolderForm" layoutX="106.0" layoutY="31.0" prefHeight="521.0" prefWidth="498.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 5; -fx-background-color: white;" visible="false">
          <children>
-            <Button fx:id="editFormCreateUserConfirm" layoutX="87.0" layoutY="462.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="122.0" text="Confirm" />
-            <Label layoutX="93.0" layoutY="346.0" text="Role:" />
+            <Button fx:id="policyHolderFormConfirmBtn" layoutX="87.0" layoutY="462.0" mnemonicParsing="false" onAction="#policyHolderFormConfirmBtnOnAction" prefHeight="25.0" prefWidth="122.0" text="Confirm" />
             <Label layoutX="65.0" layoutY="99.0" text="Full Name:" />
             <TextField fx:id="addNewPolicyHolderFullNameField" layoutX="131.0" layoutY="95.0" prefHeight="25.0" prefWidth="280.0" promptText="Nguyen Van A" />
             <TextField fx:id="addNewPolicyHolderUsernameField" layoutX="131.0" layoutY="130.0" prefHeight="25.0" prefWidth="280.0" promptText="admin1234" />
@@ -80,19 +78,18 @@
             <Label layoutX="72.0" layoutY="271.0" text="Address:" />
             <TextArea fx:id="addNewPolicyHolderAddressField" layoutX="131.0" layoutY="266.0" prefHeight="68.0" prefWidth="280.0" promptText="702 Đ. Nguyễn Văn Linh, Tân Hưng, Quận 7, Thành phố Hồ Chí Minh" />
             <Button fx:id="policyHolderFormCancelBtn" layoutX="286.0" layoutY="461.0" mnemonicParsing="false" onAction="#policyHolderFormCancelBtnOnAction" prefHeight="25.0" prefWidth="122.0" text="Cancel" />
-            <ComboBox fx:id="addNewPolicyHolderRoleField" layoutX="131.0" layoutY="342.0" prefWidth="150.0" />
             <Label layoutX="86.0" layoutY="25.0" text="Create New Policy Holder Form">
                <font>
                   <Font name="System Bold" size="25.0" />
                </font>
             </Label>
-            <Label layoutX="202.0" layoutY="385.0" text="Insurance Card">
+            <Label layoutX="202.0" layoutY="354.0" text="Insurance Card">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <Label layoutX="32.0" layoutY="415.0" text="Expiration Date:" />
-            <TextField fx:id="addNewPolicyHolderCardExpriedDateField" layoutX="129.0" layoutY="411.0" prefHeight="25.0" prefWidth="280.0" promptText="2026-05-19" />
+            <Label layoutX="32.0" layoutY="386.0" text="Expiration Date:" />
+            <TextField fx:id="addNewPolicyHolderCardExpriedDateField" layoutX="129.0" layoutY="382.0" prefHeight="25.0" prefWidth="280.0" promptText="2026-05-19" />
          </children>
       </AnchorPane>
    </children>
