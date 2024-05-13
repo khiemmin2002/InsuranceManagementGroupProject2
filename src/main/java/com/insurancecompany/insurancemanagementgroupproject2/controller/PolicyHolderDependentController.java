@@ -7,8 +7,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.util.Callback;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -56,7 +60,14 @@ public class PolicyHolderDependentController {
     private Button confirmAddBtn;
 
     @FXML
+    private AnchorPane dependentPane;
+
+    @FXML
     private TableColumn<?, ?> dependentIDCol;
+
+    @FXML
+    private MenuItem deleteDependentMenu;
+
 
     @FXML
     private TableColumn<?, ?> emailCol;
@@ -68,6 +79,9 @@ public class PolicyHolderDependentController {
 
     @FXML
     private TableColumn<?, ?> userNameCol;
+
+    @FXML
+    private MenuItem updateDependentMenu;
 
     @FXML
     private TableColumn<?, ?> passwordCol;
@@ -87,12 +101,14 @@ public class PolicyHolderDependentController {
     private MenuItem openClaimBtn;
 
 
-    @FXML
-    private MenuItem updateDependent;
 
     private String userName;
 
     BcryptPassword bcryptPassword = new BcryptPassword();
+
+
+
+
 
     @FXML
     private void initialize() {
@@ -107,6 +123,9 @@ public class PolicyHolderDependentController {
             emailCol.setPrefWidth(tableWidth * 0.15);
 
         });
+        dependentTable.prefWidthProperty().bind(dependentPane.widthProperty());
+        dependentTable.prefHeightProperty().bind(dependentPane.heightProperty().subtract(100));
+
         this.userName = LoginData.usernameLogin;
         fetchDependentData();
     }
@@ -181,10 +200,7 @@ public class PolicyHolderDependentController {
     }
 
 
-    @FXML
-    void openAddDependentModal(ActionEvent event) {
 
-    }
 
     @FXML
     void openClaimModal(ActionEvent event) {
@@ -192,9 +208,16 @@ public class PolicyHolderDependentController {
     }
 
     @FXML
-    void updateDependent(ActionEvent event) {
+    void openDeleteModalDependent(ActionEvent event) {
 
     }
+
+    @FXML
+    void openUpdateDependentModal(ActionEvent event) {
+
+    }
+
+
     @FXML
     void confirmAddClaim(ActionEvent event) {
         String dependentId = generatedRandomUserId();

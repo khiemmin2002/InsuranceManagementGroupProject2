@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.PolicyHolderDependentController">
+<AnchorPane fx:id="dependentPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.PolicyHolderDependentController">
     <children>
       <SplitPane dividerPositions="0.5378787878787878" orientation="VERTICAL" prefHeight="475.0" prefWidth="600.0">
         <items>
@@ -24,19 +24,20 @@
                             <Menu mnemonicParsing="false" text="File">
                                 <items>
                                     <MenuItem fx:id="openClaimBtn" mnemonicParsing="false" onAction="#openClaimModal" text="Open Claim" />
+                              <MenuItem mnemonicParsing="false" text="Logout" />
                                     <MenuItem fx:id="exitBtn" mnemonicParsing="false" onAction="#exitProgram" text="Exit" />
                                 </items>
                             </Menu>
-                            <Menu mnemonicParsing="false" text="Manage">
-                                <items>
-                                    <MenuItem fx:id="addDependent" mnemonicParsing="false" onAction="#openAddDependentModal" text="Add Dependent" />
-                                    <MenuItem fx:id="updateDependent" mnemonicParsing="false" onAction="#updateDependent" text="Update Dependent" />
-                                </items>
-                            </Menu>
+                        <Menu mnemonicParsing="false" text="Manage">
+                          <items>
+                            <MenuItem fx:id="updateDependentMenu" mnemonicParsing="false" onAction="#openUpdateDependentModal" text="Update Dependent" />
+                              <MenuItem fx:id="deleteDependentMenu" mnemonicParsing="false" onAction="#openDeleteModalDependent" text="Delete Dependent" />
+                          </items>
+                        </Menu>
                         </menus>
                     </MenuBar>
                     <Text layoutX="149.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
-                    <TableView fx:id="dependentTable" prefHeight="138.0" prefWidth="598.0" AnchorPane.bottomAnchor="-5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="78.0">
+                    <TableView fx:id="dependentTable" prefHeight="178.0" prefWidth="600.0" AnchorPane.bottomAnchor="-5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="78.0">
                         <columns>
                             <TableColumn fx:id="userNameCol" maxWidth="1.7976931348623157E308" prefWidth="102.0" text="User Name" />
                             <TableColumn fx:id="fullNameCol" maxWidth="1.7976931348623157E308" prefWidth="119.0" text="Full Name" />
