@@ -17,10 +17,6 @@ public class ValidateInput {
         return phoneNumber.matches(phoneRegex);
     }
 
-    public boolean isUserIdUnique(ObservableList<User> observableList, String text) {
-        return observableList.stream().noneMatch(user -> user.getId().equals(text));
-    }
-
     public boolean isUserNameUnique(ObservableList<User> observableList, String username){
         return observableList.stream().noneMatch(user -> user.getUserName().equals(username));
     }

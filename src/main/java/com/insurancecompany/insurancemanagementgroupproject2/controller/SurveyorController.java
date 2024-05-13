@@ -11,9 +11,9 @@ public class SurveyorController extends Thread{
     private final DatabaseConnection databaseConnection;
     private final Connection connection;
 
-    public SurveyorController() {
-        this.databaseConnection = new DatabaseConnection();
-        this.connection = databaseConnection.getConnection();
+    public SurveyorController(DatabaseConnection databaseConnection, Connection connection) {
+         this.databaseConnection = databaseConnection;
+        this.connection = connection;
     }
 
     public List<Surveyor> fetchSurveyor(){

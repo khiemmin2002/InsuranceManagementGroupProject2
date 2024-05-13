@@ -1,5 +1,6 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
+import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.SceneLoader;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Surveyor;
 import javafx.collections.FXCollections;
@@ -13,7 +14,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditSurveyorController {
+public class EditSurveyorForm {
     @FXML
     public TextField full_name;
     @FXML
@@ -36,7 +37,8 @@ public class EditSurveyorController {
     private List<Surveyor> surveyorList;
     @FXML
     private void initialize(){
-        surveyorController = new SurveyorController();
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        surveyorController = new SurveyorController(databaseConnection, databaseConnection.getConnection());
         ObservableList<String> surveyorsID= FXCollections.observableArrayList();
         surveyorList = surveyorController.fetchSurveyor();
         surveyorsID.setAll(getID(surveyorList));
@@ -102,7 +104,6 @@ public class EditSurveyorController {
         SceneLoader.loadSceneWithInput("fxml/manager-homepage.fxml",thisStage(),944,709);
     }
     private Stage thisStage(){
-        Stage thisStage = (Stage) submitSurveyor.getScene().getWindow();
-        return thisStage;
+        return (Stage) submitSurveyor.getScene().getWindow();
     }
 }

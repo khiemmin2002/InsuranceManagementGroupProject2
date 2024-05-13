@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="709.0" prefWidth="944.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.ManagerPageController">
+<AnchorPane prefHeight="709.0" prefWidth="944.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.ManagerHomePage">
     <Pane layoutX="14.0" layoutY="49.0" prefHeight="380.0" prefWidth="152.0">
         <Label layoutX="37.0" layoutY="281.0" text="Approving claim" />
         <Button fx:id="fetchSingleClaimButton" layoutX="41.0" layoutY="347.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="approve" />
