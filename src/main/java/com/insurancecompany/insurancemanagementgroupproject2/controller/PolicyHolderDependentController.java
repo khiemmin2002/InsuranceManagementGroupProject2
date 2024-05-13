@@ -7,22 +7,45 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.util.Callback;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Random;
 
 public class PolicyHolderDependentController {
 
     @FXML
+    private TextField addAddressField;
+
+    @FXML
     private MenuItem addDependent;
+
+    @FXML
+    private TextField addEmailField;
+
+    @FXML
+    private TextField addFullNameField;
+
+    @FXML
+    private TextField addPassWordField;
+
+    @FXML
+    private TextField addPhoneNumField;
+
+    @FXML
+    private TextField addUserNameField;
+
+
+    @FXML
+    private TableColumn<?, ?> addressCol;
 
     @FXML
     private TableView<Dependent> dependentTable;
@@ -31,10 +54,42 @@ public class PolicyHolderDependentController {
     private Button clearInputButton;
 
     @FXML
-    private TableColumn<?,?> dependentIDCol;
+    private Button clearAddInputBtn;
 
     @FXML
-    private TableColumn<?,?> dependentUserNameCol;
+    private Button confirmAddBtn;
+
+    @FXML
+    private AnchorPane dependentPane;
+
+    @FXML
+    private TableColumn<?, ?> dependentIDCol;
+
+    @FXML
+    private MenuItem deleteDependentMenu;
+
+
+    @FXML
+    private TableColumn<?, ?> emailCol;
+
+
+    @FXML
+    private TableColumn<?, ?> fullNameCol;
+
+
+    @FXML
+    private TableColumn<?, ?> userNameCol;
+
+    @FXML
+    private MenuItem updateDependentMenu;
+
+    @FXML
+    private TableColumn<?, ?> passwordCol;
+
+
+    @FXML
+    private TableColumn<?, ?> phoneNumberCol;
+
 
     @FXML
     private MenuItem exitBtn;
@@ -45,34 +100,45 @@ public class PolicyHolderDependentController {
     @FXML
     private MenuItem openClaimBtn;
 
-    @FXML
-    private TableColumn<?, ?> policyHolderIDCol;
 
-    @FXML
-    private TableColumn<?,?> policyHolderUserNameCol;
-
-    @FXML
-    private MenuItem updateDependent;
 
     private String userName;
+
+    BcryptPassword bcryptPassword = new BcryptPassword();
+
+
+
+
 
     @FXML
     private void initialize() {
         dependentTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         dependentTable.widthProperty().addListener((observable, oldValue, newValue) -> {
             double tableWidth = dependentTable.getWidth();
-            policyHolderIDCol.setPrefWidth(tableWidth * 0.1);
-            policyHolderUserNameCol.setPrefWidth(tableWidth * 0.15);
+            userNameCol.setPrefWidth(tableWidth * 0.15);
+            fullNameCol.setPrefWidth(tableWidth * 0.2);
             dependentIDCol.setPrefWidth(tableWidth * 0.1);
-            dependentUserNameCol.setPrefWidth(tableWidth * 0.15);
+            passwordCol.setPrefWidth(tableWidth * 0.15);
+            phoneNumberCol.setPrefWidth(tableWidth * 0.15);
+            emailCol.setPrefWidth(tableWidth * 0.15);
+
         });
+        dependentTable.prefWidthProperty().bind(dependentPane.widthProperty());
+        dependentTable.prefHeightProperty().bind(dependentPane.heightProperty().subtract(100));
+
         this.userName = LoginData.usernameLogin;
         fetchDependentData();
     }
 
     @FXML
     void clearInputData(ActionEvent event) {
-        inputUserName.clear();
+        addFullNameField.clear();
+        addFullNameField.clear();
+        addPassWordField.clear();
+        addEmailField.clear();
+        addPhoneNumField.clear();
+        addAddressField.clear();
+
         fetchDependentData();
     }
 
@@ -89,11 +155,9 @@ public class PolicyHolderDependentController {
         Connection connection = databaseConnection.getConnection();
 
         try {
-            String findQuery = "SELECT d.*, u.user_name AS dependent_name, p.user_name AS policy_holder_name  " +
-                    "FROM dependent d " +
-                    "JOIN users u ON d.dependent_id = u.id " +
-                    "JOIN users p ON d.policy_holder_id = p.id " +
-                    "WHERE u.user_name = ?";
+            String findQuery = "SELECT id, full_name, user_name, password, email, phone_number, address " +
+                    "FROM users " +
+                    "WHERE user_name = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(findQuery);
             preparedStatement.setString(1, dependentUserName);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -101,11 +165,13 @@ public class PolicyHolderDependentController {
             ObservableList<Dependent> foundDependents = FXCollections.observableArrayList();
             while (resultSet.next()) {
                 Dependent dependent = new Dependent();
-                dependent.setPolicyHolderId(resultSet.getString("policy_holder_id"));
-                dependent.setPolicyHolderUserName(resultSet.getString("policy_holder_name"));
-                dependent.setDependentId(resultSet.getString("dependent_id"));
-                dependent.setDependentUserName(resultSet.getString("dependent_name"));
-
+                dependent.setId(resultSet.getString("id"));
+                dependent.setFullName(resultSet.getString("full_name"));
+                dependent.setUserName(resultSet.getString("user_name"));
+                dependent.setPassword(resultSet.getString("password"));
+                dependent.setEmail(resultSet.getString("email"));
+                dependent.setPhoneNumber(resultSet.getString("phone_number"));
+                dependent.setAddress(resultSet.getString("address"));
                 foundDependents.add(dependent);
 
             }
@@ -123,9 +189,18 @@ public class PolicyHolderDependentController {
 
 
     @FXML
-    void openAddDependentModal(ActionEvent event) {
-
+    void clearAddFields(ActionEvent event) {
+        addUserNameField.clear();
+        addAddressField.clear();
+        addEmailField.clear();
+        addFullNameField.clear();
+        addPhoneNumField.clear();
+        addPassWordField.clear();
+        addAddressField.clear();
     }
+
+
+
 
     @FXML
     void openClaimModal(ActionEvent event) {
@@ -133,8 +208,97 @@ public class PolicyHolderDependentController {
     }
 
     @FXML
-    void updateDependent(ActionEvent event) {
+    void openDeleteModalDependent(ActionEvent event) {
 
+    }
+
+    @FXML
+    void openUpdateDependentModal(ActionEvent event) {
+
+    }
+
+
+    @FXML
+    void confirmAddClaim(ActionEvent event) {
+        String dependentId = generatedRandomUserId();
+
+        String userName = addUserNameField.getText();
+        String fullName = addFullNameField.getText();
+        String passwordPlainText = addPassWordField.getText();
+        String phoneNumber = addPhoneNumField.getText();
+        String email = addEmailField.getText();
+
+        String address = addAddressField.getText();
+
+        int roleId = 6;
+
+
+        if (userName.isEmpty() || fullName.isEmpty() || passwordPlainText.isEmpty() || phoneNumber.isEmpty() || address.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Please fill in all fields");
+            alert.showAndWait();
+        }
+        String passWordHashed = bcryptPassword.hashBcryptPassword(passwordPlainText);
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        try (Connection connection = databaseConnection.getConnection()){
+            String policyHolderQuery = "SELECT id FROM users WHERE user_name = ?";
+            PreparedStatement policyHolderStatement = connection.prepareStatement(policyHolderQuery);
+            policyHolderStatement.setString(1, this.userName);
+            ResultSet rs = policyHolderStatement.executeQuery();
+            String policyHolderId = null;
+
+            if (rs.next()) {
+                policyHolderId = rs.getString("id");
+            }
+            if (policyHolderId == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Policy holder not found.");
+                alert.showAndWait();
+                return;
+            }
+
+
+            String insertQuery = "INSERT INTO public.users (id, full_name, user_name, password, role_id, email, phone_number, address)" +
+                    "VALUES (?, ?, ?, ?, ? , ?, ?, ?)";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
+            preparedStatement.setString(1, dependentId);
+            preparedStatement.setString(2, fullName);
+            preparedStatement.setString(3, userName);
+            preparedStatement.setString(4, passWordHashed);
+            preparedStatement.setInt(5, roleId);
+            preparedStatement.setString(6, email);
+            preparedStatement.setString(7, phoneNumber);
+            preparedStatement.setString(8, address);
+
+            preparedStatement.executeUpdate();
+
+            String insertRelationQuery = "INSERT INTO dependent (dependent_id, policy_holder_id) VALUES (?, ?)";
+            PreparedStatement relationStatement = connection.prepareStatement(insertRelationQuery);
+            relationStatement.setString(1, dependentId);
+            relationStatement.setString(2, policyHolderId);
+            relationStatement.executeUpdate();
+
+            fetchDependentData();
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText(null);
+            alert.setContentText("Dependent add successfully");
+            alert.showAndWait();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Database Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Failed to add dependent: " + e.getMessage());
+            alert.showAndWait();
+        }
     }
 
     private void fetchDependentData() {
@@ -143,26 +307,37 @@ public class PolicyHolderDependentController {
         ObservableList<Dependent> dependentData = FXCollections.observableArrayList();
 
         try {
-            String getDependetQuery = "SELECT d.*, u.user_name AS dependent_name, p.user_name AS policy_holder_name  " +
-                    "FROM dependent d " +
-                    "JOIN users u ON d.dependent_id = u.id " +
-                    "JOIN users p ON d.policy_holder_id = p.id " +
+            String getDependentQuery = "SELECT d.id, d.full_name, d.user_name,d.password, d.email, d.phone_number, d.address " +
+                    "FROM users d " +
+                    "JOIN dependent dep " +
+                    "ON d.id = dep.dependent_id " +
+                    "JOIN users p " +
+                    "ON p.id = dep.policy_holder_id " +
                     "WHERE p.user_name = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(getDependetQuery);
+
+            PreparedStatement preparedStatement = connection.prepareStatement(getDependentQuery);
             preparedStatement.setString(1, userName);
             ResultSet queryResult = preparedStatement.executeQuery();
             while (queryResult.next()) {
                 Dependent dependent = new Dependent();
-                dependent.setDependentId(queryResult.getString("dependent_id"));
-                dependent.setDependentUserName(queryResult.getString("dependent_name"));
-                dependent.setPolicyHolderId(queryResult.getString("policy_holder_id"));
-                dependent.setPolicyHolderUserName(queryResult.getString("policy_holder_name"));
+                dependent.setId(queryResult.getString("id"));
+                dependent.setFullName(queryResult.getString("full_name"));
+                dependent.setUserName(queryResult.getString("user_name"));
+                dependent.setPassword(queryResult.getString("password"));
+                dependent.setEmail(queryResult.getString("email"));
+                dependent.setPhoneNumber(queryResult.getString("phone_number"));
+                dependent.setAddress(queryResult.getString("address"));
+
                 dependentData.add(dependent);
             }
-            dependentIDCol.setCellValueFactory(new PropertyValueFactory<>("dependentId"));
-            dependentUserNameCol.setCellValueFactory(new PropertyValueFactory<>("dependentUserName"));
-            policyHolderIDCol.setCellValueFactory(new PropertyValueFactory<>("policyHolderId"));
-            policyHolderUserNameCol.setCellValueFactory(new PropertyValueFactory<>("policyHolderUserName"));
+            dependentIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            userNameCol.setCellValueFactory(new PropertyValueFactory<>("userName"));
+            fullNameCol.setCellValueFactory(new PropertyValueFactory<>("fullName"));
+            passwordCol.setCellValueFactory(new PropertyValueFactory<>("password"));
+            phoneNumberCol.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+            emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
+            addressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
+
 
             dependentTable.setItems(dependentData);
         } catch (SQLException e) {
@@ -170,4 +345,14 @@ public class PolicyHolderDependentController {
         }
     };
 
+    private String generatedRandomUserId() {
+        StringBuilder dependentID = new StringBuilder("C");
+        Random random = new Random();
+        for (int i = 0; i < 7; i++) {
+            dependentID.append(random.nextInt(10));
+        }
+        return dependentID.toString();
+    }
+
 }
+
