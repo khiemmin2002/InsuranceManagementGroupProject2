@@ -1,19 +1,26 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
+import com.insurancecompany.insurancemanagementgroupproject2.HelloApplication;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Dependent;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -213,8 +220,15 @@ public class PolicyHolderDependentController {
     }
 
     @FXML
-    void openUpdateDependentModal(ActionEvent event) {
+    void openUpdateDependentModal(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/policy-holder-update-dependent.fxml"));
+        Parent root = fxmlLoader.load();
 
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Update Dependent");
+        stage.setScene(new Scene(root));
+        stage.showAndWait();
     }
 
 

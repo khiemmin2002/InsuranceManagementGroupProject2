@@ -41,10 +41,10 @@
                         <columns>
                             <TableColumn fx:id="userNameCol" maxWidth="1.7976931348623157E308" prefWidth="102.0" text="User Name" />
                             <TableColumn fx:id="fullNameCol" maxWidth="1.7976931348623157E308" prefWidth="119.0" text="Full Name" />
-                            <TableColumn fx:id="dependentIDCol" maxWidth="1.7976931348623157E308" prefWidth="111.0" text="Dependent ID" />
-                            <TableColumn fx:id="passwordCol" maxWidth="1.7976931348623157E308" prefWidth="118.0" text="Password" />
-                            <TableColumn fx:id="phoneNumberCol" prefWidth="75.0" text="Phone Number" />
-                            <TableColumn fx:id="emailCol" prefWidth="75.0" text="Email" />
+                            <TableColumn fx:id="dependentIDCol" maxWidth="1.7976931348623157E308" prefWidth="110.0" text="Dependent ID" />
+                            <TableColumn fx:id="passwordCol" maxWidth="1.7976931348623157E308" prefWidth="119.0" text="Password" />
+                            <TableColumn fx:id="phoneNumberCol" prefWidth="90.0" text="Phone Number" />
+                            <TableColumn fx:id="emailCol" prefWidth="60.0" text="Email" />
                             <TableColumn fx:id="addressCol" prefWidth="75.0" text="Address" />
                         </columns>
                     </TableView>
