@@ -58,6 +58,7 @@ public class AdminController {
         }
         return false;
     }
+
     public boolean updateUser(String id, String fullName, String password, String email, String phoneNumber, String address) {
         try {
                 String updateProfileQuery = "UPDATE users SET full_name = ?, password = ?, email = ?, phone_number = ?, address = ? WHERE id = ?";
