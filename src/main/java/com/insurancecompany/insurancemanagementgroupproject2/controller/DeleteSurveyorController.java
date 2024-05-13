@@ -1,5 +1,6 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
+import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.SceneLoader;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Surveyor;
 import javafx.collections.FXCollections;
@@ -26,7 +27,8 @@ public class DeleteSurveyorController {
     private List<Surveyor> surveyorList;
     @FXML
     public void initialize(){
-        surveyorController = new SurveyorController();
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        surveyorController = new SurveyorController(databaseConnection, databaseConnection.getConnection());
         ObservableList<String> surveyorsID= FXCollections.observableArrayList();
         surveyorList = surveyorController.fetchSurveyor();
         surveyorsID.setAll(getID(surveyorList));
@@ -63,7 +65,6 @@ public class DeleteSurveyorController {
         return id;
     }
     private Stage thisStage(){
-        Stage thisStage = (Stage) submitDelete.getScene().getWindow();
-        return thisStage;
+        return (Stage) submitDelete.getScene().getWindow();
     }
 }

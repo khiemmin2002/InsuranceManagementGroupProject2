@@ -1,5 +1,6 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
+import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.SceneLoader;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
@@ -9,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
@@ -71,8 +73,10 @@ public class ManagerPageController extends SurveyorPageController {
     private List<Surveyor> surveyorList = new ArrayList<Surveyor>();
     @FXML
     private void initialize() {
+        //Setup database connection
+        DatabaseConnection databaseConnection = new DatabaseConnection();
         //Setup controller
-        surveyorController = new SurveyorController();
+        surveyorController = new SurveyorController(databaseConnection,databaseConnection.getConnection());
         // Set up column widths and cell value factories
         claimTable.widthProperty().addListener((observable, oldValue, newValue) -> {
             double tableWidth = claimTable.getWidth();

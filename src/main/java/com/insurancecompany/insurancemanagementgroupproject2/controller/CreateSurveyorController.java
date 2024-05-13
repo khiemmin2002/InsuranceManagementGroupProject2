@@ -1,5 +1,6 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
+import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.SceneLoader;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -29,7 +30,8 @@ public class CreateSurveyorController {
     private String id;
     @FXML
     private void initialize(){
-        surveyorController = new SurveyorController();
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        surveyorController = new SurveyorController(databaseConnection,databaseConnection.getConnection());
         submitSurveyor.setOnAction(ActionEvent -> createSurveyor());
         ManagerPageController managerPageController = new ManagerPageController();
         id = managerPageController.createSurveyorID();
@@ -63,7 +65,6 @@ public class CreateSurveyorController {
     }
 
     private Stage thisStage(){
-        Stage thisStage = (Stage) submitSurveyor.getScene().getWindow();
-        return thisStage;
+        return (Stage) submitSurveyor.getScene().getWindow();
     }
 }
