@@ -7,22 +7,38 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Random;
 
 public class PolicyHolderDependentController {
 
     @FXML
+    private TextField addAddressField;
+
+    @FXML
     private MenuItem addDependent;
+
+    @FXML
+    private TextField addEmailField;
+
+    @FXML
+    private TextField addFullNameField;
+
+    @FXML
+    private TextField addPassWordField;
+
+    @FXML
+    private TextField addPhoneNumField;
+
+    @FXML
+    private TextField addUserNameField;
+
 
     @FXML
     private TableColumn<?, ?> addressCol;
@@ -56,11 +72,6 @@ public class PolicyHolderDependentController {
     @FXML
     private TableColumn<?, ?> passwordCol;
 
-    @FXML
-    private TextField addDependentIDField;
-
-    @FXML
-    private TextField addPolicyHolderField;
 
     @FXML
     private TableColumn<?, ?> phoneNumberCol;
@@ -81,6 +92,8 @@ public class PolicyHolderDependentController {
 
     private String userName;
 
+    BcryptPassword bcryptPassword = new BcryptPassword();
+
     @FXML
     private void initialize() {
         dependentTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -100,7 +113,13 @@ public class PolicyHolderDependentController {
 
     @FXML
     void clearInputData(ActionEvent event) {
-        inputUserName.clear();
+        addFullNameField.clear();
+        addFullNameField.clear();
+        addPassWordField.clear();
+        addEmailField.clear();
+        addPhoneNumField.clear();
+        addAddressField.clear();
+
         fetchDependentData();
     }
 
@@ -152,7 +171,13 @@ public class PolicyHolderDependentController {
 
     @FXML
     void clearAddFields(ActionEvent event) {
-
+        addUserNameField.clear();
+        addAddressField.clear();
+        addEmailField.clear();
+        addFullNameField.clear();
+        addPhoneNumField.clear();
+        addPassWordField.clear();
+        addAddressField.clear();
     }
 
 
@@ -169,6 +194,88 @@ public class PolicyHolderDependentController {
     @FXML
     void updateDependent(ActionEvent event) {
 
+    }
+    @FXML
+    void confirmAddClaim(ActionEvent event) {
+        String dependentId = generatedRandomUserId();
+
+        String userName = addUserNameField.getText();
+        String fullName = addFullNameField.getText();
+        String passwordPlainText = addPassWordField.getText();
+        String phoneNumber = addPhoneNumField.getText();
+        String email = addEmailField.getText();
+
+        String address = addAddressField.getText();
+
+        int roleId = 6;
+
+
+        if (userName.isEmpty() || fullName.isEmpty() || passwordPlainText.isEmpty() || phoneNumber.isEmpty() || address.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Please fill in all fields");
+            alert.showAndWait();
+        }
+        String passWordHashed = bcryptPassword.hashBcryptPassword(passwordPlainText);
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        try (Connection connection = databaseConnection.getConnection()){
+            String policyHolderQuery = "SELECT id FROM users WHERE user_name = ?";
+            PreparedStatement policyHolderStatement = connection.prepareStatement(policyHolderQuery);
+            policyHolderStatement.setString(1, this.userName);
+            ResultSet rs = policyHolderStatement.executeQuery();
+            String policyHolderId = null;
+
+            if (rs.next()) {
+                policyHolderId = rs.getString("id");
+            }
+            if (policyHolderId == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Policy holder not found.");
+                alert.showAndWait();
+                return;
+            }
+
+
+            String insertQuery = "INSERT INTO public.users (id, full_name, user_name, password, role_id, email, phone_number, address)" +
+                    "VALUES (?, ?, ?, ?, ? , ?, ?, ?)";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
+            preparedStatement.setString(1, dependentId);
+            preparedStatement.setString(2, fullName);
+            preparedStatement.setString(3, userName);
+            preparedStatement.setString(4, passWordHashed);
+            preparedStatement.setInt(5, roleId);
+            preparedStatement.setString(6, email);
+            preparedStatement.setString(7, phoneNumber);
+            preparedStatement.setString(8, address);
+
+            preparedStatement.executeUpdate();
+
+            String insertRelationQuery = "INSERT INTO dependent (dependent_id, policy_holder_id) VALUES (?, ?)";
+            PreparedStatement relationStatement = connection.prepareStatement(insertRelationQuery);
+            relationStatement.setString(1, dependentId);
+            relationStatement.setString(2, policyHolderId);
+            relationStatement.executeUpdate();
+
+            fetchDependentData();
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText(null);
+            alert.setContentText("Dependent add successfully");
+            alert.showAndWait();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Database Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Failed to add dependent: " + e.getMessage());
+            alert.showAndWait();
+        }
     }
 
     private void fetchDependentData() {
@@ -214,6 +321,15 @@ public class PolicyHolderDependentController {
             throw new RuntimeException(e);
         }
     };
+
+    private String generatedRandomUserId() {
+        StringBuilder dependentID = new StringBuilder("C");
+        Random random = new Random();
+        for (int i = 0; i < 7; i++) {
+            dependentID.append(random.nextInt(10));
+        }
+        return dependentID.toString();
+    }
 
 }
 
