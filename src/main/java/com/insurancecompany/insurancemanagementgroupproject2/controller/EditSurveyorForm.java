@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditSurveyorController {
+public class EditSurveyorForm {
     @FXML
     public TextField full_name;
     @FXML

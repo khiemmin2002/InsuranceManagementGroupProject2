@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeleteSurveyorController {
+public class DeleteSurveyorForm {
     @FXML
     private ChoiceBox<String> choiceBox;
     @FXML
