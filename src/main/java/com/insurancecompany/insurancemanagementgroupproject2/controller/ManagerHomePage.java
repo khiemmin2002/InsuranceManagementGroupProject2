@@ -1,5 +1,6 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
+import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.SceneLoader;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
@@ -15,7 +16,7 @@ import javafx.stage.Stage;
 
 import java.util.*;
 
-public class ManagerPageController extends SurveyorPageController {
+public class ManagerHomePage extends SurveyorHomepage {
     @FXML
     public Button createButton;
     @FXML
@@ -71,8 +72,10 @@ public class ManagerPageController extends SurveyorPageController {
     private List<Surveyor> surveyorList = new ArrayList<Surveyor>();
     @FXML
     private void initialize() {
+        //Setup database connection
+        DatabaseConnection databaseConnection = new DatabaseConnection();
         //Setup controller
-        surveyorController = new SurveyorController();
+        surveyorController = new SurveyorController(databaseConnection,databaseConnection.getConnection());
         // Set up column widths and cell value factories
         claimTable.widthProperty().addListener((observable, oldValue, newValue) -> {
             double tableWidth = claimTable.getWidth();
@@ -218,6 +221,22 @@ public class ManagerPageController extends SurveyorPageController {
     public String createSurveyorID(){
         StringBuilder sb = new StringBuilder();
         sb.append("T");
+        Random random = new Random();
+        for (int i = 0; i < 6; i++) {
+            sb.append(random.nextInt(10)); // Append random digit (0-9)
+        }
+        String id = sb.toString();
+        for(Surveyor surveyor : surveyorList){
+            if(surveyor.getId().equals(id)){
+                createSurveyorID();
+            }
+        }
+        return id;
+    }
+
+    public String createCustomerID(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("C");
         Random random = new Random();
         for (int i = 0; i < 6; i++) {
             sb.append(random.nextInt(10)); // Append random digit (0-9)

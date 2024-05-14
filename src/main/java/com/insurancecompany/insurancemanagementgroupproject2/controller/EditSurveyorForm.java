@@ -1,7 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
+import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.SceneLoader;
-import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Surveyor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditSurveyorController {
+public class EditSurveyorForm {
     @FXML
     public TextField full_name;
     @FXML
@@ -37,7 +37,8 @@ public class EditSurveyorController {
     private List<Surveyor> surveyorList;
     @FXML
     private void initialize(){
-        surveyorController = new SurveyorController();
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        surveyorController = new SurveyorController(databaseConnection, databaseConnection.getConnection());
         ObservableList<String> surveyorsID= FXCollections.observableArrayList();
         surveyorList = surveyorController.fetchSurveyor();
         surveyorsID.setAll(getID(surveyorList));
@@ -78,6 +79,7 @@ public class EditSurveyorController {
         }
         return id;
     }
+    ValidateInput validateInput = new ValidateInput();
     private void editSurveyor(String id){
         //Validate field is not empty
         if (full_name.getText().isEmpty() ||  email.getText().isEmpty()
@@ -86,13 +88,13 @@ public class EditSurveyorController {
             return;
         }
         //Validate email
-        if (!ValidateInput.isValidEmail(email.getText())) {
+        if (validateInput.isValidEmail(email.getText())) {
             errorLabel.setText("Invalid email format");
             return;
         }
 
         // Validate phone number
-        if (!ValidateInput.isValidPhoneNumber(phone_number.getText())) {
+        if (validateInput.isValidPhoneNumber(phone_number.getText())) {
             errorLabel.setText("Invalid phone number format");
             return;
         }
@@ -102,7 +104,6 @@ public class EditSurveyorController {
         SceneLoader.loadSceneWithInput("fxml/manager-homepage.fxml",thisStage(),944,709);
     }
     private Stage thisStage(){
-        Stage thisStage = (Stage) submitSurveyor.getScene().getWindow();
-        return thisStage;
+        return (Stage) submitSurveyor.getScene().getWindow();
     }
 }

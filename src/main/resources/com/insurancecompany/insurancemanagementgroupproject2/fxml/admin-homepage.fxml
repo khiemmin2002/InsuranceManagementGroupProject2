@@ -48,7 +48,7 @@
                <center>
                   <AnchorPane prefHeight="560.0" prefWidth="785.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane fx:id="mainDashboard" layoutX="10.0" layoutY="10.0" prefHeight="540.0" prefWidth="700.0" visible="false">
+                        <AnchorPane fx:id="mainDashboard" layoutX="10.0" layoutY="10.0" prefHeight="540.0" prefWidth="700.0">
                            <children>
                               <AnchorPane layoutX="12.0" layoutY="14.0" prefHeight="140.0" prefWidth="680.0" style="-fx-background-color: FAF9F6; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 5;">
                                  <opaqueInsets>
@@ -379,7 +379,7 @@
                               <Button fx:id="editFormCreateUserConfirm" layoutX="114.0" layoutY="467.0" mnemonicParsing="false" onAction="#addNewUserFormAdminBtnOnAction" prefHeight="25.0" prefWidth="122.0" text="Confirm" />
                               <Label layoutX="118.0" layoutY="418.0" text="Role:" />
                               <Label layoutX="102.0" layoutY="97.0" text="User ID:" />
-                              <TextField fx:id="editFormCreateUserId" layoutX="152.0" layoutY="93.0" prefHeight="25.0" prefWidth="281.0" promptText="C1000101" />
+                              <TextField fx:id="editFormCreateUserId" disable="true" layoutX="152.0" layoutY="93.0" prefHeight="25.0" prefWidth="281.0" promptText="Xxxxxxxx" />
                               <Label layoutX="89.0" layoutY="130.0" text="Full name:" />
                               <TextField fx:id="editFormCreateUserFullName" layoutX="153.0" layoutY="126.0" prefHeight="25.0" prefWidth="280.0" promptText="Nguyen Van A" />
                               <TextField fx:id="editFormCreateUserName" layoutX="153.0" layoutY="168.0" prefHeight="25.0" prefWidth="280.0" promptText="admin1234" />

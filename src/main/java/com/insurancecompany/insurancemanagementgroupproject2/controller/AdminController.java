@@ -13,6 +13,7 @@ public class AdminController {
 
     DatabaseConnection databaseConnection = new DatabaseConnection();
     Connection connection = databaseConnection.getConnection();
+    BcryptPassword bcryptPassword = new BcryptPassword();
 
     //Role Functions
     public ArrayList<Role> fetchRolesFromDatabase(){
@@ -44,7 +45,7 @@ public class AdminController {
                 statement.setString(1,user.getId());
                 statement.setString(2, user.getFullName());
                 statement.setString(3, user.getUserName());
-                statement.setString(4, user.getPassword());
+                statement.setString(4, bcryptPassword.hashBcryptPassword(user.getPassword()));
                 statement.setString(5, user.getEmail());
                 statement.setString(6, user.getPhoneNumber());
                 statement.setString(7, user.getAddress());
@@ -64,7 +65,7 @@ public class AdminController {
                 String updateProfileQuery = "UPDATE users SET full_name = ?, password = ?, email = ?, phone_number = ?, address = ? WHERE id = ?";
                 try (PreparedStatement statement = connection.prepareStatement(updateProfileQuery)) {
                     statement.setString(1, fullName);
-                    statement.setString(2, password);
+                    statement.setString(2, bcryptPassword.hashBcryptPassword(password));
                     statement.setString(3, email);
                     statement.setString(4, phoneNumber);
                     statement.setString(5, address);
@@ -80,7 +81,6 @@ public class AdminController {
         }
         return false;
     }
-
     public boolean deleteUser(String id) {
             try {
                 String deleteQuery = "DELETE FROM users WHERE id = ?";
@@ -100,7 +100,6 @@ public class AdminController {
             }
             return false;
     }
-
     public ArrayList<User> fetchUsersFromDatabase() {
         ArrayList<User> userArrayList = new ArrayList<>();
         try {
@@ -251,6 +250,22 @@ public class AdminController {
         return false;
     }
 
+    public int calculateTotalDocumentsOfClaim(String claimId){
+        int totalCount = 0;
+        String query = "SELECT COUNT(*) AS total FROM documents WHERE claim_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, claimId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    totalCount = resultSet.getInt("total");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return totalCount;
+    }
     public boolean deleteClaimInformation(Claim selectedClaim) {
             try {
                 String claimId = selectedClaim.getId();
@@ -270,7 +285,6 @@ public class AdminController {
             }
         return false;
     }
-
 
     //Profile dashboard functions
     public User getProfileDashboardInformation() {

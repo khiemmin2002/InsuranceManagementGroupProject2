@@ -6,7 +6,7 @@
 
 <AnchorPane prefHeight="141.0" prefWidth="261.0" xmlns="http://javafx.com/javafx/17.0.2-ea"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.DeleteSurveyorController">
+            fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.DeleteSurveyorForm">
    <Label layoutX="89.0" layoutY="14.0" text="Delete Surveyor"/>
    <Button fx:id="submitDelete" layoutX="105.0" layoutY="93.0" mnemonicParsing="false" text="Delete"/>
    <ChoiceBox fx:id="choiceBox" layoutX="56.0" layoutY="37.0" prefWidth="150.0"/>

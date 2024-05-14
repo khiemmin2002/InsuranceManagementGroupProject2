@@ -25,7 +25,7 @@
       <TextField fx:id="bankNameField" maxWidth="200.0" promptText="SCB" />
       <Label text="Bank User Name:" />
       <TextField fx:id="bankUserNameField" maxWidth="200.0" promptText="Nguyen Van A" />
-      <Label text="Bank Number:" />
+      <Label text="Bank Account Number:" />
       <TextField fx:id="bankNumberField" maxWidth="200.0" promptText="1234567890" />
       <Button fx:id="btnUploadDocuments" maxWidth="200.0" onAction="#uploadMultipleFiles" text="Upload documents" />
       <HBox alignment="CENTER" spacing="20">

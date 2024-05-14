@@ -1,5 +1,6 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
+import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.SceneLoader;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -8,7 +9,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class CreateSurveyorController {
+public class CreateSurveyorForm {
     @FXML
     public TextField full_name;
     @FXML
@@ -29,12 +30,14 @@ public class CreateSurveyorController {
     private String id;
     @FXML
     private void initialize(){
-        surveyorController = new SurveyorController();
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        surveyorController = new SurveyorController(databaseConnection,databaseConnection.getConnection());
         submitSurveyor.setOnAction(ActionEvent -> createSurveyor());
-        ManagerPageController managerPageController = new ManagerPageController();
-        id = managerPageController.createSurveyorID();
+        ManagerHomePage managerHomePage = new ManagerHomePage();
+        id = managerHomePage.createSurveyorID();
     }
 
+    ValidateInput validateInput = new ValidateInput();
     private void createSurveyor(){
         if (full_name.getText().isEmpty() || username.getText().isEmpty() || password.getText().isEmpty() || email.getText().isEmpty()
                 || phone_number.getText().isEmpty() || address.getText().isEmpty()) {
@@ -42,13 +45,13 @@ public class CreateSurveyorController {
             return;
         }
 
-        if (!ValidateInput.isValidEmail(email.getText())) {
+        if (validateInput.isValidEmail(email.getText())) {
             errorLabel.setText("Invalid email format");
             return;
         }
 
         // Validate phone number
-        if (!ValidateInput.isValidPhoneNumber(phone_number.getText())) {
+        if (validateInput.isValidPhoneNumber(phone_number.getText())) {
             errorLabel.setText("Invalid phone number format");
             return;
         }
@@ -62,7 +65,6 @@ public class CreateSurveyorController {
     }
 
     private Stage thisStage(){
-        Stage thisStage = (Stage) submitSurveyor.getScene().getWindow();
-        return thisStage;
+        return (Stage) submitSurveyor.getScene().getWindow();
     }
 }

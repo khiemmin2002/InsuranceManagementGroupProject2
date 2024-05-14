@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="335.0" prefWidth="398.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.EditSurveyorController">
+<AnchorPane prefHeight="335.0" prefWidth="398.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.EditSurveyorForm">
     <Label layoutX="169.0" layoutY="129.0" text="Full Name" />
     <TextField fx:id="full_name" layoutX="122.0" layoutY="152.0" />
     <Button fx:id="submitSurveyor" layoutX="169.0" layoutY="385.0" mnemonicParsing="false" text="Submit" />
