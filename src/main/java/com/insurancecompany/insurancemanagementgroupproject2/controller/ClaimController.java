@@ -38,6 +38,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -83,12 +85,17 @@ public class ClaimController {
     private String currentClaimId;
 
     private List<String> uploadedDocumentNames = new ArrayList<>();
-    
+
+
+
 
     @FXML
     void confirmAddClaim(ActionEvent event)  {
-        String claimId = generateRandomClaimID();
-        currentClaimId = claimId;
+        if (currentClaimId == null || currentClaimId.isEmpty()) {
+            currentClaimId = generateRandomClaimID();
+        }
+        btnUploadDocuments.setDisable(false);
+        System.out.println("Current claim ID: " + currentClaimId);
         String cardNumber = cardNumberInput.getText();
         String claimAmountText = claimAmountInput.getText();
         String insuredPerson = insuredPersonInput.getText();
@@ -111,7 +118,7 @@ public class ClaimController {
             String insertQuery = "INSERT INTO public.claims (claim_id, insured_person, card_number, exam_date, claim_date, claim_amount, status, bank_name, bank_user_name, bank_number) " +
                     "VALUES (?, ?, ?, NULL, NULL, ?, 'NEW', ?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
-            preparedStatement.setString(1, claimId);
+            preparedStatement.setString(1, this.currentClaimId);
             preparedStatement.setString(2, insuredPerson);
             preparedStatement.setString(3, cardNumber);
             preparedStatement.setDouble(4, claimAmount);
@@ -121,7 +128,7 @@ public class ClaimController {
 
             preparedStatement.executeUpdate();
             for (String documentName: uploadedDocumentNames) {
-                saveDocumentDetails(claimId, documentName);
+                saveDocumentDetails(currentClaimId, documentName);
             }
             showAlert(Alert.AlertType.INFORMATION, "Claim and associated documents added successfully.");
             clearInputFields();
@@ -147,6 +154,9 @@ public class ClaimController {
         cardNumberInput.clear();
         claimAmountInput.clear();
         insuredPersonInput.clear();
+        bankNameField.clear();
+        bankNumberField.clear();
+        bankUserNameField.clear();
         validationMessage.setText("");
     }
     private String generateRandomClaimID() {
@@ -166,22 +176,31 @@ public class ClaimController {
 
 
         List<File> files = fileChooser.showOpenMultipleDialog(((Node) event.getSource()).getScene().getWindow());
-        for (File file: files) {
-            String renamedFile = renameAndSaveFile(file);
-            uploadedDocumentNames.add(renamedFile);
-
+        if (files != null && !files.isEmpty()) {
+            for (File file : files) {
+                String renamedFile = renameAndSaveFile(file);
+                if (renamedFile != null) {
+                    uploadedDocumentNames.add(renamedFile);
+                } else {
+                    System.out.println("Skipping file due to renaming error.");
+                }
+            }
+        } else {
+            System.out.println("No files were selected.");
         }
     }
 
     private String renameAndSaveFile(File originalFile) {
-        if (currentClaimId == null || currentClaimId.trim().isEmpty()) {
-            System.out.println("Error: No claim ID available for renaming the file.");
-            return null;
-        }
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String formattedDate = currentDate.format(formatter);
+
+
         String originalFileName = originalFile.getName();
         String baseName = originalFileName.substring(0, originalFileName.lastIndexOf('.'));
         String extension = getFileExtension(originalFile);
-        String newFileName = "Claim" + currentClaimId + "_" + baseName + extension;;
+
+        String newFileName = formattedDate + "_" + baseName + extension;;
         System.out.println("File renamed to: " + newFileName);
         return newFileName;
 
