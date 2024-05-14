@@ -81,11 +81,14 @@ public class ClaimController {
 
 
     private String currentClaimId;
+
+    private List<String> uploadedDocumentNames = new ArrayList<>();
     
 
     @FXML
     void confirmAddClaim(ActionEvent event)  {
         String claimId = generateRandomClaimID();
+        currentClaimId = claimId;
         String cardNumber = cardNumberInput.getText();
         String claimAmountText = claimAmountInput.getText();
         String insuredPerson = insuredPersonInput.getText();
@@ -117,13 +120,12 @@ public class ClaimController {
             preparedStatement.setString(7, bankNumber);
 
             preparedStatement.executeUpdate();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success");
-            alert.setHeaderText(null);
-            alert.setContentText("Claim added successfully.");
-            alert.showAndWait();
-
+            for (String documentName: uploadedDocumentNames) {
+                saveDocumentDetails(claimId, documentName);
+            }
+            showAlert(Alert.AlertType.INFORMATION, "Claim and associated documents added successfully.");
             clearInputFields();
+            uploadedDocumentNames.clear();
         } catch (SQLException e) {
             validationMessage.setText("Error: Unable to add claim. Please try again.");
             System.out.println(e.getMessage());
@@ -133,6 +135,11 @@ public class ClaimController {
     void backToHomePage(ActionEvent event) {
        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
        currentStage.close();
+    }
+
+    private void showAlert(Alert.AlertType alertType, String message) {
+        Alert alert = new Alert(alertType, message);
+        alert.showAndWait();
     }
 
 
@@ -154,38 +161,43 @@ public class ClaimController {
     @FXML
     void uploadMultipleFiles(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.bmp");
-        fileChooser.getExtensionFilters().add(extFilter);
+        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf");
+        fileChooser.getExtensionFilters().add(extensionFilter);
+
 
         List<File> files = fileChooser.showOpenMultipleDialog(((Node) event.getSource()).getScene().getWindow());
         for (File file: files) {
             String renamedFile = renameAndSaveFile(file);
+            uploadedDocumentNames.add(renamedFile);
 
         }
     }
 
     private String renameAndSaveFile(File originalFile) {
-        String claimId = currentClaimId;
-        String newFileName = claimId + " " + System.currentTimeMillis() + getFileExtension(originalFile);
-        File newFile = new File(originalFile.getParent(), newFileName);
-
-        try {
-            Files.copy(originalFile.toPath(), newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            System.out.println("File renamed and saved as: " + newFile.getPath());
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (currentClaimId == null || currentClaimId.trim().isEmpty()) {
+            System.out.println("Error: No claim ID available for renaming the file.");
+            return null;
         }
-        return newFile.getPath();
+        String originalFileName = originalFile.getName();
+        String baseName = originalFileName.substring(0, originalFileName.lastIndexOf('.'));
+        String extension = getFileExtension(originalFile);
+        String newFileName = "Claim" + currentClaimId + "_" + baseName + extension;;
+        System.out.println("File renamed to: " + newFileName);
+        return newFileName;
+
     }
 
-    private void saveFileToDatabase(String claimId, String fileName, String filePath) {
+    private void saveDocumentDetails(String claimId, String documentName) throws SQLException {
+        String insertQuery = "INSERT INTO documents (claim_id, document_name) VALUES (?, ?)";
         DatabaseConnection databaseConnection = new DatabaseConnection();
-        try(Connection connection = databaseConnection.getConnection()){
-            String insertQuery = "INSERT INTO public.documents (claim_id, document_name";
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        Connection connection = databaseConnection.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+            preparedStatement.setString(1, claimId);
+            preparedStatement.setString(2, documentName);
+            preparedStatement.executeUpdate();
         }
     }
+
 
     private String getFileExtension(File file) {
         String name = file.getName();
