@@ -137,6 +137,16 @@ public class PolicyHolderController {
         }
         DatabaseConnection databaseConnection = new DatabaseConnection();
         Connection connection = databaseConnection.getConnection();
+        String deleteDocumentsQuery = "DELETE FROM documents WHERE claim_id = ?";
+        try(PreparedStatement documentStatement =  connection.prepareStatement(deleteDocumentsQuery)) {
+            documentStatement.setString(1, claim.getId());
+            documentStatement.executeUpdate();
+            System.out.println("Associated documents deleted successfully");
+        } catch (SQLException e) {
+            showAlert(false, "Error deleting associated documents: " + e.getMessage());
+            e.printStackTrace();
+        }
+
         String deleteQuery = "DELETE FROM public.claims WHERE claim_id = ?";
         try(PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)){
             preparedStatement.setString(1, claim.getId());
