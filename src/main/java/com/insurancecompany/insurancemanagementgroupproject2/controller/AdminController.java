@@ -40,7 +40,7 @@ public class AdminController {
     //User functions
     public boolean addUser(User user){
         try {
-            String insertQuery = "INSERT INTO users (id,full_name, user_name, password, email, phone_number, address, role_id) VALUES (?,?, ?, ?, ?, ?, ?, ?)";
+            String insertQuery = "INSERT INTO users (id, full_name, user_name, password, email, phone_number, address, role_id) VALUES (?,?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
                 statement.setString(1,user.getId());
                 statement.setString(2, user.getFullName());
@@ -59,6 +59,7 @@ public class AdminController {
         }
         return false;
     }
+
     public boolean updateUser(String id, String fullName, String password, String email, String phoneNumber, String address) {
         try {
                 String updateProfileQuery = "UPDATE users SET full_name = ?, password = ?, email = ?, phone_number = ?, address = ? WHERE id = ?";

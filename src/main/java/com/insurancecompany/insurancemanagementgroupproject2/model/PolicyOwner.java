@@ -1,5 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.model;
 
+import java.util.List;
+
 public class PolicyOwner extends User{
     public PolicyOwner() {
     }
