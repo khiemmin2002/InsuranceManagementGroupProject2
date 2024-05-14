@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.*;
 import javafx.util.StringConverter;
@@ -135,6 +136,7 @@ public class PolicyOwnerMyDependentController implements Initializable {
         addNewDependentForm.setVisible(false);
     }
 
+    // Confirm button for adding a new dependent
     @FXML
     private void dependentFormConfirmBtnOnAction(ActionEvent event) {
         PolicyHolder selectedPolicyHolder = addNewDependentPolicyHolderField.getValue();
@@ -174,12 +176,62 @@ public class PolicyOwnerMyDependentController implements Initializable {
 
     @FXML
     private void editFieldDependentConfirmBtnOnAction(ActionEvent event) {
+        String id = editFieldDependentID.getText();
+        String fullName = editFieldDependentFullName.getText();
+        String userName = editFieldDependentUsername.getText();
+        String password = editFieldDependentPassword.getText();
+        String email = editFieldDependentEmail.getText();
+        String phoneNumber = editFieldDependentPhoneNumber.getText();
+        String address = editFieldDependentAddress.getText();
 
+        boolean isSuccess = updateDependent(id, fullName, userName, password, email, phoneNumber, address);
+        if (isSuccess) {
+            Dependent selectedDependent = dependentTableView.getSelectionModel().getSelectedItem();
+            if (selectedDependent != null) {
+                selectedDependent.setFullName(fullName);
+                selectedDependent.setUserName(userName);
+                selectedDependent.setPassword(password);
+                selectedDependent.setEmail(email);
+                selectedDependent.setPhoneNumber(phoneNumber);
+                selectedDependent.setAddress(address);
+                dependentTableView.refresh();
+            }
+        } else {
+            System.out.println("Failed to update dependent.");
+        }
     }
 
     @FXML
     private void editFieldDependentDeleteBtnOnAction(ActionEvent event) {
+        Dependent selectedDependent = dependentTableView.getSelectionModel().getSelectedItem();
+        if (selectedDependent != null) {
+            boolean isSuccess = deleteDependent(selectedDependent.getId());
+            if (isSuccess) {
+                dependentObservableList.remove(selectedDependent);
+                dependentTableView.refresh();
+                System.out.println("Dependent successfully deleted.");
+            } else {
+                System.out.println("Failed to delete the dependent.");
+            }
+        } else {
+            System.out.println("No dependent selected for deletion.");
+        }
+    }
 
+    // Handle selecting a row in the TableView -> Populate the fields in the edit form
+    @FXML
+    private void selectDependentRow(MouseEvent event) {
+        Dependent selectedDependent = dependentTableView.getSelectionModel().getSelectedItem();
+        if (selectedDependent != null) {
+            editFieldDependentID.setText(selectedDependent.getId());
+            editFieldDependentFullName.setText(selectedDependent.getFullName());
+            editFieldDependentUsername.setText(selectedDependent.getUserName());
+            editFieldDependentPassword.setText(selectedDependent.getPassword());
+            editFieldDependentEmail.setText(selectedDependent.getEmail());
+            editFieldDependentPhoneNumber.setText(selectedDependent.getPhoneNumber());
+            editFieldDependentAddress.setText(selectedDependent.getAddress());
+            editFieldDependentRole.setText(String.valueOf(selectedDependent.getRoleId()));
+        }
     }
 
     @Override
@@ -334,6 +386,57 @@ public class PolicyOwnerMyDependentController implements Initializable {
                 return true;
             } catch (SQLException ex) {
                 conn.rollback();  // Rollback transaction on error
+                ex.printStackTrace();
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Update the dependent in the database
+    private boolean updateDependent(String id, String fullName, String userName, String password, String email, String phoneNumber, String address) {
+        String updateQuery = "UPDATE users SET full_name = ?, user_name = ?, password = ?, email = ?, phone_number = ?, address = ? WHERE id = ?";
+        try (Connection conn = databaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
+            stmt.setString(1, fullName);
+            stmt.setString(2, userName);
+            stmt.setString(3, password);
+            stmt.setString(4, email);
+            stmt.setString(5, phoneNumber);
+            stmt.setString(6, address);
+            stmt.setString(7, id);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Delete the dependent in the database
+    private boolean deleteDependent(String dependentId) {
+        String deleteUserQuery = "DELETE FROM users WHERE id = ?";
+        String deleteDependentQuery = "DELETE FROM dependent WHERE dependent_id = ?";
+
+        try (Connection conn = databaseConnection.getConnection()) {
+            conn.setAutoCommit(false);  // Start transaction
+
+            try (PreparedStatement stmtUser = conn.prepareStatement(deleteUserQuery);
+                 PreparedStatement stmtDependent = conn.prepareStatement(deleteDependentQuery)) {
+
+                // Delete from dependent table
+                stmtDependent.setString(1, dependentId);
+                stmtDependent.executeUpdate();
+
+                // Delete from users table
+                stmtUser.setString(1, dependentId);
+                stmtUser.executeUpdate();
+
+                conn.commit();  // Commit transaction
+                return true;
+            } catch (SQLException ex) {
+                conn.rollback();  // Rollback on error
                 ex.printStackTrace();
                 return false;
             }
