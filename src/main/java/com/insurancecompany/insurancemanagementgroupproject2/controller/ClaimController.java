@@ -181,8 +181,6 @@ public class ClaimController {
                 String renamedFile = renameAndSaveFile(file);
                 if (renamedFile != null) {
                     uploadedDocumentNames.add(renamedFile);
-                } else {
-                    System.out.println("Skipping file due to renaming error.");
                 }
             }
         } else {
