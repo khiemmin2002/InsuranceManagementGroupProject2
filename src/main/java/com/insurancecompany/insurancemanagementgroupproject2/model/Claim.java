@@ -2,7 +2,9 @@ package com.insurancecompany.insurancemanagementgroupproject2.model;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Claim {
 
@@ -16,6 +18,7 @@ public class Claim {
     private String bankName;
     private String bankUserName;
     private String bankNumber;
+    private String documents;
 
     public Claim() {
         this.id = "";
@@ -28,6 +31,8 @@ public class Claim {
         this.bankName = "";
         this.bankUserName = "";
         this.bankNumber = "";
+        this.documents = "";
+
     }
 
     public Claim(String insuredPerson, String cardNumber, Date examDate, Date claimDate, double claimAmount, String status, String bankName, String bankUserName, String bankNumber) {
@@ -40,6 +45,20 @@ public class Claim {
         this.bankName = bankName;
         this.bankUserName = bankUserName;
         this.bankNumber = bankNumber;
+    }
+
+    public Claim(String id, String insuredPerson, String cardNumber, Date examDate, Date claimDate, double claimAmount, String status, String bankName, String bankUserName, String bankNumber, String documents) {
+        this.id = id;
+        this.insuredPerson = insuredPerson;
+        this.cardNumber = cardNumber;
+        this.examDate = examDate;
+        this.claimDate = claimDate;
+        this.claimAmount = claimAmount;
+        this.status = status;
+        this.bankName = bankName;
+        this.bankUserName = bankUserName;
+        this.bankNumber = bankNumber;
+        this.documents = documents;
     }
 
     public String getId() {
@@ -143,4 +162,11 @@ public class Claim {
         }
     }
 
+    public String getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(String documents) {
+        this.documents = documents;
+    }
 }
