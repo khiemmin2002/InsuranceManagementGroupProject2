@@ -29,7 +29,10 @@ import java.io.File;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PolicyHolderController {
 
@@ -64,6 +67,9 @@ public class PolicyHolderController {
 
     @FXML
     private TableColumn<?, ?> examDate;
+
+    @FXML
+    private TableColumn<?, ?> document;
 
     @FXML
     private TableColumn<?, ?> insuredPerson;
@@ -177,6 +183,7 @@ public class PolicyHolderController {
             bankName.setPrefWidth(tableWidth * 0.15);
             bankUserName.setPrefWidth(tableWidth * 0.15);
             bankNumber.setPrefWidth(tableWidth * 0.15);
+            document.setPrefWidth(tableWidth * 0.2);
             deleteColumn.setPrefWidth(tableWidth * 0.15);
         });
         this.userName = LoginData.usernameLogin;
@@ -230,7 +237,9 @@ public class PolicyHolderController {
         Connection connection = databaseConnection.getConnection();
 
         try {
-            String claimQuery = "SELECT * FROM public.claims WHERE insured_person = ?";
+            String claimQuery = "SELECT c.*, d.document_name FROM public.claims c " +
+                    "JOIN documents d ON c.claim_id = d.claim_id " +
+                    "WHERE c.insured_person = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(claimQuery);
             preparedStatement.setString(1, insuredPersonId);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -248,6 +257,7 @@ public class PolicyHolderController {
                 claim.setBankName(resultSet.getString("bank_name"));
                 claim.setBankUserName(resultSet.getString("bank_user_name"));
                 claim.setBankNumber(resultSet.getString("bank_number"));
+                claim.setDocuments(resultSet.getString("document_name"));
 
                 foundClaims.add(claim);
 
@@ -267,12 +277,14 @@ public class PolicyHolderController {
         ObservableList<Claim> claimData = FXCollections.observableArrayList();
 
         try {
-            String getClaimsQuery = "SELECT * FROM public.claims " +
+            String getClaimsQuery = "SELECT c.*, d.document_name FROM public.claims c " +
+                    "JOIN documents d ON c.claim_id = d.claim_id " +
                     "WHERE insured_person IN " +
                     "    (SELECT id FROM public.users WHERE user_name = ?) " +
                     "OR insured_person IN " +
                     "    (SELECT dependent_id FROM public.dependent WHERE policy_holder_id = " +
                     "     (SELECT id FROM public.users WHERE user_name = ?))";
+
 
             PreparedStatement preparedStatement = connection.prepareStatement(getClaimsQuery);
             preparedStatement.setString(1, this.userName);
@@ -280,6 +292,7 @@ public class PolicyHolderController {
             ResultSet queryResult = preparedStatement.executeQuery();
 
             while (queryResult.next()) {
+                String claimId = queryResult.getString("claim_id");
                 Claim claim = new Claim();
                 claim.setId(queryResult.getString("claim_id"));
                 claim.setInsuredPerson(queryResult.getString("insured_person"));
@@ -291,8 +304,11 @@ public class PolicyHolderController {
                 claim.setBankName(queryResult.getString("bank_name"));
                 claim.setBankUserName(queryResult.getString("bank_user_name"));
                 claim.setBankNumber(queryResult.getString("bank_number"));
+                claim.setDocuments(queryResult.getString("document_name"));
                 claimData.add(claim);
+
             }
+
 
             claimID.setCellValueFactory(new PropertyValueFactory<>("id"));
             insuredPerson.setCellValueFactory(new PropertyValueFactory<>("insuredPerson"));
@@ -304,6 +320,7 @@ public class PolicyHolderController {
             bankName.setCellValueFactory(new PropertyValueFactory<>("bankName"));
             bankUserName.setCellValueFactory(new PropertyValueFactory<>("bankUserName"));
             bankNumber.setCellValueFactory(new PropertyValueFactory<>("bankNumber"));
+            document.setCellValueFactory(new PropertyValueFactory<>("documents"));
 
 
             claimTable.setItems(claimData); // Set the items to the TableView
