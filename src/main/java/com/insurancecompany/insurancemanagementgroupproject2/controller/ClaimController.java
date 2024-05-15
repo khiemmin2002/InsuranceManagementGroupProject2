@@ -1,21 +1,13 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
-import com.insurancecompany.insurancemanagementgroupproject2.HelloApplication;
 
-import com.insurancecompany.insurancemanagementgroupproject2.model.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -23,24 +15,18 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-
-import java.io.IOException;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -86,10 +72,15 @@ public class ClaimController {
     private String currentClaimId;
     DatabaseConnection databaseConnection = new DatabaseConnection();
     Connection connection = databaseConnection.getConnection();
+    private final List<String> uploadedDocumentNames = new ArrayList<>();
 
     @FXML
     void confirmAddClaim(ActionEvent event)  {
-        String claimId = generateRandomClaimID();
+        if (currentClaimId == null || currentClaimId.isEmpty()) {
+            currentClaimId = generateRandomClaimID();
+        }
+        btnUploadDocuments.setDisable(false);
+        System.out.println("Current claim ID: " + currentClaimId);
         String cardNumber = cardNumberInput.getText();
         String claimAmountText = claimAmountInput.getText();
         String insuredPerson = insuredPersonInput.getText();
@@ -112,7 +103,7 @@ public class ClaimController {
             String insertQuery = "INSERT INTO public.claims (claim_id, insured_person, card_number, exam_date, claim_date, claim_amount, status, bank_name, bank_user_name, bank_number) " +
                     "VALUES (?, ?, ?, NULL, NULL, ?, 'NEW', ?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
-            preparedStatement.setString(1, claimId);
+            preparedStatement.setString(1, this.currentClaimId);
             preparedStatement.setString(2, insuredPerson);
             preparedStatement.setString(3, cardNumber);
             preparedStatement.setDouble(4, claimAmount);
@@ -121,13 +112,12 @@ public class ClaimController {
             preparedStatement.setString(7, bankNumber);
 
             preparedStatement.executeUpdate();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success");
-            alert.setHeaderText(null);
-            alert.setContentText("Claim added successfully.");
-            alert.showAndWait();
-
+            for (String documentName: uploadedDocumentNames) {
+                saveDocumentDetails(currentClaimId, documentName);
+            }
+            showAlert();
             clearInputFields();
+            uploadedDocumentNames.clear();
         } catch (SQLException e) {
             validationMessage.setText("Error: Unable to add claim. Please try again.");
             System.out.println(e.getMessage());
@@ -139,11 +129,19 @@ public class ClaimController {
        currentStage.close();
     }
 
+    private void showAlert() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Claim and associated documents added successfully.");
+        alert.showAndWait();
+    }
+
 
     private void clearInputFields() {
         cardNumberInput.clear();
         claimAmountInput.clear();
         insuredPersonInput.clear();
+        bankNameField.clear();
+        bankNumberField.clear();
+        bankUserNameField.clear();
         validationMessage.setText("");
     }
     private String generateRandomClaimID() {
@@ -158,38 +156,48 @@ public class ClaimController {
     @FXML
     void uploadMultipleFiles(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.bmp");
-        fileChooser.getExtensionFilters().add(extFilter);
+        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf");
+        fileChooser.getExtensionFilters().add(extensionFilter);
+
 
         List<File> files = fileChooser.showOpenMultipleDialog(((Node) event.getSource()).getScene().getWindow());
-        for (File file: files) {
-            String renamedFile = renameAndSaveFile(file);
-
+        if (files != null && !files.isEmpty()) {
+            for (File file : files) {
+                String renamedFile = renameAndSaveFile(file);
+                uploadedDocumentNames.add(renamedFile);
+            }
+        } else {
+            System.out.println("No files were selected.");
         }
     }
 
     private String renameAndSaveFile(File originalFile) {
-        String claimId = currentClaimId;
-        String newFileName = claimId + " " + System.currentTimeMillis() + getFileExtension(originalFile);
-        File newFile = new File(originalFile.getParent(), newFileName);
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String formattedDate = currentDate.format(formatter);
 
-        try {
-            Files.copy(originalFile.toPath(), newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            System.out.println("File renamed and saved as: " + newFile.getPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return newFile.getPath();
+
+        String originalFileName = originalFile.getName();
+        String baseName = originalFileName.substring(0, originalFileName.lastIndexOf('.'));
+        String extension = getFileExtension(originalFile);
+
+        String newFileName = formattedDate + "_" + baseName + extension;;
+        System.out.println("File renamed to: " + newFileName);
+        return newFileName;
+
     }
 
-    private void saveFileToDatabase(String claimId, String fileName, String filePath) {
+    private void saveDocumentDetails(String claimId, String documentName) throws SQLException {
+        String insertQuery = "INSERT INTO documents (claim_id, document_name) VALUES (?, ?)";
         DatabaseConnection databaseConnection = new DatabaseConnection();
-        try(Connection connection = databaseConnection.getConnection()){
-            String insertQuery = "INSERT INTO public.documents (claim_id, document_name";
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        Connection connection = databaseConnection.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+            preparedStatement.setString(1, claimId);
+            preparedStatement.setString(2, documentName);
+            preparedStatement.executeUpdate();
         }
     }
+
 
     private String getFileExtension(File file) {
         String name = file.getName();
