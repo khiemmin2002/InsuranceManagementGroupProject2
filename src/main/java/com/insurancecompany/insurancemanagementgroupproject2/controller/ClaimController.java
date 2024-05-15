@@ -1,20 +1,13 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
-import com.insurancecompany.insurancemanagementgroupproject2.HelloApplication;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -22,21 +15,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-
-import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -81,12 +66,39 @@ public class ClaimController {
     @FXML
     private Label validationMessage;
 
+    @FXML
+    private Button cancelUpdateBtn;
+
+    @FXML
+    private Button confirmUpdateBtn;
+
+
+    @FXML
+    private TextField updateBankNameField;
+
+    @FXML
+    private TextField updateBankNumberField;
+
+    @FXML
+    private TextField updateBankUserNameField;
+    @FXML
+    private TextField updateCardNumberField;
+
+    @FXML
+    private TextField updateClaimAmountField;
+
+    @FXML
+    private TextField updateClaimIDField;
+
+    @FXML
+    private TextField updateInsuredPersonIDField;
+
 
     private String currentClaimId;
 
     private List<String> uploadedDocumentNames = new ArrayList<>();
 
-
+    private PolicyHolderClaimController policyHolderClaimController = new PolicyHolderClaimController();
 
 
     @FXML
@@ -111,37 +123,70 @@ public class ClaimController {
             return;
 
         }
-        double claimAmount = Double.parseDouble(claimAmountText);
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-
-        try (Connection connection = databaseConnection.getConnection()) {
-            String insertQuery = "INSERT INTO public.claims (claim_id, insured_person, card_number, exam_date, claim_date, claim_amount, status, bank_name, bank_user_name, bank_number) " +
-                    "VALUES (?, ?, ?, NULL, NULL, ?, 'NEW', ?, ?, ?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
-            preparedStatement.setString(1, this.currentClaimId);
-            preparedStatement.setString(2, insuredPerson);
-            preparedStatement.setString(3, cardNumber);
-            preparedStatement.setDouble(4, claimAmount);
-            preparedStatement.setString(5, bankName);
-            preparedStatement.setString(6, bankUserName);
-            preparedStatement.setString(7, bankNumber);
-
-            preparedStatement.executeUpdate();
-            for (String documentName: uploadedDocumentNames) {
-                saveDocumentDetails(currentClaimId, documentName);
-            }
+        try {
+            double claimAmount = Double.parseDouble(claimAmountText);
+            Claim claim = new Claim(currentClaimId, insuredPerson, cardNumber, null, null, claimAmount, "NEW", bankName, bankUserName, bankNumber);
+            policyHolderClaimController.addClaim(claim, uploadedDocumentNames);
             showAlert(Alert.AlertType.INFORMATION, "Claim and associated documents added successfully.");
             clearInputFields();
             uploadedDocumentNames.clear();
         } catch (SQLException e) {
-            validationMessage.setText("Error: Unable to add claim. Please try again.");
-            System.out.println(e.getMessage());
+            validationMessage.setText("Error: " + e.getMessage());
+        }
+
+
+    }
+
+    @FXML
+    void confirmUpdateClaim(ActionEvent event) {
+        String claimId = updateClaimIDField.getText();
+        String insuredPersonID = updateInsuredPersonIDField.getText();
+        String cardNumber = updateCardNumberField.getText();
+        String claimAmountText = updateClaimAmountField.getText();
+        String bankName = updateBankNameField.getText();
+        String bankUserName = updateBankUserNameField.getText();
+        String bankNumber = updateBankNumberField.getText();
+
+
+        if (claimId.isEmpty() || insuredPersonID.isEmpty() || cardNumber.isEmpty() || claimAmountText.isEmpty() || bankName.isEmpty() || bankNumber.isEmpty() || bankUserName.isEmpty()) {
+            validationMessage.setText("Please fill in all fields");
+            return;
+        }
+
+        try {
+
+            double claimAmount = Double.parseDouble(claimAmountText);
+            policyHolderClaimController.updateClaim(claimId, insuredPersonID, cardNumber, claimAmount, bankName, bankUserName, bankNumber);
+
+
+            if (!uploadedDocumentNames.isEmpty()) {
+                policyHolderClaimController.updateDocumentDetails(claimId, uploadedDocumentNames);
+                uploadedDocumentNames.clear();
+            }
+
+
+            showAlert(Alert.AlertType.INFORMATION, "Claim and associated documents updated successfully.");
+            clearUpdateInputFields();
+        } catch (SQLException e) {
+
+            validationMessage.setText("Error updating claim: " + e.getMessage());
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
+            validationMessage.setText("Error in number input: " + e.getMessage());
+            e.printStackTrace();
         }
     }
+
     @FXML
     void backToHomePage(ActionEvent event) {
        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
        currentStage.close();
+    }
+
+    @FXML
+    void cancelUpdateClaim(ActionEvent event) {
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currentStage.close();
     }
 
     private void showAlert(Alert.AlertType alertType, String message) {
@@ -158,6 +203,16 @@ public class ClaimController {
         bankNumberField.clear();
         bankUserNameField.clear();
         validationMessage.setText("");
+    }
+
+    private void clearUpdateInputFields() {
+        updateClaimIDField.clear();
+        updateCardNumberField.clear();
+        updateInsuredPersonIDField.clear();
+        updateClaimAmountField.clear();
+        updateBankNameField.clear();
+        updateBankUserNameField.clear();
+        updateBankNumberField.clear();
     }
     private String generateRandomClaimID() {
         StringBuilder claimId = new StringBuilder("F");
@@ -204,16 +259,7 @@ public class ClaimController {
 
     }
 
-    private void saveDocumentDetails(String claimId, String documentName) throws SQLException {
-        String insertQuery = "INSERT INTO documents (claim_id, document_name) VALUES (?, ?)";
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        Connection connection = databaseConnection.getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
-            preparedStatement.setString(1, claimId);
-            preparedStatement.setString(2, documentName);
-            preparedStatement.executeUpdate();
-        }
-    }
+
 
 
     private String getFileExtension(File file) {

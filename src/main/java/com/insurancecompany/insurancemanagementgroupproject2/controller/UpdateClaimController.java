@@ -1,12 +1,8 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
-import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,9 +11,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -58,7 +51,7 @@ public class UpdateClaimController {
     @FXML
     private Label validationMessage;
     private  List<String> uploadedDocumentNames = new ArrayList<>();
-    private ClaimDAO claimDAO = new ClaimDAO();
+    private PolicyHolderClaimController policyHolderClaimController = new PolicyHolderClaimController();
 
     @FXML
     void confirmUpdateClaim(ActionEvent event) {
@@ -79,11 +72,11 @@ public class UpdateClaimController {
         try {
 
             double claimAmount = Double.parseDouble(claimAmountText);
-            claimDAO.updateClaim(claimId, insuredPersonID, cardNumber, claimAmount, bankName, bankUserName, bankNumber);
+            policyHolderClaimController.updateClaim(claimId, insuredPersonID, cardNumber, claimAmount, bankName, bankUserName, bankNumber);
 
 
             if (!uploadedDocumentNames.isEmpty()) {
-                claimDAO.updateDocumentDetails(claimId, uploadedDocumentNames);
+                policyHolderClaimController.updateDocumentDetails(claimId, uploadedDocumentNames);
                 uploadedDocumentNames.clear();
             }
 
@@ -163,7 +156,7 @@ public class UpdateClaimController {
     private void updateDocumentDetails(String claimId) {
         try {
             if (!uploadedDocumentNames.isEmpty()) {
-                claimDAO.updateDocumentDetails(claimId, uploadedDocumentNames);
+                policyHolderClaimController.updateDocumentDetails(claimId, uploadedDocumentNames);
             }
         } catch (SQLException e) {
             e.printStackTrace();

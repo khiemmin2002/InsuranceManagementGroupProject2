@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class ClaimDAO {
+public class PolicyHolderClaimController {
     public void deleteClaimDocuments(String claimId) {
         String query = "DELETE FROM documents WHERE claim_id = ?";
         DatabaseConnection databaseConnection = new DatabaseConnection();
@@ -111,6 +111,36 @@ public class ClaimDAO {
                 stmt.setString(1, documentName);
                 stmt.setString(2, claimId);
                 stmt.executeUpdate();
+            }
+        }
+    }
+    public void addClaim(Claim claim, List<String> documentNames) throws SQLException {
+        String insertQuery = "INSERT INTO public.claims (claim_id, insured_person, card_number, exam_date, claim_date, claim_amount, status, bank_name, bank_user_name, bank_number) " +
+                "VALUES (?, ?, ?, NULL, NULL, ?, 'NEW', ?, ?, ?)";
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        try (Connection connection = databaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+            preparedStatement.setString(1, claim.getId());
+            preparedStatement.setString(2, claim.getInsuredPerson());
+            preparedStatement.setString(3, claim.getCardNumber());
+            preparedStatement.setDouble(4, claim.getClaimAmount());
+            preparedStatement.setString(5, claim.getBankName());
+            preparedStatement.setString(6, claim.getBankUserName());
+            preparedStatement.setString(7, claim.getBankNumber());
+            preparedStatement.executeUpdate();
+        }
+        addDocuments(claim.getId(), documentNames);
+    }
+
+    private void addDocuments(String claimId, List<String> documentNames) throws SQLException {
+        String insertDocQuery = "INSERT INTO documents (claim_id, document_name) VALUES (?, ?)";
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        try (Connection connection = databaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(insertDocQuery)) {
+            for (String docName : documentNames) {
+                preparedStatement.setString(1, claimId);
+                preparedStatement.setString(2, docName);
+                preparedStatement.executeUpdate();
             }
         }
     }
