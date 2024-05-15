@@ -72,7 +72,7 @@ public class PolicyHolderClaimController {
         }
         return claims;
     }
-    private Claim extractClaimFromResultSet(ResultSet rs) throws SQLException {
+    public Claim extractClaimFromResultSet(ResultSet rs) throws SQLException {
         Claim claim = new Claim();
         claim.setId(rs.getString("claim_id"));
         claim.setInsuredPerson(rs.getString("insured_person"));
@@ -132,7 +132,7 @@ public class PolicyHolderClaimController {
         addDocuments(claim.getId(), documentNames);
     }
 
-    private void addDocuments(String claimId, List<String> documentNames) throws SQLException {
+    public void addDocuments(String claimId, List<String> documentNames) throws SQLException {
         String insertDocQuery = "INSERT INTO documents (claim_id, document_name) VALUES (?, ?)";
         DatabaseConnection databaseConnection = new DatabaseConnection();
         try (Connection connection = databaseConnection.getConnection();
