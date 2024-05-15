@@ -1,6 +1,7 @@
-package com.insurancecompany.insurancemanagementgroupproject2.controller;
+package com.insurancecompany.insurancemanagementgroupproject2;
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.PolicyOwnerMyProfileController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
