@@ -278,8 +278,17 @@ public class PolicyHolderDependentController {
 
 
     @FXML
-    void openClaimModal(ActionEvent event) {
+    void openClaimModal(ActionEvent event) throws IOException {
+        Stage currentStage = (Stage) dependentTable.getScene().getWindow();
+        currentStage.close();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/policy-holder-homepage.fxml"));
+        Parent root = fxmlLoader.load();
 
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Dependent");
+        stage.setScene(new Scene(root));
+        stage.showAndWait();
     }
 
 

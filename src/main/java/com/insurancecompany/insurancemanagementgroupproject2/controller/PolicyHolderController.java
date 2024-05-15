@@ -98,6 +98,8 @@ public class PolicyHolderController {
 
     private String userName;
 
+    private ClaimDAO claimDAO = new ClaimDAO();
+
 
     private void setUpDeleteColumn() {
         deleteColumn.setCellFactory(param -> new TableCell<Claim, Void>() {
@@ -135,43 +137,13 @@ public class PolicyHolderController {
             showAlert(false, "No claim selected for deletion. ");
             return;
         }
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        Connection connection = databaseConnection.getConnection();
-        String deleteDocumentsQuery = "DELETE FROM documents WHERE claim_id = ?";
-        try(PreparedStatement documentStatement =  connection.prepareStatement(deleteDocumentsQuery)) {
-            documentStatement.setString(1, claim.getId());
-            documentStatement.executeUpdate();
-            System.out.println("Associated documents deleted successfully");
+        try {
+            claimDAO.deleteClaimDocuments(claim.getId());
+            claimDAO.deleteClaim(claim.getId());
+            claimTable.getItems().remove(claim);
         } catch (SQLException e) {
-            showAlert(false, "Error deleting associated documents: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        String deleteQuery = "DELETE FROM public.claims WHERE claim_id = ?";
-        try(PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)){
-            preparedStatement.setString(1, claim.getId());
-            int affectedRows = preparedStatement.executeUpdate();
-
-            if (affectedRows > 0) {
-                ObservableList<Claim> allClaims = claimTable.getItems();
-                allClaims.remove(claim);
-                showAlert(true, "Claim deleted successfully. ");
-
-            } else {
-                showAlert(false, "No claim was deleted. Claim might not exist.");
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
             showAlert(false, "Error deleting claim: " + e.getMessage());
-            e.printStackTrace();
-        } finally {
-            try {
-                if (connection != null) connection.close();
-            } catch (SQLException e) {
-                showAlert(false, "Error closing database connection: " + e.getMessage());
-                System.out.println(e.getMessage());
-                e.printStackTrace();
-            }
+            throw new RuntimeException(e);
         }
 
     }
@@ -241,85 +213,19 @@ public class PolicyHolderController {
 
     @FXML
     private void findClaimId() {
-
         String insuredPersonId = inputClaimId.getText();
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        Connection connection = databaseConnection.getConnection();
-
         try {
-            String claimQuery = "SELECT c.*, d.document_name FROM public.claims c " +
-                    "JOIN documents d ON c.claim_id = d.claim_id " +
-                    "WHERE c.insured_person = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(claimQuery);
-            preparedStatement.setString(1, insuredPersonId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            ObservableList<Claim> foundClaims = FXCollections.observableArrayList();
-            while (resultSet.next()) {
-                Claim claim = new Claim();
-                claim.setId(resultSet.getString("claim_id"));
-                claim.setInsuredPerson(resultSet.getString("insured_person"));
-                claim.setCardNumber(resultSet.getString("card_number"));
-                claim.setExamDate(resultSet.getDate("exam_date"));
-                claim.setClaimDate(resultSet.getDate("claim_date"));
-                claim.setClaimAmount(resultSet.getDouble("claim_amount"));
-                claim.setStatus(resultSet.getString("status"));
-                claim.setBankName(resultSet.getString("bank_name"));
-                claim.setBankUserName(resultSet.getString("bank_user_name"));
-                claim.setBankNumber(resultSet.getString("bank_number"));
-                claim.setDocuments(resultSet.getString("document_name"));
-
-                foundClaims.add(claim);
-
-            }
+            ObservableList<Claim> foundClaims = claimDAO.findClaimsByInsuredPerson(insuredPersonId);
             claimTable.setItems(foundClaims);
-
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            showAlert(false, "Error finding claims: " + e.getMessage());
+            e.printStackTrace();
         }
-
     }
 
     public void fetchClaimData() {
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        Connection connection = databaseConnection.getConnection();
-
-        ObservableList<Claim> claimData = FXCollections.observableArrayList();
-
         try {
-            String getClaimsQuery = "SELECT c.*, d.document_name FROM public.claims c " +
-                    "JOIN documents d ON c.claim_id = d.claim_id " +
-                    "WHERE insured_person IN " +
-                    "    (SELECT id FROM public.users WHERE user_name = ?) " +
-                    "OR insured_person IN " +
-                    "    (SELECT dependent_id FROM public.dependent WHERE policy_holder_id = " +
-                    "     (SELECT id FROM public.users WHERE user_name = ?))";
-
-
-            PreparedStatement preparedStatement = connection.prepareStatement(getClaimsQuery);
-            preparedStatement.setString(1, this.userName);
-            preparedStatement.setString(2, this.userName);
-            ResultSet queryResult = preparedStatement.executeQuery();
-
-            while (queryResult.next()) {
-                String claimId = queryResult.getString("claim_id");
-                Claim claim = new Claim();
-                claim.setId(queryResult.getString("claim_id"));
-                claim.setInsuredPerson(queryResult.getString("insured_person"));
-                claim.setCardNumber(queryResult.getString("card_number"));
-                claim.setExamDate(queryResult.getDate("exam_date"));
-                claim.setClaimDate(queryResult.getDate("claim_date"));
-                claim.setClaimAmount(queryResult.getDouble("claim_amount"));
-                claim.setStatus(queryResult.getString("status"));
-                claim.setBankName(queryResult.getString("bank_name"));
-                claim.setBankUserName(queryResult.getString("bank_user_name"));
-                claim.setBankNumber(queryResult.getString("bank_number"));
-                claim.setDocuments(queryResult.getString("document_name"));
-                claimData.add(claim);
-
-            }
-
-
+            ObservableList<Claim> claimData = claimDAO.fetchAllClaims(this.userName);
             claimID.setCellValueFactory(new PropertyValueFactory<>("id"));
             insuredPerson.setCellValueFactory(new PropertyValueFactory<>("insuredPerson"));
             cardNumber.setCellValueFactory(new PropertyValueFactory<>("cardNumber"));
@@ -331,9 +237,7 @@ public class PolicyHolderController {
             bankUserName.setCellValueFactory(new PropertyValueFactory<>("bankUserName"));
             bankNumber.setCellValueFactory(new PropertyValueFactory<>("bankNumber"));
             document.setCellValueFactory(new PropertyValueFactory<>("documents"));
-
-
-            claimTable.setItems(claimData); // Set the items to the TableView
+            claimTable.setItems(claimData);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

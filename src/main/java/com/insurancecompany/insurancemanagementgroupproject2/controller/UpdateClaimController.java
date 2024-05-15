@@ -58,6 +58,7 @@ public class UpdateClaimController {
     @FXML
     private Label validationMessage;
     private  List<String> uploadedDocumentNames = new ArrayList<>();
+    private ClaimDAO claimDAO = new ClaimDAO();
 
     @FXML
     void confirmUpdateClaim(ActionEvent event) {
@@ -68,37 +69,37 @@ public class UpdateClaimController {
         String bankName = updateBankNameField.getText();
         String bankUserName = updateBankUserNameField.getText();
         String bankNumber = updateBankNumberField.getText();
+
+
         if (claimId.isEmpty() || insuredPersonID.isEmpty() || cardNumber.isEmpty() || claimAmountText.isEmpty() || bankName.isEmpty() || bankNumber.isEmpty() || bankUserName.isEmpty()) {
             validationMessage.setText("Please fill in all fields");
             return;
         }
-        double claimAmount = Double.parseDouble(claimAmountText);
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        try (Connection connection = databaseConnection.getConnection()) {
-            String updateQuery = "UPDATE public.claims SET insured_person = ?, card_number = ?, claim_amount = ?, bank_name = ?, bank_user_name = ?, bank_number = ? WHERE claim_id = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(updateQuery);
-            preparedStatement.setString(1, insuredPersonID);
-            preparedStatement.setString(2, cardNumber);
-            preparedStatement.setDouble(3, claimAmount);
-            preparedStatement.setString(4, bankName);
-            preparedStatement.setString(5, bankUserName);
-            preparedStatement.setString(6, bankNumber);
-            preparedStatement.setString(7, claimId);
-            preparedStatement.executeUpdate();
 
-            for (String documentName: uploadedDocumentNames) {
-                updateDocumentDetails(claimId, documentName);
+        try {
+
+            double claimAmount = Double.parseDouble(claimAmountText);
+            claimDAO.updateClaim(claimId, insuredPersonID, cardNumber, claimAmount, bankName, bankUserName, bankNumber);
+
+
+            if (!uploadedDocumentNames.isEmpty()) {
+                claimDAO.updateDocumentDetails(claimId, uploadedDocumentNames);
+                uploadedDocumentNames.clear();
             }
+
+
             showAlert(Alert.AlertType.INFORMATION, "Claim and associated documents updated successfully.");
             clearInputFields();
-            uploadedDocumentNames.clear();
-
         } catch (SQLException e) {
-            validationMessage.setText("Error: Unable to add claim. Please try again");
-            System.out.println(e.getMessage());
-        }
 
+            validationMessage.setText("Error updating claim: " + e.getMessage());
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
+            validationMessage.setText("Error in number input: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
+
     private void showAlert(Alert.AlertType alertType, String message) {
         Alert alert = new Alert(alertType, message);
         alert.showAndWait();
@@ -158,18 +159,18 @@ public class UpdateClaimController {
         System.out.println("File renamed to: " + newFileName);
         return newFileName;
     }
-    private void updateDocumentDetails(String claimId, String documentName) {
-        String updateQuery = "UPDATE documents SET document_name = ? WHERE claim_id = ?";
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        Connection connection = databaseConnection.getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
-            preparedStatement.setString(1, documentName);
-            preparedStatement.setString(2, claimId);
-            preparedStatement.executeUpdate();
+
+    private void updateDocumentDetails(String claimId) {
+        try {
+            if (!uploadedDocumentNames.isEmpty()) {
+                claimDAO.updateDocumentDetails(claimId, uploadedDocumentNames);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+            validationMessage.setText("Error updating documents: " + e.getMessage());
         }
-}
+    }
+
 
     @FXML
     void cancelUpdateClaim(ActionEvent event) {
