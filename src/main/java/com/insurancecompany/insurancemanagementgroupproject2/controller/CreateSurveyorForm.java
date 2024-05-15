@@ -28,6 +28,7 @@ public class CreateSurveyorForm {
     private Label errorLabel;
     private SurveyorController surveyorController;
     private String id;
+    private BcryptPassword bcryptPassword;
     @FXML
     private void initialize(){
         DatabaseConnection databaseConnection = new DatabaseConnection();
@@ -35,6 +36,7 @@ public class CreateSurveyorForm {
         submitSurveyor.setOnAction(ActionEvent -> createSurveyor());
         ManagerHomePage managerHomePage = new ManagerHomePage();
         id = managerHomePage.createSurveyorID();
+        bcryptPassword = new BcryptPassword();
     }
 
     ValidateInput validateInput = new ValidateInput();
@@ -57,7 +59,7 @@ public class CreateSurveyorForm {
         }
 
         surveyorController.createNewSurveyor(
-                id,full_name.getText(),username.getText(),password.getText(),email.getText(),
+                id,full_name.getText(),username.getText(),bcryptPassword.hashBcryptPassword(password.getText()),email.getText(),
                 phone_number.getText(),address.getText());
 
         System.out.println("Created surveyor " + full_name.getText() + " successfully!");
