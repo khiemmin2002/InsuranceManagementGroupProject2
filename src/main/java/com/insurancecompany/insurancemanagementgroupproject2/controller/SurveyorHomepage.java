@@ -117,11 +117,12 @@ public class SurveyorHomepage {
             }
         }
     };
+    ClaimController claimController = new ClaimController();
     public List<Claim> fetchClaimData() {
         //Create ObservableList for TableView
         ObservableList<Claim> claimData = FXCollections.observableArrayList();
         ObservableList<String> newClaimID = FXCollections.observableArrayList();
-        claimList = ClaimController.fetchClaim();
+        claimList = claimController.fetchClaimsFromDatabase();
         claimData.addAll(claimList);
         //Set view table
         claimTable.setItems(claimData);

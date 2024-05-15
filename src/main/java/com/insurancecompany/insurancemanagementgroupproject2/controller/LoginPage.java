@@ -66,7 +66,7 @@ public class LoginPage {
                     System.out.println(LoginData.usernameLogin);
                 }
                 default -> {
-                        loginMessageLabel.setText("Unknown role!");
+                    loginMessageLabel.setText("Unknown role!");
                 }
             }
         } else if (usernameTextField.getText().isEmpty() || passwordField.getText().isEmpty()){
