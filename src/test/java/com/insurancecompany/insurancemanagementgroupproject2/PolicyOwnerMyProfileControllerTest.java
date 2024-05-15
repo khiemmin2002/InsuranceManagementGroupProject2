@@ -19,9 +19,6 @@ import static org.mockito.Mockito.*;
 
 class PolicyOwnerMyProfileControllerTest {
     @Mock
-    private DatabaseConnection databaseConnection;
-
-    @Mock
     private Connection connection;
     @Mock
     private ResultSet resultSet;
