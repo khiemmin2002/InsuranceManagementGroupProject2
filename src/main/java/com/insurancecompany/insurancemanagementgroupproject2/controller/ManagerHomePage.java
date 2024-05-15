@@ -149,13 +149,13 @@ public class ManagerHomePage extends SurveyorHomepage {
         surveyorObservableList.addAll(surveyorList);
         surveyorTable.setItems(surveyorObservableList);
     }
-
+    ClaimController claimController = new ClaimController();
     @Override
     public List<Claim> fetchClaimData() {
         //Create ObservableList for TableView
         ObservableList<Claim> claimData = FXCollections.observableArrayList();
         ObservableList<String> processingClaimID = FXCollections.observableArrayList();
-        claimList = ClaimController.fetchClaim();
+        claimList = claimController.fetchClaimsFromDatabase();
         //Handling SQL exception by surrounding try catch
         claimData.addAll(claimList);
         //Set view table

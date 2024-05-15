@@ -265,9 +265,8 @@ public class AdminHomepage implements Initializable {
     @FXML
     private Button editFormCreateUserCancel;
     private ObservableList<Role> roleObservableList = FXCollections.observableArrayList();
-
-
-    private final AdminController adminController = new AdminController();
+    AdminController adminController = new AdminController();
+    ClaimController claimController = new ClaimController();
 
     //User Dashboard functions
     @FXML
@@ -490,8 +489,12 @@ public class AdminHomepage implements Initializable {
                             InsuranceCard insuranceCard = getTableView().getItems().get(getIndex());
                             boolean isSuccess = adminController.deleteInsuranceCardInformation(insuranceCard.getCardNumber());
                             if (isSuccess) {
-                                insuranceCardObservableList.remove(insuranceCard);
-                                insuranceCardTableView.refresh();
+                                boolean isClaimsDeleted = adminController.deleteClaimsOfInsuranceCard(insuranceCard.getCardNumber());
+                                if(isClaimsDeleted){
+                                    claimObservableList.removeIf(claim -> claim.getCardNumber().equalsIgnoreCase(insuranceCard.getCardNumber()));
+                                    insuranceCardObservableList.remove(insuranceCard);
+                                    insuranceCardTableView.refresh();
+                                }
                             } else {
                                 System.out.println("isSuccess: " + false);
                             }
@@ -531,7 +534,7 @@ public class AdminHomepage implements Initializable {
                 editFormClaimBankName.setText(selectedClaim.getBankName());
                 editFormClaimBankUser.setText(selectedClaim.getBankUserName());
                 editFormClaimBankNumber.setText(selectedClaim.getBankNumber());
-                editFormClaimTotalDocument.setText(String.valueOf(adminController.calculateTotalDocumentsOfClaim(selectedClaim.getId())));
+                editFormClaimTotalDocument.setText(String.valueOf(claimController.calculateTotalDocumentsOfClaim(selectedClaim.getId())));
                 editFormClaimInformation.setVisible(true);
             }
         } catch (Exception e) {
@@ -569,7 +572,7 @@ public class AdminHomepage implements Initializable {
                             Claim selectedClaim = getTableView().getItems().get(getIndex());
                             selectClaimRow(selectedClaim);
                             editFormClaimConfirmBtn.setOnAction(event1 -> {
-                                boolean isSuccess = adminController.updateClaimInformation(editFormClaimId.getText(), editFormClaimDate.getText(), editFormClaimExam.getText(), editFormClaimAmount.getText(), editFormClaimStatus.getText(), editFormClaimBankName.getText(), editFormClaimBankUser.getText(), editFormClaimBankNumber.getText());
+                                boolean isSuccess = claimController.updateClaimInformation(editFormClaimId.getText(), editFormClaimDate.getText(), editFormClaimExam.getText(), editFormClaimAmount.getText(), editFormClaimStatus.getText(), editFormClaimBankName.getText(), editFormClaimBankUser.getText(), editFormClaimBankNumber.getText());
                                 if (isSuccess) {
                                     selectedClaim.setClaimDate(selectedClaim.getClaimDateFormat(editFormClaimDate.getText()));
                                    selectedClaim.setExamDate(selectedClaim.getExamDateFormat(editFormClaimExam.getText()));
@@ -589,7 +592,7 @@ public class AdminHomepage implements Initializable {
                         deleteButton.setOnAction(event -> {
                             Claim claim = getTableView().getItems().get(getIndex());
                             System.out.println("Deleting claim: " + claim.getId());
-                            boolean isSuccess = adminController.deleteClaimInformation(claim);
+                            boolean isSuccess = claimController.deleteClaimInformation(claim);
                             if (isSuccess) {
                                 claimObservableList.remove(claim);
                                 claimTableView.refresh();
@@ -746,7 +749,7 @@ public class AdminHomepage implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         userObservableList.addAll(adminController.fetchUsersFromDatabase());
-        claimObservableList.addAll(adminController.fetchClaimsFromDatabase());
+        claimObservableList.addAll(claimController.fetchClaimsFromDatabase());
         insuranceCardObservableList.addAll(adminController.fetchInsuranceCardsFromDatabase());
         roleObservableList.addAll(adminController.fetchRolesFromDatabase());
         editFormCreateUserRoleIdOnAction();
