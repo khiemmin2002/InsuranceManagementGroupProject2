@@ -1,27 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="667.0" prefWidth="904.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.DependentMyClaimController">
-   <children>
-      <TableView fx:id="dependentClaimTable" layoutX="21.0" layoutY="20.0" prefHeight="700.0" prefWidth="900.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
-        <columns>
-          <TableColumn fx:id="claimID" prefWidth="75.0" text="Claim ID" />
-          <TableColumn fx:id="claimInsuredPerson" prefWidth="95.0" text="Insured Person" />
-            <TableColumn fx:id="claimCardNum" prefWidth="87.0" text="Card Number" />
-            <TableColumn fx:id="claimDate" prefWidth="74.0" text="Claim Date" />
-            <TableColumn fx:id="claimExamDate" minWidth="0.0" prefWidth="74.0" text="Exam Date" />
-            <TableColumn fx:id="claimAmount" minWidth="0.0" prefWidth="105.86447143554688" text="Claim Amount" />
-            <TableColumn fx:id="claimStatus" minWidth="0.0" prefWidth="50.1356201171875" text="Status" />
-            <TableColumn fx:id="claimBankName" minWidth="0.0" prefWidth="78.0" text="Bank Name" />
-            <TableColumn fx:id="claimBankUserName" minWidth="0.0" prefWidth="113.832763671875" text="Bank User Name" />
-            <TableColumn fx:id="claimBankNum" minWidth="0.0" prefWidth="119.5" text="Bank Number" />
-        </columns>
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy>
-      </TableView>
-   </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="718.0" prefWidth="868.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.PolicyOwnerMyClaimController">
+    <children>
+        <StackPane prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <AnchorPane prefHeight="697.0" prefWidth="751.0">
+                    <children>
+                        <Line endX="-100.0" endY="30.0" layoutX="187.0" layoutY="20.0" startX="-100.0" strokeWidth="3.0" />
+                        <Label layoutX="100.0" layoutY="26.0" text="Claim Information">
+                            <font>
+                                <Font name="System Bold" size="15.0" />
+                            </font>
+                        </Label>
+                        <TableView fx:id="claimTableView" layoutX="85.0" layoutY="66.0" onMouseClicked="#selectClaimRow" prefHeight="281.0" prefWidth="703.0">
+                            <columns>
+                                <TableColumn fx:id="claimIDCol" prefWidth="49.0" text="ID" />
+                                <TableColumn fx:id="claimInsuredPersonCol" prefWidth="74.0" text="Insured Person" />
+                                <TableColumn fx:id="claimCardNumCol" prefWidth="68.5" text="Card Number" />
+                                <TableColumn fx:id="claimExamDateCol" prefWidth="86.0" text="Exam Date" />
+                                <TableColumn fx:id="claimClaimDateCol" prefWidth="67.239013671875" text="Claim Date" />
+                                <TableColumn fx:id="claimStatusCol" prefWidth="51.611663818359375" text="Status" />
+                                <TableColumn fx:id="claimBankNameCol" prefWidth="95.38833618164062" text="Bank Name" />
+                                <TableColumn fx:id="claimBankUserNameCol" prefWidth="123.5" text="Bank User Name" />
+                                <TableColumn fx:id="claimBankNumCol" prefWidth="87.0" text="Bank Number" />
+                            </columns>
+                        </TableView>
+                        <AnchorPane layoutX="85.0" layoutY="366.0" prefHeight="330.0" prefWidth="704.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 5;">
+                            <children>
+                                <Button fx:id="editFieldClaimConfirmBtn" layoutX="383.0" layoutY="280.0" mnemonicParsing="false" onAction="#editFieldClaimConfirmBtnOnAction" prefHeight="25.0" prefWidth="122.0" text="Confirm" />
+                                <Button fx:id="editFieldClaimDeleteBtn" layoutX="208.0" layoutY="281.0" mnemonicParsing="false" onAction="#editFieldClaimDeleteBtnOnAction" prefHeight="25.0" prefWidth="122.0" text="Delete" />
+                                <TextField fx:id="editFieldClaimBankNumber" layoutX="520.0" layoutY="105.0" prefHeight="26.0" prefWidth="156.0" promptText="0123456789" />
+                                <Label layoutX="434.0" layoutY="109.0" text="Bank Number:" />
+                                <Label layoutX="52.0" layoutY="25.0" text="Claim ID:" />
+                                <TextField fx:id="editFieldClaimID" disable="true" editable="false" layoutX="108.0" layoutY="21.0" prefHeight="25.0" prefWidth="120.0" promptText="C1000101" />
+                                <Label layoutX="17.0" layoutY="67.0" text="Insured Person:" />
+                                <TextField fx:id="editFieldClaimInsuredPerson" disable="true" layoutX="108.0" layoutY="63.0" prefHeight="25.0" prefWidth="120.0" promptText="Nguyen Van A" />
+                                <TextField fx:id="editFieldClaimCardNumber" disable="true" layoutX="108.0" layoutY="105.0" prefHeight="25.0" prefWidth="120.0" promptText="admin1234" />
+                                <Label layoutX="24.0" layoutY="109.0" text="Card Number:" />
+                                <TextField fx:id="editFieldClaimExamDate" disable="true" layoutX="314.0" layoutY="21.0" prefHeight="25.0" prefWidth="120.0" promptText="password1233" />
+                                <Label layoutX="246.0" layoutY="25.0" text="Exam Date:" />
+                                <TextField fx:id="editFieldClaimDate" disable="true" layoutX="314.0" layoutY="63.0" prefHeight="25.0" prefWidth="120.0" promptText="email@gmail.com" />
+                                <Label layoutX="243.0" layoutY="67.0" text="Claim Date:" />
+                                <TextField fx:id="editFieldClaimStatus" disable="true" layoutX="314.0" layoutY="105.0" prefHeight="26.0" prefWidth="111.0" promptText="096482892" />
+                                <Label layoutX="267.0" layoutY="109.0" text="Status:" />
+                                <Label layoutX="446.0" layoutY="25.0" text="Bank Name:" />
+                        <TextField fx:id="editFieldClaimBankName" layoutX="519.0" layoutY="21.0" prefHeight="26.0" prefWidth="156.0" promptText="Vietcombank" />
+                        <Label layoutX="452.0" layoutY="65.0" text="Bank User:" />
+                        <TextField fx:id="editFieldClaimBankUser" layoutX="520.0" layoutY="61.0" prefHeight="26.0" prefWidth="156.0" promptText="Nguyen Van A" />
+                        <Label layoutX="33.0" layoutY="147.0" text="Documents:" />
+                        <ListView layoutX="108.0" layoutY="146.0" prefHeight="118.0" prefWidth="323.0" />
+                        <Button layoutX="444.0" layoutY="146.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="122.0" text="Add a Document" />
+                            </children>
+                        </AnchorPane>
+                        <Button fx:id="addNewClaimBtn" layoutX="637.0" layoutY="22.0" mnemonicParsing="false" onAction="#addNewClaimBtnOnAction" prefHeight="26.0" prefWidth="150.0" text="Add New Claim" />
+                    </children>
+                </AnchorPane>
+            </children>
+        </StackPane>
+        <AnchorPane fx:id="addNewClaimForm" layoutX="176.0" layoutY="35.0" prefHeight="531.0" prefWidth="523.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 5; -fx-background-color: white;" visible="false">
+            <children>
+                <Button fx:id="newClaimFormConfirmBtn" layoutX="93.0" layoutY="457.0" mnemonicParsing="false" onAction="#newClaimFormConfirmBtnOnAction" prefHeight="25.0" prefWidth="122.0" text="Confirm" />
+                <Label layoutX="61.0" layoutY="92.0" text="Insured Person:" />
+                <TextField fx:id="newClaimFormClaimAmountField" layoutX="153.0" layoutY="126.0" prefHeight="25.0" prefWidth="280.0" promptText="email@gmail.com" />
+                <Label layoutX="64.0" layoutY="129.0" text="Claim Amount:" />
+                <TextField fx:id="newClaimFormBankNameField" layoutX="154.0" layoutY="162.0" prefHeight="26.0" prefWidth="280.0" promptText="096482892" />
+                <Label layoutX="77.0" layoutY="166.0" text="Bank Name:" />
+                <Label layoutX="48.0" layoutY="202.0" text="Bank User Name:" />
+                <Button fx:id="newClaimFormCancelBtn" layoutX="298.0" layoutY="456.0" mnemonicParsing="false" onAction="#newClaimFormCancelBtnOnAction" prefHeight="25.0" prefWidth="122.0" text="Cancel" />
+                <Label layoutX="141.0" layoutY="31.0" text="Create New Claim Form">
+                    <font>
+                        <Font name="System Bold" size="25.0" />
+                    </font>
+                </Label>
+                <Label layoutX="77.0" layoutY="281.0" text="Documents:" />
+            <TextField fx:id="newClaimFormBankUserNameField" layoutX="154.0" layoutY="198.0" prefHeight="26.0" prefWidth="280.0" promptText="Nguyen Van A" />
+            <Label layoutX="64.0" layoutY="238.0" text="Bank Number:" />
+            <TextField fx:id="newClaimFormBankNumberField" layoutX="154.0" layoutY="235.0" prefHeight="26.0" prefWidth="280.0" promptText="0123456789" />
+            <Button fx:id="newClaimFormAddDocBtn" layoutX="154.0" layoutY="277.0" mnemonicParsing="false" onAction="#newClaimFormAddDocBtnOnAction" prefHeight="26.0" prefWidth="120.0" text="Add a Document" />
+            <ListView fx:id="newClaimFormListView" layoutX="153.0" layoutY="314.0" prefHeight="115.0" prefWidth="280.0" />
+            <ComboBox fx:id="newClaimFormInsuredPersonField" layoutX="153.0" layoutY="88.0" prefHeight="26.0" prefWidth="280.0" />
+            </children>
+        </AnchorPane>
+    </children>
 </AnchorPane>
