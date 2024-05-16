@@ -4,6 +4,7 @@ import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.HelloApplication;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Dependent;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -86,6 +87,10 @@ public class PolicyHolderDependentHomePage {
 
     @FXML
     private MenuItem updateDependentMenu;
+
+
+    @FXML
+    private MenuItem logoutBtn;
 
     @FXML
     private TableColumn<?, ?> passwordCol;
@@ -216,8 +221,34 @@ public class PolicyHolderDependentHomePage {
 
     @FXML
     void exitProgram(ActionEvent event) {
-        inputUserName.clear();
-        fetchDependentData();
+        Platform.exit();
+    }
+
+    @FXML
+    void logout(ActionEvent event) {
+        try {
+            MenuItem menuItem = (MenuItem) event.getSource();
+
+
+            Scene scene = menuItem.getParentPopup().getOwnerWindow().getScene();
+            Stage currentStage = (Stage) scene.getWindow();
+
+
+            currentStage.close();
+
+
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("fxml/login.fxml"));
+            Parent root = loader.load();
+            Stage loginStage = new Stage();
+            Scene loginScene = new Scene(root);
+
+            loginStage.setTitle("Login - Insurance Claim Management System");
+            loginStage.setScene(loginScene);
+            loginStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Failed to load login screen.");
+        }
     }
 
     @FXML

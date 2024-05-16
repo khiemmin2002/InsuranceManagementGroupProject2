@@ -78,6 +78,9 @@ public class PolicyHolderClaimHomepage {
     private MenuItem updateClaim;
 
     @FXML
+    private MenuItem logoutBtn;
+
+    @FXML
     private TextField inputClaimId;
 
     @FXML
@@ -143,6 +146,32 @@ public class PolicyHolderClaimHomepage {
 
 
 
+    @FXML
+    void logout(ActionEvent event) {
+        try {
+            MenuItem menuItem = (MenuItem) event.getSource();
+
+
+            Scene scene = menuItem.getParentPopup().getOwnerWindow().getScene();
+            Stage currentStage = (Stage) scene.getWindow();
+
+
+            currentStage.close();
+
+
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("fxml/login.fxml"));
+            Parent root = loader.load();
+            Stage loginStage = new Stage();
+            Scene loginScene = new Scene(root);
+
+            loginStage.setTitle("Login - Insurance Claim Management System");
+            loginStage.setScene(loginScene);
+            loginStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Failed to load login screen.");
+        }
+    }
 
     private void showAlert(Alert.AlertType alertType, String message) {
         Alert alert = new Alert(alertType, message);
