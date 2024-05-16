@@ -123,6 +123,7 @@ public class ClaimController {
             System.out.println(e.getMessage());
         }
     }
+
     @FXML
     void backToHomePage(ActionEvent event) {
        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
