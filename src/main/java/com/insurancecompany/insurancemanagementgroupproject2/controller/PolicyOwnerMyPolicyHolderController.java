@@ -28,6 +28,7 @@ public class PolicyOwnerMyPolicyHolderController implements Initializable {
 
     DatabaseConnection databaseConnection = new DatabaseConnection();
     Connection connection = databaseConnection.getConnection();
+    BcryptPassword bcryptPassword = new BcryptPassword();
 
     @FXML
     private Button addNewPolicyHolderBtn;
@@ -198,11 +199,12 @@ public class PolicyOwnerMyPolicyHolderController implements Initializable {
         }
     }
 
+
     @FXML
     private void editFieldPolicyHolderConfirmBtnOnAction(ActionEvent event) {
         boolean isSuccess = updatePolicyHolder(editFieldPolicyHolderID.getText(),
                 editFieldPolicyHolderFullName.getText(),
-                editFieldPolicyHolderPassword.getText(),
+                bcryptPassword.hashBcryptPassword(editFieldPolicyHolderPassword.getText()),
                 editFieldPolicyHolderEmail.getText(),
                 editFieldPolicyHolderPhoneNumber.getText(),
                 editFieldPolicyHolderAddress.getText());
@@ -261,7 +263,7 @@ public class PolicyOwnerMyPolicyHolderController implements Initializable {
             newPolicyHolder.setId(newPolicyHolderID);
             newPolicyHolder.setUserName(addNewPolicyHolderUsernameField.getText());
             newPolicyHolder.setFullName(addNewPolicyHolderFullNameField.getText());
-            newPolicyHolder.setPassword(addNewPolicyHolderPassword.getText());
+            newPolicyHolder.setPassword(bcryptPassword.hashBcryptPassword(addNewPolicyHolderPassword.getText()));
             newPolicyHolder.setEmail(addNewPolicyHolderEmailField.getText());
             newPolicyHolder.setPhoneNumber(addNewPolicyHolderPhoneNumField.getText());
             newPolicyHolder.setAddress(addNewPolicyHolderAddressField.getText());
