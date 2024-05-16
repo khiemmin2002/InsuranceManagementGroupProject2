@@ -47,13 +47,13 @@ public class CreateSurveyorForm {
             return;
         }
 
-        if (validateInput.isValidEmail(email.getText())) {
+        if (!validateInput.isValidEmail(email.getText())) {
             errorLabel.setText("Invalid email format");
             return;
         }
 
         // Validate phone number
-        if (validateInput.isValidPhoneNumber(phone_number.getText())) {
+        if (!validateInput.isValidPhoneNumber(phone_number.getText())) {
             errorLabel.setText("Invalid phone number format");
             return;
         }

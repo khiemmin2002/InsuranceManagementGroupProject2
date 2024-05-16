@@ -47,7 +47,7 @@ This project use Java and JavaFX library to build, Junit 5 for unit test and req
 `password`: whyme123
 
 ### Insurance Surveyor
-`username`: adamguy
+`username`: adam
 
 `password`: adam123
 
