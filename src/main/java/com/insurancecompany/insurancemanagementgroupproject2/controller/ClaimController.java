@@ -170,6 +170,8 @@ public class ClaimController {
     }
 
     public boolean updateClaimInformation(String claimId, String claimDate, String examDate, String amount, String status, String bankName, String bankUser, String bankNumber) {
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        Connection connection = databaseConnection.getConnection();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date parsedClaimDate = null;
         java.util.Date parsedExamDate = null;
@@ -230,6 +232,8 @@ public class ClaimController {
     }
 
     public int calculateTotalDocumentsOfClaim(String claimId){
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        Connection connection = databaseConnection.getConnection();
         int totalCount = 0;
         String query = "SELECT COUNT(*) AS total FROM documents WHERE claim_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -247,6 +251,8 @@ public class ClaimController {
     }
 
     public boolean deleteClaimInformation(Claim selectedClaim) {
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        Connection connection = databaseConnection.getConnection();
         try {
             String claimId = selectedClaim.getId();
             String deleteQuery = "DELETE FROM claims WHERE claim_id = ?";
