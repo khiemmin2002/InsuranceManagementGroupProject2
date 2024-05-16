@@ -139,6 +139,8 @@ public class ClaimController {
     }
 
     public ArrayList<Claim> fetchClaimsFromDatabase() {
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        Connection connection = databaseConnection.getConnection();
         ArrayList<Claim> claimList = new ArrayList<>();
         try {
             String queryClaims = "SELECT * FROM claims";
