@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import javafx.scene.layout.StackPane?>
-<AnchorPane fx:id="dependentPane" prefHeight="435.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.PolicyHolderDependentController">
+<AnchorPane fx:id="dependentPane" prefHeight="435.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.PolicyHolderDependentHomePage">
     <children>
         <SplitPane dividerPositions="0.3" orientation="VERTICAL" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
             <items>
@@ -68,7 +68,7 @@
                     </HBox>
                     <StackPane layoutY="20" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10">
                         <HBox spacing="10" alignment="CENTER">
-                            <Button fx:id="confirmAddBtn" onAction="#confirmAddClaim" text="Confirm" />
+                            <Button fx:id="confirmAddBtn" onAction="#confirmAddDependent" text="Confirm" />
                             <Button fx:id="clearAddInputBtn" onAction="#clearAddFields" text="Clear" />
                         </HBox>
                     </StackPane>
