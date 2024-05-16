@@ -7,7 +7,6 @@ import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class AdminController {
 
@@ -59,7 +58,6 @@ public class AdminController {
         }
         return false;
     }
-
     public boolean updateUser(String id, String fullName, String password, String email, String phoneNumber, String address) {
         try {
                 String updateProfileQuery = "UPDATE users SET full_name = ?, password = ?, email = ?, phone_number = ?, address = ? WHERE id = ?";
@@ -129,6 +127,20 @@ public class AdminController {
     }
 
     //Insurance Card Dashboard
+    public boolean deleteClaimsOfInsuranceCard(String cardNumber) {
+        String deleteQuery = "DELETE FROM claims WHERE card_number = ?";
+        try (PreparedStatement statement = connection.prepareStatement(deleteQuery)) {
+            statement.setString(1, cardNumber);
+            int rowsDeleted = statement.executeUpdate();
+            if (rowsDeleted > 0) {
+                System.out.println("Claims deleted successfully!");
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     public boolean deleteInsuranceCardInformation(String cardNumber){
             try {
                 String deleteQuery = "DELETE FROM insurance_card WHERE card_number = ?";
@@ -188,104 +200,7 @@ public class AdminController {
         }
         return insuranceCardArrayList;
     }
-
-    //Claim Dashboard
-    public boolean updateClaimInformation(String claimId, String claimDate, String examDate, String amount, String status, String bankName, String bankUser, String bankNumber) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        java.util.Date parsedClaimDate = null;
-        java.util.Date parsedExamDate = null;
-        java.sql.Date sqlClaimDate = null;
-        java.sql.Date sqlExamDate = null;
-
-        try {
-            if (claimDate != null && !claimDate.isEmpty()) {
-                parsedClaimDate = sdf.parse(claimDate);
-                sqlClaimDate = new java.sql.Date(parsedClaimDate.getTime());
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        try {
-            if (examDate != null && !examDate.isEmpty()) {
-                parsedExamDate = sdf.parse(examDate);
-                sqlExamDate = new java.sql.Date(parsedExamDate.getTime());
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        double claimAmount;
-        try {
-            claimAmount = Double.parseDouble(amount);
-        } catch (NumberFormatException | NullPointerException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        try {
-            String updateQuery = "UPDATE claims SET claim_date=?, exam_date=?, claim_amount=?, status=?, bank_name=?, bank_user_name=?, bank_number=? WHERE claim_id=?";
-            try (PreparedStatement statement = connection.prepareStatement(updateQuery)) {
-                if (sqlClaimDate != null) statement.setDate(1, sqlClaimDate);
-                else statement.setNull(1, Types.DATE);
-                if (sqlExamDate != null) statement.setDate(2, sqlExamDate);
-                else statement.setNull(2, Types.DATE);
-                statement.setDouble(3, claimAmount);
-                statement.setString(4, status);
-                statement.setString(5, bankName);
-                statement.setString(6, bankUser);
-                statement.setString(7, bankNumber);
-                statement.setString(8, claimId);
-                int rowsUpdated = statement.executeUpdate();
-                if (rowsUpdated > 0) {
-                    System.out.println("Claim information updated successfully!");
-                    return true;
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public int calculateTotalDocumentsOfClaim(String claimId){
-        int totalCount = 0;
-        String query = "SELECT COUNT(*) AS total FROM documents WHERE claim_id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, claimId);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    totalCount = resultSet.getInt("total");
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        return totalCount;
-    }
-    public boolean deleteClaimInformation(Claim selectedClaim) {
-            try {
-                String claimId = selectedClaim.getId();
-                String deleteQuery = "DELETE FROM claims WHERE claim_id = ?";
-                try (PreparedStatement statement = connection.prepareStatement(deleteQuery)) {
-                    statement.setString(1, claimId);
-                    int rowsDeleted = statement.executeUpdate();
-                    if (rowsDeleted > 0) {
-                        System.out.println("Claim deleted successfully!");
-                        return true;
-//                        claimObservableList.remove(selectedClaim);
-//                        claimTableView.refresh();
-                    }
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        return false;
-    }
-
+    //Claim Dashboard - Reference to ClaimController
     //Profile dashboard functions
     public User getProfileDashboardInformation() {
         try {
@@ -314,37 +229,36 @@ public class AdminController {
         }
         return null;
     }
-
     //Main Dash board
 
-    public ArrayList<Claim> fetchClaimsFromDatabase() {
-        ArrayList<Claim> claimList = new ArrayList<>();
-        try {
-            String queryClaims = "SELECT * FROM claims";
-            PreparedStatement statement = connection.prepareStatement(queryClaims);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Claim claim = new Claim();
-                claim.setId(resultSet.getString("claim_id"));
-                claim.setInsuredPerson(resultSet.getString("insured_person"));
-                claim.setCardNumber(resultSet.getString("card_number"));
-                claim.setClaimDate(resultSet.getDate("claim_date"));
-                claim.setExamDate(resultSet.getDate("exam_date"));
-                claim.setClaimAmount(resultSet.getDouble("claim_amount"));
-                claim.setStatus(resultSet.getString("status"));
-                claim.setBankName(resultSet.getString("bank_name"));
-                claim.setBankUserName(resultSet.getString("bank_user_name"));
-                claim.setBankNumber(resultSet.getString("bank_number"));
-                claimList.add(claim);
-            }
-            resultSet.close();
-            statement.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return claimList;
-    }
+//    public ArrayList<Claim> fetchClaimsFromDatabase() {
+//        ArrayList<Claim> claimList = new ArrayList<>();
+//        try {
+//            String queryClaims = "SELECT * FROM claims";
+//            PreparedStatement statement = connection.prepareStatement(queryClaims);
+//            ResultSet resultSet = statement.executeQuery();
+//            while (resultSet.next()) {
+//                Claim claim = new Claim();
+//                claim.setId(resultSet.getString("claim_id"));
+//                claim.setInsuredPerson(resultSet.getString("insured_person"));
+//                claim.setCardNumber(resultSet.getString("card_number"));
+//                claim.setClaimDate(resultSet.getDate("claim_date"));
+//                claim.setExamDate(resultSet.getDate("exam_date"));
+//                claim.setClaimAmount(resultSet.getDouble("claim_amount"));
+//                claim.setStatus(resultSet.getString("status"));
+//                claim.setBankName(resultSet.getString("bank_name"));
+//                claim.setBankUserName(resultSet.getString("bank_user_name"));
+//                claim.setBankNumber(resultSet.getString("bank_number"));
+//                claimList.add(claim);
+//            }
+//            resultSet.close();
+//            statement.close();
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return claimList;
+//    }
 
     public String getNameForUser(String userId) {
         String name = "";
