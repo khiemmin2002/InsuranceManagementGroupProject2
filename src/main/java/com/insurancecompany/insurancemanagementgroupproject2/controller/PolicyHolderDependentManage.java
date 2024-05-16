@@ -62,7 +62,7 @@ public class PolicyHolderDependentManage {
             controller.updateDependent(dependentId, password, email, phoneNumber, address);
             showAlert("Success", "Dependent updated successfully.", Alert.AlertType.INFORMATION);
             clearInputFields();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             validationMessage.setText("Error: Unable to update dependent. Please try again");
             System.out.println(e.getMessage());
         }

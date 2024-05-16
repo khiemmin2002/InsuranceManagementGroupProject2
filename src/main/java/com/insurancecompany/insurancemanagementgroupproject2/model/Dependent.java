@@ -15,6 +15,7 @@ public class Dependent extends User{
         this.policyHolderName = policyHolderName;  // Initialize the new property
     }
 
+
     // Getter for policy holder's name
     public String getPolicyHolderName() {
         return policyHolderName;

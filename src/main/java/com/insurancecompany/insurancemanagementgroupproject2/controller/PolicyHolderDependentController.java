@@ -12,7 +12,7 @@ import java.sql.SQLException;
 
 public class PolicyHolderDependentController {
 
-    public ObservableList<Dependent> fetchDependents(String userName) throws SQLException {
+    public ObservableList<Dependent> fetchDependents(String userName)  throws SQLException {
         ObservableList<Dependent> dependentData = FXCollections.observableArrayList();
         DatabaseConnection databaseConnection = new DatabaseConnection();
         try (Connection connection = databaseConnection.getConnection()) {
@@ -35,10 +35,12 @@ public class PolicyHolderDependentController {
                 dependent.setAddress(results.getString("address"));
                 dependentData.add(dependent);
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return dependentData;
     }
-    public void addDependent(Dependent dependent, String policyHolderUserName) throws SQLException {
+    public void addDependent(Dependent dependent, String policyHolderUserName) throws SQLException  {
         DatabaseConnection databaseConnection = new DatabaseConnection();
         String policyHolderId = null;
 
@@ -76,6 +78,8 @@ public class PolicyHolderDependentController {
                 depStmt.setString(2, policyHolderId);
                 depStmt.executeUpdate();
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
     public void deleteDependent(String dependentId) throws SQLException {
@@ -98,9 +102,11 @@ public class PolicyHolderDependentController {
                     throw new SQLException("No dependent found with ID: " + dependentId);
                 }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
-    public ObservableList<Dependent> findDependentUserName(String userName) {
+    public ObservableList<Dependent> findDependentUserName(String userName) throws SQLException {
         ObservableList<Dependent> foundDependents = FXCollections.observableArrayList();
         DatabaseConnection databaseConnection = new DatabaseConnection();
         Connection connection = databaseConnection.getConnection();
@@ -133,7 +139,7 @@ public class PolicyHolderDependentController {
         }
         return foundDependents;
     }
-    public void updateDependent(String dependentId, String password, String email, String phoneNumber, String address) throws SQLException {
+    public void updateDependent(String dependentId, String password, String email, String phoneNumber, String address)  throws SQLException {
         DatabaseConnection databaseConnection = new DatabaseConnection();
         try (Connection connection = databaseConnection.getConnection()) {
             String updateQuery = "UPDATE public.users SET password = ?, email = ?, phone_number = ?, address = ? WHERE id = ?";
@@ -149,6 +155,8 @@ public class PolicyHolderDependentController {
                     throw new SQLException("Updating dependent failed, no rows affected.");
                 }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 

@@ -15,7 +15,7 @@ public class PolicyHolderClaimController {
     private final DatabaseConnection databaseConnection = new DatabaseConnection();
     private final Connection connection = databaseConnection.getConnection();
 
-    public boolean deleteClaimDocuments(String claimId) {
+    public boolean deleteClaimDocuments(String claimId) throws SQLException {
         String query = "DELETE FROM documents WHERE claim_id = ?";
         try{
             PreparedStatement stmt = connection.prepareStatement(query);
@@ -27,7 +27,7 @@ public class PolicyHolderClaimController {
         }
     }
 
-    public boolean deleteClaim(String claimId) throws SQLException {
+    public boolean deleteClaim(String claimId) throws SQLException  {
         String query = "DELETE FROM public.claims WHERE claim_id = ?";
         try {
             PreparedStatement stmt = connection.prepareStatement(query);
@@ -77,6 +77,8 @@ public class PolicyHolderClaimController {
             while (rs.next()) {
                 claims.add(extractClaimFromResultSet(rs));
             }
+        } catch (SQLException e) {
+            System.out.println("Exception" + e);
         }
         return claims;
     }
