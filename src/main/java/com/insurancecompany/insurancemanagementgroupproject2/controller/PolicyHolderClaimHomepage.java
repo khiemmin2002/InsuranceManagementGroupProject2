@@ -1,40 +1,37 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
 
-import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.HelloApplication;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
-import com.insurancecompany.insurancemanagementgroupproject2.model.Manager;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.FileChooser;
 
+import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 
 import java.io.File;
-
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Random;
 
-public class PolicyHolderController {
+public class PolicyHolderClaimHomepage {
 
     @FXML
     private MenuItem addClaim;
@@ -81,6 +78,9 @@ public class PolicyHolderController {
     private MenuItem updateClaim;
 
     @FXML
+    private MenuItem logoutBtn;
+
+    @FXML
     private TextField inputClaimId;
 
     @FXML
@@ -89,14 +89,12 @@ public class PolicyHolderController {
     @FXML
     private Button clearInputButton;
 
+    private String userName;
+
     @FXML
     private TableColumn<Claim, Void> deleteColumn;
 
-
-    @FXML
-    private Button btnUploadDocuments;
-
-    private String userName;
+    private PolicyHolderClaimController policyHolderClaimController = new PolicyHolderClaimController();
 
 
     private void setUpDeleteColumn() {
@@ -135,46 +133,62 @@ public class PolicyHolderController {
             showAlert(false, "No claim selected for deletion. ");
             return;
         }
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        Connection connection = databaseConnection.getConnection();
-        String deleteDocumentsQuery = "DELETE FROM documents WHERE claim_id = ?";
-        try(PreparedStatement documentStatement =  connection.prepareStatement(deleteDocumentsQuery)) {
-            documentStatement.setString(1, claim.getId());
-            documentStatement.executeUpdate();
-            System.out.println("Associated documents deleted successfully");
+        try {
+            policyHolderClaimController.deleteClaimDocuments(claim.getId());
+            policyHolderClaimController.deleteClaim(claim.getId());
+            claimTable.getItems().remove(claim);
         } catch (SQLException e) {
-            showAlert(false, "Error deleting associated documents: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        String deleteQuery = "DELETE FROM public.claims WHERE claim_id = ?";
-        try(PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)){
-            preparedStatement.setString(1, claim.getId());
-            int affectedRows = preparedStatement.executeUpdate();
-
-            if (affectedRows > 0) {
-                ObservableList<Claim> allClaims = claimTable.getItems();
-                allClaims.remove(claim);
-                showAlert(true, "Claim deleted successfully. ");
-
-            } else {
-                showAlert(false, "No claim was deleted. Claim might not exist.");
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
             showAlert(false, "Error deleting claim: " + e.getMessage());
-            e.printStackTrace();
-        } finally {
-            try {
-                if (connection != null) connection.close();
-            } catch (SQLException e) {
-                showAlert(false, "Error closing database connection: " + e.getMessage());
-                System.out.println(e.getMessage());
-                e.printStackTrace();
-            }
+            throw new RuntimeException(e);
         }
 
     }
+
+
+
+    @FXML
+    void logout(ActionEvent event) {
+        try {
+            MenuItem menuItem = (MenuItem) event.getSource();
+
+
+            Scene scene = menuItem.getParentPopup().getOwnerWindow().getScene();
+            Stage currentStage = (Stage) scene.getWindow();
+
+
+            currentStage.close();
+
+
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("fxml/login.fxml"));
+            Parent root = loader.load();
+            Stage loginStage = new Stage();
+            Scene loginScene = new Scene(root);
+
+            loginStage.setTitle("Login - Insurance Claim Management System");
+            loginStage.setScene(loginScene);
+            loginStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Failed to load login screen.");
+        }
+    }
+
+    private void showAlert(Alert.AlertType alertType, String message) {
+        Alert alert = new Alert(alertType, message);
+        alert.showAndWait();
+    }
+
+
+
+    private String generateRandomClaimID() {
+        StringBuilder claimId = new StringBuilder("F");
+        Random random = new Random();
+        for (int i = 0; i < 10; i++) {
+            claimId.append(random.nextInt(10));
+        }
+        return claimId.toString();
+    }
+
 
 
     @FXML
@@ -241,85 +255,19 @@ public class PolicyHolderController {
 
     @FXML
     private void findClaimId() {
-
         String insuredPersonId = inputClaimId.getText();
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        Connection connection = databaseConnection.getConnection();
-
         try {
-            String claimQuery = "SELECT c.*, d.document_name FROM public.claims c " +
-                    "JOIN documents d ON c.claim_id = d.claim_id " +
-                    "WHERE c.insured_person = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(claimQuery);
-            preparedStatement.setString(1, insuredPersonId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            ObservableList<Claim> foundClaims = FXCollections.observableArrayList();
-            while (resultSet.next()) {
-                Claim claim = new Claim();
-                claim.setId(resultSet.getString("claim_id"));
-                claim.setInsuredPerson(resultSet.getString("insured_person"));
-                claim.setCardNumber(resultSet.getString("card_number"));
-                claim.setExamDate(resultSet.getDate("exam_date"));
-                claim.setClaimDate(resultSet.getDate("claim_date"));
-                claim.setClaimAmount(resultSet.getDouble("claim_amount"));
-                claim.setStatus(resultSet.getString("status"));
-                claim.setBankName(resultSet.getString("bank_name"));
-                claim.setBankUserName(resultSet.getString("bank_user_name"));
-                claim.setBankNumber(resultSet.getString("bank_number"));
-                claim.setDocuments(resultSet.getString("document_name"));
-
-                foundClaims.add(claim);
-
-            }
+            ObservableList<Claim> foundClaims = policyHolderClaimController.findClaimsByInsuredPerson(insuredPersonId);
             claimTable.setItems(foundClaims);
-
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            showAlert(false, "Error finding claims: " + e.getMessage());
+            e.printStackTrace();
         }
-
     }
 
     public void fetchClaimData() {
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        Connection connection = databaseConnection.getConnection();
-
-        ObservableList<Claim> claimData = FXCollections.observableArrayList();
-
         try {
-            String getClaimsQuery = "SELECT c.*, d.document_name FROM public.claims c " +
-                    "JOIN documents d ON c.claim_id = d.claim_id " +
-                    "WHERE insured_person IN " +
-                    "    (SELECT id FROM public.users WHERE user_name = ?) " +
-                    "OR insured_person IN " +
-                    "    (SELECT dependent_id FROM public.dependent WHERE policy_holder_id = " +
-                    "     (SELECT id FROM public.users WHERE user_name = ?))";
-
-
-            PreparedStatement preparedStatement = connection.prepareStatement(getClaimsQuery);
-            preparedStatement.setString(1, this.userName);
-            preparedStatement.setString(2, this.userName);
-            ResultSet queryResult = preparedStatement.executeQuery();
-
-            while (queryResult.next()) {
-                String claimId = queryResult.getString("claim_id");
-                Claim claim = new Claim();
-                claim.setId(queryResult.getString("claim_id"));
-                claim.setInsuredPerson(queryResult.getString("insured_person"));
-                claim.setCardNumber(queryResult.getString("card_number"));
-                claim.setExamDate(queryResult.getDate("exam_date"));
-                claim.setClaimDate(queryResult.getDate("claim_date"));
-                claim.setClaimAmount(queryResult.getDouble("claim_amount"));
-                claim.setStatus(queryResult.getString("status"));
-                claim.setBankName(queryResult.getString("bank_name"));
-                claim.setBankUserName(queryResult.getString("bank_user_name"));
-                claim.setBankNumber(queryResult.getString("bank_number"));
-                claim.setDocuments(queryResult.getString("document_name"));
-                claimData.add(claim);
-
-            }
-
-
+            ObservableList<Claim> claimData = policyHolderClaimController.fetchAllClaims(this.userName);
             claimID.setCellValueFactory(new PropertyValueFactory<>("id"));
             insuredPerson.setCellValueFactory(new PropertyValueFactory<>("insuredPerson"));
             cardNumber.setCellValueFactory(new PropertyValueFactory<>("cardNumber"));
@@ -331,9 +279,7 @@ public class PolicyHolderController {
             bankUserName.setCellValueFactory(new PropertyValueFactory<>("bankUserName"));
             bankNumber.setCellValueFactory(new PropertyValueFactory<>("bankNumber"));
             document.setCellValueFactory(new PropertyValueFactory<>("documents"));
-
-
-            claimTable.setItems(claimData); // Set the items to the TableView
+            claimTable.setItems(claimData);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -342,7 +288,7 @@ public class PolicyHolderController {
 
     @FXML
     private void openAddClaimModal() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/add-claim.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/policy-holder-add-claim.fxml"));
         Parent root = fxmlLoader.load();
 
         // Set up the scene

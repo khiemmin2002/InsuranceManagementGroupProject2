@@ -84,7 +84,7 @@ public class LoginPage {
 
     private void loadPolicyHolderHomePage() {
         Stage currentStage = (Stage) usernameTextField.getScene().getWindow();
-        SceneLoader.loadScene("fxml/policy-holder-homepage.fxml", currentStage);
+        SceneLoader.loadScene("fxml/policy-holder-claim.fxml", currentStage);
     }
 
     private void loadAdminHomePage() {
