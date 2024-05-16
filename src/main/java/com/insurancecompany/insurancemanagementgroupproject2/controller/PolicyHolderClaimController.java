@@ -12,26 +12,32 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class PolicyHolderClaimController {
-    public void deleteClaimDocuments(String claimId) {
+    private final DatabaseConnection databaseConnection = new DatabaseConnection();
+    private final Connection connection = databaseConnection.getConnection();
+
+    public boolean deleteClaimDocuments(String claimId) {
         String query = "DELETE FROM documents WHERE claim_id = ?";
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        try (Connection conn = databaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        try{
+            PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setString(1, claimId);
             stmt.executeUpdate();
+            return true;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void deleteClaim(String claimId) throws SQLException {
+    public boolean deleteClaim(String claimId) throws SQLException {
         String query = "DELETE FROM public.claims WHERE claim_id = ?";
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        try (Connection conn = databaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        try {
+            PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setString(1, claimId);
             stmt.executeUpdate();
+            return true;
+        } catch (SQLException e){
+            System.out.println("Error " + e);
         }
+        return false;
     }
 
     public ObservableList<Claim> findClaimsByInsuredPerson(String insuredPerson) throws SQLException {
@@ -39,14 +45,16 @@ public class PolicyHolderClaimController {
                 "JOIN documents d ON c.claim_id = d.claim_id " +
                 "WHERE c.insured_person = ?";
         ObservableList<Claim> claims = FXCollections.observableArrayList();
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        try (Connection conn = databaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        try {
+            PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setString(1, insuredPerson);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 claims.add(extractClaimFromResultSet(rs));
             }
+            return claims;
+        }catch (SQLException e){
+            System.out.println("Exception" + e);
         }
         return claims;
     }
@@ -87,11 +95,10 @@ public class PolicyHolderClaimController {
         claim.setDocuments(rs.getString("document_name"));
         return claim;
     }
-    public void updateClaim(String claimId, String insuredPersonID, String cardNumber, double claimAmount, String bankName, String bankUserName, String bankNumber) throws SQLException {
+    public boolean updateClaim(String claimId, String insuredPersonID, String cardNumber, double claimAmount, String bankName, String bankUserName, String bankNumber) throws SQLException {
         String query = "UPDATE public.claims SET insured_person = ?, card_number = ?, claim_amount = ?, bank_name = ?, bank_user_name = ?, bank_number = ? WHERE claim_id = ?";
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        try (Connection conn = databaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        try {
+            PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setString(1, insuredPersonID);
             stmt.setString(2, cardNumber);
             stmt.setDouble(3, claimAmount);
@@ -100,26 +107,33 @@ public class PolicyHolderClaimController {
             stmt.setString(6, bankNumber);
             stmt.setString(7, claimId);
             stmt.executeUpdate();
+            return true;
+        } catch (SQLException e ){
+            System.out.println("Error " + e);
         }
+        return false;
     }
-    public void updateDocumentDetails(String claimId, List<String> documentNames) throws SQLException {
+    public boolean updateDocumentDetails(String claimId, List<String> documentNames) throws SQLException {
         String query = "UPDATE documents SET document_name = ? WHERE claim_id = ?";
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        try (Connection conn = databaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        try {
+            PreparedStatement stmt = connection.prepareStatement(query);
             for (String documentName : documentNames) {
                 stmt.setString(1, documentName);
                 stmt.setString(2, claimId);
                 stmt.executeUpdate();
             }
+            return true;
+        }catch (SQLException e){
+            System.out.println("Error " + e);
         }
+        return false;
     }
-    public void addClaim(Claim claim, List<String> documentNames) throws SQLException {
+    public boolean addClaim(Claim claim, List<String> documentNames) throws SQLException {
         String insertQuery = "INSERT INTO public.claims (claim_id, insured_person, card_number, exam_date, claim_date, claim_amount, status, bank_name, bank_user_name, bank_number) " +
                 "VALUES (?, ?, ?, NULL, NULL, ?, 'NEW', ?, ?, ?)";
         DatabaseConnection databaseConnection = new DatabaseConnection();
-        try (Connection connection = databaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+        try  {
+            PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
             preparedStatement.setString(1, claim.getId());
             preparedStatement.setString(2, claim.getInsuredPerson());
             preparedStatement.setString(3, claim.getCardNumber());
@@ -128,20 +142,27 @@ public class PolicyHolderClaimController {
             preparedStatement.setString(6, claim.getBankUserName());
             preparedStatement.setString(7, claim.getBankNumber());
             preparedStatement.executeUpdate();
+            addDocuments(claim.getId(), documentNames);
+            return true;
+        }catch (SQLException e){
+            System.out.println("Error " + e);
         }
-        addDocuments(claim.getId(), documentNames);
+        return false;
     }
 
-    public void addDocuments(String claimId, List<String> documentNames) throws SQLException {
+    public boolean addDocuments(String claimId, List<String> documentNames) throws SQLException {
         String insertDocQuery = "INSERT INTO documents (claim_id, document_name) VALUES (?, ?)";
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        try (Connection connection = databaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(insertDocQuery)) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(insertDocQuery);
             for (String docName : documentNames) {
                 preparedStatement.setString(1, claimId);
                 preparedStatement.setString(2, docName);
                 preparedStatement.executeUpdate();
             }
+            return true;
+        } catch (SQLException e){
+            System.out.println("Error " + e);
         }
+        return false;
     }
 }
