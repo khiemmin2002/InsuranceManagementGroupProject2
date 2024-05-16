@@ -133,6 +133,24 @@ public class PolicyHolderDependentController {
         }
         return foundDependents;
     }
+    public void updateDependent(String dependentId, String password, String email, String phoneNumber, String address) throws SQLException {
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        try (Connection connection = databaseConnection.getConnection()) {
+            String updateQuery = "UPDATE public.users SET password = ?, email = ?, phone_number = ?, address = ? WHERE id = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
+                preparedStatement.setString(1, password);
+                preparedStatement.setString(2, email);
+                preparedStatement.setString(3, phoneNumber);
+                preparedStatement.setString(4, address);
+                preparedStatement.setString(5, dependentId);
+                int affectedRows = preparedStatement.executeUpdate();
+
+                if (affectedRows == 0) {
+                    throw new SQLException("Updating dependent failed, no rows affected.");
+                }
+            }
+        }
+    }
 
 
 }
