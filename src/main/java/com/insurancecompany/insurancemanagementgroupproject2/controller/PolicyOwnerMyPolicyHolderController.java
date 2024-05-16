@@ -136,7 +136,7 @@ public class PolicyOwnerMyPolicyHolderController implements Initializable {
         addNewPolicyHolderForm.setVisible(false);
     }
 
-    public ArrayList<PolicyHolder> fetchPolicyHoldersFromDatabase() {
+    private ArrayList<PolicyHolder> fetchPolicyHoldersFromDatabase() {
         ArrayList<PolicyHolder> policyHolderArrayList = new ArrayList<>();
         try {
             String policyOwnerId = getIDFromUserName(LoginData.usernameLogin);

@@ -35,11 +35,12 @@ public class Claim {
 
     }
 
-    public Claim(String insuredPerson, String cardNumber, Date examDate, Date claimDate, double claimAmount, String status, String bankName, String bankUserName, String bankNumber) {
+    public Claim(String id,String insuredPerson, String cardNumber, Date examDate, Date claimDate, double claimAmount, String status, String bankName, String bankUserName, String bankNumber) {
+        this.id = id;
         this.insuredPerson = insuredPerson;
         this.cardNumber = cardNumber;
-        this.examDate = examDate;
-        this.claimDate = claimDate;
+        this.examDate = examDate != null ? examDate: null;
+        this.claimDate = claimDate != null ? claimDate: null;
         this.claimAmount = claimAmount;
         this.status = status;
         this.bankName = bankName;
