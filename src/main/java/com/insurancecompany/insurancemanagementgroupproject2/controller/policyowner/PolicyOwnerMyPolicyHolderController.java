@@ -1,6 +1,7 @@
-package com.insurancecompany.insurancemanagementgroupproject2.controller;
+package com.insurancecompany.insurancemanagementgroupproject2.controller.policyowner;
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.BcryptPassword;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import com.insurancecompany.insurancemanagementgroupproject2.model.PolicyHolder;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Role;
@@ -28,6 +29,7 @@ public class PolicyOwnerMyPolicyHolderController implements Initializable {
 
     DatabaseConnection databaseConnection = new DatabaseConnection();
     Connection connection = databaseConnection.getConnection();
+    BcryptPassword bcryptPassword = new BcryptPassword();
 
     @FXML
     private Button addNewPolicyHolderBtn;
@@ -135,7 +137,7 @@ public class PolicyOwnerMyPolicyHolderController implements Initializable {
         addNewPolicyHolderForm.setVisible(false);
     }
 
-    public ArrayList<PolicyHolder> fetchPolicyHoldersFromDatabase() {
+    private ArrayList<PolicyHolder> fetchPolicyHoldersFromDatabase() {
         ArrayList<PolicyHolder> policyHolderArrayList = new ArrayList<>();
         try {
             String policyOwnerId = getIDFromUserName(LoginData.usernameLogin);
@@ -198,11 +200,12 @@ public class PolicyOwnerMyPolicyHolderController implements Initializable {
         }
     }
 
+
     @FXML
     private void editFieldPolicyHolderConfirmBtnOnAction(ActionEvent event) {
         boolean isSuccess = updatePolicyHolder(editFieldPolicyHolderID.getText(),
                 editFieldPolicyHolderFullName.getText(),
-                editFieldPolicyHolderPassword.getText(),
+                bcryptPassword.hashBcryptPassword(editFieldPolicyHolderPassword.getText()),
                 editFieldPolicyHolderEmail.getText(),
                 editFieldPolicyHolderPhoneNumber.getText(),
                 editFieldPolicyHolderAddress.getText());
@@ -261,7 +264,7 @@ public class PolicyOwnerMyPolicyHolderController implements Initializable {
             newPolicyHolder.setId(newPolicyHolderID);
             newPolicyHolder.setUserName(addNewPolicyHolderUsernameField.getText());
             newPolicyHolder.setFullName(addNewPolicyHolderFullNameField.getText());
-            newPolicyHolder.setPassword(addNewPolicyHolderPassword.getText());
+            newPolicyHolder.setPassword(bcryptPassword.hashBcryptPassword(addNewPolicyHolderPassword.getText()));
             newPolicyHolder.setEmail(addNewPolicyHolderEmailField.getText());
             newPolicyHolder.setPhoneNumber(addNewPolicyHolderPhoneNumField.getText());
             newPolicyHolder.setAddress(addNewPolicyHolderAddressField.getText());

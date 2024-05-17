@@ -1,6 +1,10 @@
-package com.insurancecompany.insurancemanagementgroupproject2.controller;
+package com.insurancecompany.insurancemanagementgroupproject2.view;
 
+import com.insurancecompany.insurancemanagementgroupproject2.controller.AdminController;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.ClaimController;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.ValidateInput;
 import com.insurancecompany.insurancemanagementgroupproject2.model.*;
+import com.insurancecompany.insurancemanagementgroupproject2.view.ManagerHomePage;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

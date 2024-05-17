@@ -1,5 +1,6 @@
-package com.insurancecompany.insurancemanagementgroupproject2.controller;
+package com.insurancecompany.insurancemanagementgroupproject2.view;
 
+import com.insurancecompany.insurancemanagementgroupproject2.controller.ClaimController;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import javafx.collections.FXCollections;

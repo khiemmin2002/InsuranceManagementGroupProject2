@@ -1,6 +1,7 @@
-package com.insurancecompany.insurancemanagementgroupproject2.controller;
+package com.insurancecompany.insurancemanagementgroupproject2.view;
 
 import com.insurancecompany.insurancemanagementgroupproject2.SceneLoader;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.LoginController;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -84,7 +85,7 @@ public class LoginPage {
 
     private void loadPolicyHolderHomePage() {
         Stage currentStage = (Stage) usernameTextField.getScene().getWindow();
-        SceneLoader.loadScene("fxml/policy-holder-homepage.fxml", currentStage);
+        SceneLoader.loadScene("fxml/policy-holder-claim.fxml", currentStage);
     }
 
     private void loadAdminHomePage() {

@@ -1,5 +1,6 @@
-package com.insurancecompany.insurancemanagementgroupproject2.controller;
+package com.insurancecompany.insurancemanagementgroupproject2.controller.policyowner;
 
+import com.insurancecompany.insurancemanagementgroupproject2.controller.DependentController;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

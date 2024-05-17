@@ -1,24 +1,23 @@
-package com.insurancecompany.insurancemanagementgroupproject2.controller;
+package com.insurancecompany.insurancemanagementgroupproject2.view;
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.HelloApplication;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.BcryptPassword;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.policyholder.PolicyHolderDependentController;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Dependent;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
-import javafx.collections.FXCollections;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -27,7 +26,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Random;
 
-public class PolicyHolderDependentController {
+public class PolicyHolderDependentHomePage {
 
     @FXML
     private TextField addAddressField;
@@ -90,6 +89,10 @@ public class PolicyHolderDependentController {
     @FXML
     private MenuItem updateDependentMenu;
 
+
+    @FXML
+    private MenuItem logoutBtn;
+
     @FXML
     private TableColumn<?, ?> passwordCol;
 
@@ -110,7 +113,7 @@ public class PolicyHolderDependentController {
     @FXML
     private MenuItem openClaimBtn;
 
-
+    private PolicyHolderDependentController controller = new PolicyHolderDependentController();
 
 
 
@@ -219,46 +222,50 @@ public class PolicyHolderDependentController {
 
     @FXML
     void exitProgram(ActionEvent event) {
-        inputUserName.clear();
-        fetchDependentData();
+        Platform.exit();
+    }
+
+    @FXML
+    void logout(ActionEvent event) {
+        try {
+            MenuItem menuItem = (MenuItem) event.getSource();
+
+
+            Scene scene = menuItem.getParentPopup().getOwnerWindow().getScene();
+            Stage currentStage = (Stage) scene.getWindow();
+
+
+            currentStage.close();
+
+
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("fxml/login.fxml"));
+            Parent root = loader.load();
+            Stage loginStage = new Stage();
+            Scene loginScene = new Scene(root);
+
+            loginStage.setTitle("Login - Insurance Claim Management System");
+            loginStage.setScene(loginScene);
+            loginStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Failed to load login screen.");
+        }
     }
 
     @FXML
     void findDependentUserName(ActionEvent event) {
         String dependentUserName = inputUserName.getText();
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        Connection connection = databaseConnection.getConnection();
-
         try {
-            String findQuery = "SELECT id, full_name, user_name, password, email, phone_number, address " +
-                    "FROM users " +
-                    "WHERE user_name = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(findQuery);
-            preparedStatement.setString(1, dependentUserName);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            ObservableList<Dependent> foundDependents = FXCollections.observableArrayList();
-            while (resultSet.next()) {
-                Dependent dependent = new Dependent();
-                dependent.setId(resultSet.getString("id"));
-                dependent.setFullName(resultSet.getString("full_name"));
-                dependent.setUserName(resultSet.getString("user_name"));
-                dependent.setPassword(resultSet.getString("password"));
-                dependent.setEmail(resultSet.getString("email"));
-                dependent.setPhoneNumber(resultSet.getString("phone_number"));
-                dependent.setAddress(resultSet.getString("address"));
-                foundDependents.add(dependent);
-
-            }
-            if(foundDependents.isEmpty()) {
-                System.out.println("No dependents found.");  // Debug output
-            }
-
+            ObservableList<Dependent> foundDependents = controller.findDependentUserName(dependentUserName);
             dependentTable.setItems(foundDependents);
-        } catch (SQLException e) {
+            if (foundDependents.isEmpty()) {
+                System.out.println("No dependents found.");
+                showAlert(Alert.AlertType.INFORMATION, "No dependents found with that username.");
+            }
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
-            throw new RuntimeException(e);
+            showAlert(Alert.AlertType.ERROR, "Error retrieving data: " + e.getMessage());
         }
     }
 
@@ -278,14 +285,23 @@ public class PolicyHolderDependentController {
 
 
     @FXML
-    void openClaimModal(ActionEvent event) {
+    void openClaimModal(ActionEvent event) throws IOException {
+        Stage currentStage = (Stage) dependentTable.getScene().getWindow();
+        currentStage.close();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/policy-holder-claim.fxml"));
+        Parent root = fxmlLoader.load();
 
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Dependent");
+        stage.setScene(new Scene(root));
+        stage.showAndWait();
     }
 
 
 
     @FXML
-    void refreshData(ActionEvent event) {
+    void refreshData(ActionEvent event)  {
         fetchDependentData();
     }
 
@@ -303,7 +319,7 @@ public class PolicyHolderDependentController {
 
 
     @FXML
-    void confirmAddClaim(ActionEvent event) {
+    void confirmAddDependent(ActionEvent event) {
         String dependentId = generatedRandomUserId();
 
         String userName = addUserNameField.getText();
@@ -385,35 +401,10 @@ public class PolicyHolderDependentController {
         }
     }
 
-    private void fetchDependentData() {
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        Connection connection = databaseConnection.getConnection();
-        ObservableList<Dependent> dependentData = FXCollections.observableArrayList();
-
+    private void fetchDependentData()  {
         try {
-            String getDependentQuery = "SELECT d.id, d.full_name, d.user_name,d.password, d.email, d.phone_number, d.address " +
-                    "FROM users d " +
-                    "JOIN dependent dep " +
-                    "ON d.id = dep.dependent_id " +
-                    "JOIN users p " +
-                    "ON p.id = dep.policy_holder_id " +
-                    "WHERE p.user_name = ?";
-
-            PreparedStatement preparedStatement = connection.prepareStatement(getDependentQuery);
-            preparedStatement.setString(1, userName);
-            ResultSet queryResult = preparedStatement.executeQuery();
-            while (queryResult.next()) {
-                Dependent dependent = new Dependent();
-                dependent.setId(queryResult.getString("id"));
-                dependent.setFullName(queryResult.getString("full_name"));
-                dependent.setUserName(queryResult.getString("user_name"));
-                dependent.setPassword(queryResult.getString("password"));
-                dependent.setEmail(queryResult.getString("email"));
-                dependent.setPhoneNumber(queryResult.getString("phone_number"));
-                dependent.setAddress(queryResult.getString("address"));
-
-                dependentData.add(dependent);
-            }
+            ObservableList<Dependent> dependentData = controller.fetchDependents(LoginData.usernameLogin);
+            dependentTable.setItems(dependentData);
             dependentIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             userNameCol.setCellValueFactory(new PropertyValueFactory<>("userName"));
             fullNameCol.setCellValueFactory(new PropertyValueFactory<>("fullName"));

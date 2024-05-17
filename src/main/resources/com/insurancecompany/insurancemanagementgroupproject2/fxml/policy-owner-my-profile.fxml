@@ -11,7 +11,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="policyOwnerMyProfileDashboard" prefHeight="560.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.PolicyOwnerMyProfileController">
+<AnchorPane fx:id="policyOwnerMyProfileDashboard" prefHeight="560.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.policyowner.PolicyOwnerMyProfileController">
    <children>
       <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="529.0" prefWidth="250.0" style="-fx-border-color: black; -fx-border-radius: 5; -fx-border-width: 2;">
          <children>

@@ -1,7 +1,11 @@
-package com.insurancecompany.insurancemanagementgroupproject2.controller;
+package com.insurancecompany.insurancemanagementgroupproject2.view;
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.SceneLoader;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.BcryptPassword;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.SurveyorController;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.ValidateInput;
+import com.insurancecompany.insurancemanagementgroupproject2.view.ManagerHomePage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -28,6 +32,7 @@ public class CreateSurveyorForm {
     private Label errorLabel;
     private SurveyorController surveyorController;
     private String id;
+    private BcryptPassword bcryptPassword;
     @FXML
     private void initialize(){
         DatabaseConnection databaseConnection = new DatabaseConnection();
@@ -35,6 +40,7 @@ public class CreateSurveyorForm {
         submitSurveyor.setOnAction(ActionEvent -> createSurveyor());
         ManagerHomePage managerHomePage = new ManagerHomePage();
         id = managerHomePage.createSurveyorID();
+        bcryptPassword = new BcryptPassword();
     }
 
     ValidateInput validateInput = new ValidateInput();
@@ -45,19 +51,19 @@ public class CreateSurveyorForm {
             return;
         }
 
-        if (validateInput.isValidEmail(email.getText())) {
+        if (!validateInput.isValidEmail(email.getText())) {
             errorLabel.setText("Invalid email format");
             return;
         }
 
         // Validate phone number
-        if (validateInput.isValidPhoneNumber(phone_number.getText())) {
+        if (!validateInput.isValidPhoneNumber(phone_number.getText())) {
             errorLabel.setText("Invalid phone number format");
             return;
         }
 
         surveyorController.createNewSurveyor(
-                id,full_name.getText(),username.getText(),password.getText(),email.getText(),
+                id,full_name.getText(),username.getText(),bcryptPassword.hashBcryptPassword(password.getText()),email.getText(),
                 phone_number.getText(),address.getText());
 
         System.out.println("Created surveyor " + full_name.getText() + " successfully!");
