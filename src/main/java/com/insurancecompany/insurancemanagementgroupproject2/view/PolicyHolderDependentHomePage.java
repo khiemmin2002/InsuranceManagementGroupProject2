@@ -113,7 +113,10 @@ public class PolicyHolderDependentHomePage {
     @FXML
     private MenuItem openClaimBtn;
 
-    private PolicyHolderDependentController controller = new PolicyHolderDependentController();
+    private DatabaseConnection databaseConnection;
+    private Connection connection;
+
+    private PolicyHolderDependentController controller = new PolicyHolderDependentController(databaseConnection, connection);
 
 
 
@@ -338,7 +341,7 @@ public class PolicyHolderDependentHomePage {
 
     private void fetchDependentData()  {
         try {
-            ObservableList<Dependent> dependentData = controller.fetchDependents(LoginData.usernameLogin);
+            ObservableList<Dependent> dependentData = controller.fetchDependents();
             dependentTable.setItems(dependentData);
             dependentIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             userNameCol.setCellValueFactory(new PropertyValueFactory<>("userName"));

@@ -2,6 +2,7 @@ package com.insurancecompany.insurancemanagementgroupproject2.controller.policyh
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Dependent;
+import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -11,8 +12,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class PolicyHolderDependentController {
+    private final DatabaseConnection databaseConnection;
+    private final Connection connection;
 
-    public ObservableList<Dependent> fetchDependents(String userName) throws SQLException {
+    public PolicyHolderDependentController(DatabaseConnection databaseConnection, Connection connection) {
+        this.databaseConnection = databaseConnection;
+        this.connection = connection;
+    }
+
+    public ObservableList<Dependent> fetchDependents() throws SQLException {
+        String userName = LoginData.usernameLogin;
         ObservableList<Dependent> dependentData = FXCollections.observableArrayList();
         DatabaseConnection databaseConnection = new DatabaseConnection();
         try (Connection connection = databaseConnection.getConnection()) {
@@ -35,6 +44,7 @@ public class PolicyHolderDependentController {
                 dependent.setAddress(results.getString("address"));
                 dependentData.add(dependent);
             }
+            System.out.println("Fetch data from database successfully");
         }
         return dependentData;
     }

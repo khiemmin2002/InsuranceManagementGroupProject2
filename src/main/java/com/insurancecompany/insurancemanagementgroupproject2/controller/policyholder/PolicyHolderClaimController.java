@@ -2,6 +2,7 @@ package com.insurancecompany.insurancemanagementgroupproject2.controller.policyh
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
+import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -59,7 +60,8 @@ public class PolicyHolderClaimController {
         return claims;
     }
 
-    public ObservableList<Claim> fetchAllClaims(String userName) throws SQLException {
+    public ObservableList<Claim> fetchAllClaims() throws SQLException {
+        String userName = LoginData.usernameLogin;
         String query = "SELECT c.*, d.document_name FROM public.claims c " +
                 "JOIN documents d ON c.claim_id = d.claim_id " +
                 "WHERE insured_person IN " +

@@ -260,7 +260,7 @@ public class PolicyHolderClaimHomepage {
 
     public void fetchClaimData() {
         try {
-            ObservableList<Claim> claimData = policyHolderClaimController.fetchAllClaims(this.userName);
+            ObservableList<Claim> claimData = policyHolderClaimController.fetchAllClaims();
             claimID.setCellValueFactory(new PropertyValueFactory<>("id"));
             insuredPerson.setCellValueFactory(new PropertyValueFactory<>("insuredPerson"));
             cardNumber.setCellValueFactory(new PropertyValueFactory<>("cardNumber"));
