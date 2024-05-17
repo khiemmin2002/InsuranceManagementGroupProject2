@@ -1,6 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2;
 
 import com.insurancecompany.insurancemanagementgroupproject2.controller.AdminController;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.BcryptPassword;
 import com.insurancecompany.insurancemanagementgroupproject2.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,9 @@ public class AdminControllerTest {
 
     @Mock
     private Connection connection;
+
+    @Mock
+    private BcryptPassword bcryptPassword;
 
     @InjectMocks
     private AdminController adminController;
@@ -68,6 +72,7 @@ public class AdminControllerTest {
         PreparedStatement statement = mock(PreparedStatement.class);
         when(connection.prepareStatement(anyString())).thenReturn(statement);
         when(statement.executeUpdate()).thenReturn(1);
+        when(bcryptPassword.hashBcryptPassword(anyString())).thenReturn("hashedPassword");
 
         assertTrue(adminController.addUser(user));
     }
@@ -84,6 +89,7 @@ public class AdminControllerTest {
         PreparedStatement statement = mock(PreparedStatement.class);
         when(connection.prepareStatement(anyString())).thenReturn(statement);
         when(statement.executeUpdate()).thenReturn(1);
+        when(bcryptPassword.hashBcryptPassword(anyString())).thenReturn("hashedPassword");
 
         assertTrue(adminController.updateUser(id, fullName, password, email, phoneNumber, address));
     }
@@ -152,63 +158,10 @@ public class AdminControllerTest {
         assertTrue(adminController.updateInsuranceCardInformation(cardNumber, expDate));
     }
 
-//    @Test
-//    public void testFetchInsuranceCardsFromDatabase() throws SQLException {
-//        PreparedStatement statement = mock(PreparedStatement.class);
-//        ResultSet resultSet = mock(ResultSet.class);
-//        when(resultSet.next()).thenReturn(true, false);
-//        when(resultSet.getString("card_number")).thenReturn("1234567890");
-//        when(resultSet.getDate("expiration_date")).thenReturn(new java.sql.Date(System.currentTimeMillis()));
-//        when(resultSet.getString("card_holder_id")).thenReturn("123");
-//        when(resultSet.getString("policy_owner_id")).thenReturn("456");
-//        when(statement.executeQuery()).thenReturn(resultSet);
-//        when(connection.prepareStatement(anyString())).thenReturn(statement);
-//
-//        ArrayList<InsuranceCard> insuranceCards = adminController.fetchInsuranceCardsFromDatabase();
-//
-//        assertEquals(1, insuranceCards.size());
-//        InsuranceCard insuranceCard = insuranceCards.get(0);
-//        assertEquals("1234567890", insuranceCard.getCardNumber());
-//        assertNotNull(insuranceCard.getExpirationDate());
-//        assertEquals("123", insuranceCard.getCardHolderId());
-//        assertEquals("456", insuranceCard.getPolicyOwnerId());
-//    }
-
-//    ClaimController claimController = new ClaimController();
-//    @Test
-//    public void testUpdateClaimInformation() throws SQLException {
-//        String claimId = "123";
-//        String claimDate = "2024-04-25";
-//        String examDate = "2024-04-26";
-//        String amount = "1000";
-//        String status = "Approved";
-//        String bankName = "Bank of America";
-//        String bankUser = "John Doe";
-//        String bankNumber = "1234567890";
-//
-//        PreparedStatement statement = mock(PreparedStatement.class);
-//        when(connection.prepareStatement(anyString())).thenReturn(statement);
-//        when(statement.executeUpdate()).thenReturn(1);
-//
-//        assertTrue(claimController.updateClaimInformation(claimId, claimDate, examDate, amount, status, bankName, bankUser, bankNumber));
-//    }
-
-//    @Test
-//    public void testDeleteClaimInformation() throws SQLException {
-//        Claim selectedClaim = new Claim();
-//        selectedClaim.setId("123");
-//
-//        PreparedStatement statement = mock(PreparedStatement.class);
-//        when(connection.prepareStatement(anyString())).thenReturn(statement);
-//        when(statement.executeUpdate()).thenReturn(1);
-//
-//        assertTrue(claim.deleteClaimInformation(selectedClaim));
-//    }
-
     @Test
     public void testGetProfileDashboardInformation() throws SQLException {
-        LoginData.usernameLogin = "johndoe";
-        LoginData.roleId = 2;
+        String username = "johndoe";
+        int roleId = 2;
 
         PreparedStatement statement = mock(PreparedStatement.class);
         ResultSet resultSet = mock(ResultSet.class);
@@ -224,7 +177,7 @@ public class AdminControllerTest {
         when(statement.executeQuery()).thenReturn(resultSet);
         when(connection.prepareStatement(anyString())).thenReturn(statement);
 
-        User user = adminController.getProfileDashboardInformation(LoginData.usernameLogin, LoginData.roleId);
+        User user = adminController.getProfileDashboardInformation(username, roleId);
 
         assertNotNull(user);
         assertEquals("123", user.getId());
@@ -236,40 +189,6 @@ public class AdminControllerTest {
         assertEquals("1234567890", user.getPhoneNumber());
         assertEquals("123 Main St", user.getAddress());
     }
-
-//    @Test
-//    public void testFetchClaimsFromDatabase() throws SQLException {
-//        PreparedStatement statement = mock(PreparedStatement.class);
-//        ResultSet resultSet = mock(ResultSet.class);
-//        when(resultSet.next()).thenReturn(true, false);
-//        when(resultSet.getString("claim_id")).thenReturn("123");
-//        when(resultSet.getString("insured_person")).thenReturn("John Doe");
-//        when(resultSet.getString("card_number")).thenReturn("1234567890");
-//        when(resultSet.getDate("claim_date")).thenReturn(new java.sql.Date(System.currentTimeMillis()));
-//        when(resultSet.getDate("exam_date")).thenReturn(new java.sql.Date(System.currentTimeMillis()));
-//        when(resultSet.getDouble("claim_amount")).thenReturn(1000.0);
-//        when(resultSet.getString("status")).thenReturn("Approved");
-//        when(resultSet.getString("bank_name")).thenReturn("Bank of America");
-//        when(resultSet.getString("bank_user_name")).thenReturn("John Doe");
-//        when(resultSet.getString("bank_number")).thenReturn("1234567890");
-//        when(statement.executeQuery()).thenReturn(resultSet);
-//        when(connection.prepareStatement(anyString())).thenReturn(statement);
-//
-//        ArrayList<Claim> claims = adminController.fetchClaimsFromDatabase();
-//
-//        assertEquals(1, claims.size());
-//        Claim claim = claims.get(0);
-//        assertEquals("123", claim.getId());
-//        assertEquals("John Doe", claim.getInsuredPerson());
-//        assertEquals("1234567890", claim.getCardNumber());
-//        assertNotNull(claim.getClaimDate());
-//        assertNotNull(claim.getExamDate());
-//        assertEquals(1000.0, claim.getClaimAmount());
-//        assertEquals("Approved", claim.getStatus());
-//        assertEquals("Bank of America", claim.getBankName());
-//        assertEquals("John Doe", claim.getBankUserName());
-//        assertEquals("1234567890", claim.getBankNumber());
-//    }
 
     @Test
     public void testGetNameForUser() throws SQLException {
@@ -323,64 +242,62 @@ public class AdminControllerTest {
 
         assertEquals(8, totalProvider);
     }
-
     @Test
     public void testDisplayTotalCustomers() throws SQLException {
         PreparedStatement policyOwnerStatement = mock(PreparedStatement.class);
-        ResultSet policyOwnerResultSet = mock(ResultSet.class);
-        when(policyOwnerResultSet.next()).thenReturn(true);
-        when(policyOwnerResultSet.getInt("policyOwnerCount")).thenReturn(5);
-        when(policyOwnerStatement.executeQuery()).thenReturn(policyOwnerResultSet);
-
         PreparedStatement policyHolderStatement = mock(PreparedStatement.class);
-        ResultSet policyHolderResultSet = mock(ResultSet.class);
-        when(policyHolderResultSet.next()).thenReturn(true);
-        when(policyHolderResultSet.getInt("policyHolderCount")).thenReturn(3);
-        when(policyHolderStatement.executeQuery()).thenReturn(policyHolderResultSet);
-
         PreparedStatement dependentStatement = mock(PreparedStatement.class);
+        ResultSet policyOwnerResultSet = mock(ResultSet.class);
+        ResultSet policyHolderResultSet = mock(ResultSet.class);
         ResultSet dependentResultSet = mock(ResultSet.class);
-        when(dependentResultSet.next()).thenReturn(true);
-        when(dependentResultSet.getInt("dependentCount")).thenReturn(2);
-        when(dependentStatement.executeQuery()).thenReturn(dependentResultSet);
 
-        when(connection.prepareStatement(anyString()))
-                .thenReturn(policyOwnerStatement)
-                .thenReturn(policyHolderStatement)
+        when(connection.prepareStatement("SELECT COUNT(*) as policyOwnerCount FROM users WHERE role_id = ?"))
+                .thenReturn(policyOwnerStatement);
+        when(connection.prepareStatement("SELECT COUNT(*) as policyHolderCount FROM users WHERE role_id = ?"))
+                .thenReturn(policyHolderStatement);
+        when(connection.prepareStatement("SELECT COUNT(*) as dependentCount FROM users WHERE role_id = ?"))
                 .thenReturn(dependentStatement);
 
-        int totalCustomer = adminController.displayTotalCustomers();
+        when(policyOwnerStatement.executeQuery()).thenReturn(policyOwnerResultSet);
+        when(policyHolderStatement.executeQuery()).thenReturn(policyHolderResultSet);
+        when(dependentStatement.executeQuery()).thenReturn(dependentResultSet);
 
-        assertEquals(10, totalCustomer);
+        when(policyOwnerResultSet.next()).thenReturn(true);
+        when(policyOwnerResultSet.getInt("policyOwnerCount")).thenReturn(10);
+        when(policyHolderResultSet.next()).thenReturn(true);
+        when(policyHolderResultSet.getInt("policyHolderCount")).thenReturn(20);
+        when(dependentResultSet.next()).thenReturn(true);
+        when(dependentResultSet.getInt("dependentCount")).thenReturn(30);
+
+        int totalCustomers = adminController.displayTotalCustomers();
+        assertEquals(60, totalCustomers);
     }
 
     @Test
     public void testDisplayTotalInsuranceCards() throws SQLException {
         PreparedStatement statement = mock(PreparedStatement.class);
         ResultSet resultSet = mock(ResultSet.class);
-        when(resultSet.next()).thenReturn(true);
-        when(resultSet.getInt("cardCount")).thenReturn(15);
+
+        when(connection.prepareStatement("SELECT COUNT(*) AS cardCount FROM insurance_card")).thenReturn(statement);
         when(statement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true);
+        when(resultSet.getInt("cardCount")).thenReturn(100);
 
-        when(connection.prepareStatement(anyString())).thenReturn(statement);
-
-        int cardCount = adminController.displayTotalInsuranceCards();
-
-        assertEquals(15, cardCount);
+        int totalInsuranceCards = adminController.displayTotalInsuranceCards();
+        assertEquals(100, totalInsuranceCards);
     }
 
     @Test
     public void testDisplayTotalClaims() throws SQLException {
         PreparedStatement statement = mock(PreparedStatement.class);
         ResultSet resultSet = mock(ResultSet.class);
-        when(resultSet.next()).thenReturn(true);
-        when(resultSet.getInt("claimCount")).thenReturn(20);
+
+        when(connection.prepareStatement("SELECT COUNT(*) AS claimCount FROM claims")).thenReturn(statement);
         when(statement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true);
+        when(resultSet.getInt("claimCount")).thenReturn(50);
 
-        when(connection.prepareStatement(anyString())).thenReturn(statement);
-
-        int claimCount = adminController.displayTotalClaims();
-
-        assertEquals(20, claimCount);
+        int totalClaims = adminController.displayTotalClaims();
+        assertEquals(50, totalClaims);
     }
 }

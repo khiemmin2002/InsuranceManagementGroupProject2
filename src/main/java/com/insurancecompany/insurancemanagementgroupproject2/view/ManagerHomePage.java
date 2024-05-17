@@ -259,7 +259,7 @@ public class ManagerHomePage extends SurveyorHomepage {
         sb.append("C");
         Random random = new Random();
         for (int i = 0; i < 6; i++) {
-            sb.append(random.nextInt(10)); // Append random digit (0-9)
+            sb.append(random.nextInt(10));
         }
         String id = sb.toString();
         for(Surveyor surveyor : surveyorList){

@@ -3,22 +3,10 @@ package com.insurancecompany.insurancemanagementgroupproject2.controller;
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.Node;
+
 
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
-
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-
-import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -26,12 +14,10 @@ import java.sql.SQLException;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
 
 import java.util.List;
-import java.util.Random;
 
 public class ClaimController {
     DatabaseConnection databaseConnection = new DatabaseConnection();
