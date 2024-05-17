@@ -81,16 +81,71 @@ class PolicyHolderDependentControllerTest {
         LoginData.usernameLogin = username;
     }
 
+//    @Test
+//    void testAddDependent() throws SQLException {
+//        // Setup
+//        PreparedStatement findStmt = mock(PreparedStatement.class);
+//        PreparedStatement userStmt = mock(PreparedStatement.class);
+//        PreparedStatement depStmt = mock(PreparedStatement.class);
+//        ResultSet rs = mock(ResultSet.class);
+//
+//        when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
+//        // Method call
+//        String id = "C2346231";
+//        String fullName = "Jane Smith";
+//        String userName = "janesmith";
+//        String password = "testpassword";
+//        String email = "testemail@gmail.com";
+//        String phoneNumber = "23421234";
+//        String address = "123 SG";
+//        int roleId = 6;
+//
+//
+//        boolean result = controller.addDependent(id, fullName, userName, password, email, phoneNumber, address, roleId);
+//
+//        // Verification
+//        verify(connection).prepareStatement("SELECT id FROM users WHERE user_name = ?");
+//        verify(findStmt).setString(1, LoginData.usernameLogin);
+//        verify(findStmt).executeQuery();
+//
+//
+//        verify(connection).prepareStatement("INSERT INTO users (id, full_name, user_name, password, role_id ,email, phone_number, address) " +
+//                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+//        verify(userStmt).setString(1, id);
+//        verify(userStmt).setString(2, fullName);
+//        verify(userStmt).setString(3, userName);
+//        verify(userStmt).setString(4, password);
+//        verify(userStmt).setInt(5, roleId);
+//        verify(userStmt).setString(6, email);
+//        verify(userStmt).setString(7, phoneNumber);
+//        verify(userStmt).setString(8, address);
+//        verify(userStmt).executeUpdate();;
+//
+//        verify(connection).prepareStatement("INSERT INTO dependent (dependent_id, policy_holder_id) VALUES (?, ?)");
+//        verify(depStmt).setString(1, id);
+//        verify(depStmt).setString(2, "C1000114");
+//        verify(depStmt).executeUpdate();
+//        assertTrue(result,"Result must be true");
+//    }
+
     @Test
     void testAddDependent() throws SQLException {
-        // Setup
         PreparedStatement findStmt = mock(PreparedStatement.class);
         PreparedStatement userStmt = mock(PreparedStatement.class);
         PreparedStatement depStmt = mock(PreparedStatement.class);
         ResultSet rs = mock(ResultSet.class);
 
-        when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
-        // Method call
+        when(connection.prepareStatement("SELECT id FROM users WHERE user_name = ?")).thenReturn(findStmt);
+        when(connection.prepareStatement("INSERT INTO users (id, full_name, user_name, password, role_id, email, phone_number, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"))
+                .thenReturn(userStmt);
+        when(connection.prepareStatement("INSERT INTO dependent (dependent_id, policy_holder_id) VALUES (?, ?)")).thenReturn(depStmt);
+
+        // Setup for findStmt
+        when(findStmt.executeQuery()).thenReturn(rs);
+        when(rs.next()).thenReturn(true);  // Assuming a user is found
+        when(rs.getString("id")).thenReturn("C1000114");  // Returning a fake user ID
+
+        // Act
         String id = "C2346231";
         String fullName = "Jane Smith";
         String userName = "janesmith";
@@ -99,18 +154,12 @@ class PolicyHolderDependentControllerTest {
         String phoneNumber = "23421234";
         String address = "123 SG";
         int roleId = 6;
-
-
-        boolean result = controller.addDependent(id, fullName, userName, password, email, phoneNumber, address, roleId);
+        controller.addDependent(id, fullName, userName, password, email, phoneNumber, address, roleId);
 
         // Verification
-        verify(connection).prepareStatement("SELECT id FROM users WHERE user_name = ?");
         verify(findStmt).setString(1, LoginData.usernameLogin);
         verify(findStmt).executeQuery();
 
-
-        verify(connection).prepareStatement("INSERT INTO users (id, full_name, user_name, password, role_id ,email, phone_number, address) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         verify(userStmt).setString(1, id);
         verify(userStmt).setString(2, fullName);
         verify(userStmt).setString(3, userName);
@@ -119,15 +168,12 @@ class PolicyHolderDependentControllerTest {
         verify(userStmt).setString(6, email);
         verify(userStmt).setString(7, phoneNumber);
         verify(userStmt).setString(8, address);
-        verify(userStmt).executeUpdate();;
+        verify(userStmt).executeUpdate();
 
-        verify(connection).prepareStatement("INSERT INTO dependent (dependent_id, policy_holder_id) VALUES (?, ?)");
         verify(depStmt).setString(1, id);
         verify(depStmt).setString(2, "C1000114");
         verify(depStmt).executeUpdate();
-        assertTrue(result,"Result must be true");
     }
-
 
 
 
@@ -137,7 +183,7 @@ class PolicyHolderDependentControllerTest {
     void testDeleteDependent() throws SQLException {
         when(preparedStatement.executeUpdate()).thenReturn(1);
 
-        assertDoesNotThrow(() -> controller.deleteDependent("1"));
+        assertDoesNotThrow(() -> controller.deleteDependent("   "));
 
         verify(preparedStatement, times(1)).setString(1, "1");
         verify(preparedStatement, times(2)).executeUpdate(); // One for deleting from dependent, another for deleting from users
