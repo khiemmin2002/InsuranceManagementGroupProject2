@@ -282,7 +282,6 @@ public class PolicyHolderDependentHomePage {
 
     @FXML
     void confirmAddDependent(ActionEvent event) {
-        String dependentId = generatedRandomUserId();
         try {
             String dependentId = generatedRandomUserId();
             String userName = addUserNameField.getText().trim();
