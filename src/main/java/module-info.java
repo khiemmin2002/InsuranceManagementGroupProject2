@@ -6,7 +6,6 @@ module com.insurancecompany.insurancemanagementgroupproject2 {
     requires org.postgresql.jdbc;
     requires bcrypt;
 
-    opens com.insurancecompany.insurancemanagementgroupproject2.model to javafx.base;
     opens com.insurancecompany.insurancemanagementgroupproject2 to javafx.fxml;
     opens com.insurancecompany.insurancemanagementgroupproject2.controller to javafx.fxml;
 
@@ -14,5 +13,8 @@ module com.insurancecompany.insurancemanagementgroupproject2 {
     exports com.insurancecompany.insurancemanagementgroupproject2.controller;
 
     exports com.insurancecompany.insurancemanagementgroupproject2.model;
+    opens com.insurancecompany.insurancemanagementgroupproject2.model to javafx.base, javafx.fxml;
+    exports com.insurancecompany.insurancemanagementgroupproject2.view;
+    opens com.insurancecompany.insurancemanagementgroupproject2.view to javafx.base, javafx.fxml;
 }
 
