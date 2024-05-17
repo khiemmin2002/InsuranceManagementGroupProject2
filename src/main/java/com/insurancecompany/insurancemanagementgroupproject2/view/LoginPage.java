@@ -15,13 +15,10 @@ import javafx.stage.Stage;
 public class LoginPage {
     @FXML
     private Button cancelButton;
-
     @FXML
     private Label loginMessageLabel;
-
     @FXML
     private TextField usernameTextField;
-
     @FXML
     private PasswordField passwordField;
     // Create new Login controller class object
