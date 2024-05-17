@@ -1,6 +1,6 @@
 package com.insurancecompany.insurancemanagementgroupproject2;
 
-import com.insurancecompany.insurancemanagementgroupproject2.controller.policyowner.PolicyOwnerMyPolicyHolderController;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.policyowner.POPolicyHolderController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,13 +16,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-class PolicyOwnerMyPolicyHolderControllerTest {
+class POPolicyHolderControllerTest {
     @Mock
     private Connection connection;
     @Mock
     private ResultSet resultSet;
     @InjectMocks
-    private PolicyOwnerMyPolicyHolderController policyOwnerMyPolicyHolderController;
+    private POPolicyHolderController POPolicyHolderController;
     @Mock
     private PreparedStatement preparedStatement;
     @BeforeEach
@@ -45,7 +45,7 @@ class PolicyOwnerMyPolicyHolderControllerTest {
         when(preparedStatement.executeUpdate()).thenReturn(1); // Assuming one row is updated
 
         // Calling the method under test
-        boolean isSuccess = policyOwnerMyPolicyHolderController.updatePolicyHolder(id, fullName, password, email, phoneNumber, address);
+        boolean isSuccess = POPolicyHolderController.updatePolicyHolder(id, fullName, password, email, phoneNumber, address);
 
         // Verifying the result
         assertTrue(isSuccess);
@@ -66,7 +66,7 @@ class PolicyOwnerMyPolicyHolderControllerTest {
         when(preparedStatement.executeUpdate()).thenReturn(0); // Assuming one row is updated
 
         // Calling the method under test
-        boolean isSuccess = policyOwnerMyPolicyHolderController.updatePolicyHolder(id, fullName, password, email, phoneNumber, address);
+        boolean isSuccess = POPolicyHolderController.updatePolicyHolder(id, fullName, password, email, phoneNumber, address);
 
         // Verifying the result
         assertFalse(isSuccess);
@@ -91,7 +91,7 @@ class PolicyOwnerMyPolicyHolderControllerTest {
         when(resultSet.getString("role")).thenReturn(role_name);
 
         //Logic to check for testing if true
-        String role_name_test = policyOwnerMyPolicyHolderController.getRoleName(role);
+        String role_name_test = POPolicyHolderController.getRoleName(role);
         assertEquals(role_name_test,role_name);
     }
 
@@ -109,7 +109,7 @@ class PolicyOwnerMyPolicyHolderControllerTest {
         when(resultSet.getString("role")).thenReturn("wrong_role");
 
         //Logic to check for testing if true
-        String role_name_test = policyOwnerMyPolicyHolderController.getRoleName(role);
+        String role_name_test = POPolicyHolderController.getRoleName(role);
         assertNotEquals(role_name_test, role_name);
     }
 }

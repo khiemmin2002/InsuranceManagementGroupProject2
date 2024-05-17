@@ -1,6 +1,6 @@
 package com.insurancecompany.insurancemanagementgroupproject2;
 
-import com.insurancecompany.insurancemanagementgroupproject2.controller.policyholder.PolicyHolderClaimController;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.policyholder.PHClaimController;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,9 +16,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-class PolicyHolderClaimControllerTest {
+class PHClaimControllerTest {
     @InjectMocks
-    private PolicyHolderClaimController controller;
+    private PHClaimController controller;
     @Mock
     DatabaseConnection databaseConnection;
     @Mock

@@ -18,18 +18,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PolicyOwnerHomepageController implements Initializable {
-
     @FXML
     private BorderPane borderPane;
-
     @FXML
     private AnchorPane anchorPane;
-
     @FXML
     private Button logoutButton;
-
-
-
+    // Set mouse event action
     @FXML
     private void home(MouseEvent event) {
         System.out.println("Home");

@@ -1,6 +1,6 @@
 package com.insurancecompany.insurancemanagementgroupproject2.view;
 
-import com.insurancecompany.insurancemanagementgroupproject2.controller.policyholder.PolicyHolderDependentController;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.policyholder.PHDependentController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -37,7 +37,7 @@ public class PolicyHolderDependentManage {
 
     @FXML
     private Label validationMessage;
-    private PolicyHolderDependentController controller = new PolicyHolderDependentController();
+    private PHDependentController controller = new PHDependentController();
 
     @FXML
     void cancelUpdate(ActionEvent event) {

@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class PolicyHolderDependentController {
+public class PHDependentController {
 
     public ObservableList<Dependent> fetchDependents(String userName) throws SQLException {
         ObservableList<Dependent> dependentData = FXCollections.observableArrayList();

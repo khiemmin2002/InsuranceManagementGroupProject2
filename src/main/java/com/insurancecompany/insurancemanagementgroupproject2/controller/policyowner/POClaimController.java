@@ -18,8 +18,6 @@ import javafx.util.StringConverter;
 import java.io.File;
 import java.net.URL;
 import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -27,7 +25,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class PolicyOwnerMyClaimController implements Initializable {
+public class POClaimController implements Initializable {
 
     DatabaseConnection databaseConnection = new DatabaseConnection();
     Connection connection = databaseConnection.getConnection();

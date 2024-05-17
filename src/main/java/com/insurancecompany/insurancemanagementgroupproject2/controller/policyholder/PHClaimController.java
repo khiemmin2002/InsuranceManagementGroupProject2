@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class PolicyHolderClaimController {
+public class PHClaimController {
     private final DatabaseConnection databaseConnection = new DatabaseConnection();
     private final Connection connection = databaseConnection.getConnection();
 

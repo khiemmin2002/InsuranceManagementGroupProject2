@@ -1,6 +1,6 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
-import com.insurancecompany.insurancemanagementgroupproject2.controller.policyholder.PolicyHolderClaimController;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.policyholder.PHClaimController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -52,7 +52,7 @@ public class UpdateClaimController {
     @FXML
     private Label validationMessage;
     private  List<String> uploadedDocumentNames = new ArrayList<>();
-    private PolicyHolderClaimController policyHolderClaimController = new PolicyHolderClaimController();
+    private PHClaimController PHClaimController = new PHClaimController();
 
     @FXML
     void confirmUpdateClaim(ActionEvent event) {
@@ -73,11 +73,11 @@ public class UpdateClaimController {
         try {
 
             double claimAmount = Double.parseDouble(claimAmountText);
-            policyHolderClaimController.updateClaim(claimId, insuredPersonID, cardNumber, claimAmount, bankName, bankUserName, bankNumber);
+            PHClaimController.updateClaim(claimId, insuredPersonID, cardNumber, claimAmount, bankName, bankUserName, bankNumber);
 
 
             if (!uploadedDocumentNames.isEmpty()) {
-                policyHolderClaimController.updateDocumentDetails(claimId, uploadedDocumentNames);
+                PHClaimController.updateDocumentDetails(claimId, uploadedDocumentNames);
                 uploadedDocumentNames.clear();
             }
 
@@ -157,7 +157,7 @@ public class UpdateClaimController {
     private void updateDocumentDetails(String claimId) {
         try {
             if (!uploadedDocumentNames.isEmpty()) {
-                policyHolderClaimController.updateDocumentDetails(claimId, uploadedDocumentNames);
+                PHClaimController.updateDocumentDetails(claimId, uploadedDocumentNames);
             }
         } catch (SQLException e) {
             e.printStackTrace();
