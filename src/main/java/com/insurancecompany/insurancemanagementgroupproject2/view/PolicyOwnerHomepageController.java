@@ -1,5 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.view;
-
+/**
+ * @author team 5
+ */
 import com.insurancecompany.insurancemanagementgroupproject2.controller.DependentController;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import javafx.fxml.FXML;

@@ -1,6 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.view;
-
-
+/**
+ * @author team 5
+ */
 import com.insurancecompany.insurancemanagementgroupproject2.HelloApplication;
 import com.insurancecompany.insurancemanagementgroupproject2.controller.policyholder.PHClaimController;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;

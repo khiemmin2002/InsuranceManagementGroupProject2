@@ -1,5 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.view;
-
+/**
+ * @author team 5
+ */
 import com.insurancecompany.insurancemanagementgroupproject2.controller.policyholder.PHDependentController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

@@ -1,5 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller.policyowner;
-
+/**
+ * @author team 5
+ */
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.controller.BcryptPassword;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
@@ -180,7 +182,6 @@ public class POPolicyHolderController implements Initializable {
         policyHolderRoleCol.setCellValueFactory(new PropertyValueFactory<>("roleId"));
         policyHolderTableView.setItems(policyHolderObservableList);
     }
-
     // Setting text when clicking on a row in the TableView
     @FXML
     private void selectPolicyHolderRow() {
@@ -196,7 +197,6 @@ public class POPolicyHolderController implements Initializable {
             editFieldPolicyHolderRole.setText(getRoleName(selectedPolicyHolder.getRoleId()));
         }
     }
-
 
     @FXML
     private void editFieldPolicyHolderConfirmBtnOnAction(ActionEvent event) {
@@ -282,7 +282,6 @@ public class POPolicyHolderController implements Initializable {
             if (!isUsernameUnique) System.out.println("Error: Username already exists.");
         }
     }
-
     // Clear the fields in the form to add a new policyholder
     private void clearNewPolicyFolderFormFields() {
         addNewPolicyHolderUsernameField.clear();
@@ -293,7 +292,6 @@ public class POPolicyHolderController implements Initializable {
         addNewPolicyHolderAddressField.clear();
         addNewPolicyHolderCardExpriedDateField.clear();
     }
-
     // Update the policyholder in the database
     public boolean updatePolicyHolder(String id, String fullName, String password, String email, String phoneNumber, String address) {
         try {
@@ -316,13 +314,11 @@ public class POPolicyHolderController implements Initializable {
         }
         return false;
     }
-
     // Delete the policyholder from the database
     public boolean deletePolicyHolder(String id) {
         Connection conn = null;
         PreparedStatement deleteInsuranceCardsStmt = null;
         PreparedStatement deletePolicyHolderStmt = null;
-
         try {
             conn = databaseConnection.getConnection();
             conn.setAutoCommit(false); // Start transaction
