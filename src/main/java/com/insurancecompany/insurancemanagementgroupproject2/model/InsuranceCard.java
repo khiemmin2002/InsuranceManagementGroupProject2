@@ -1,5 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.model;
-
+/**
+ * @author team 5
+ */
 import java.sql.Date;
 
 public class InsuranceCard {
@@ -7,7 +9,9 @@ public class InsuranceCard {
     private String cardHolderId;
     private Date expirationDate;
     private String policyOwnerId;
-
+    /*
+        Getter and setter for InsuranceCard class
+     */
     public String getCardNumber() {
         return cardNumber;
     }
@@ -39,10 +43,10 @@ public class InsuranceCard {
     public void setPolicyOwnerId(String policyOwnerId) {
         this.policyOwnerId = policyOwnerId;
     }
-
+    //Empty constructor for insurance card class
     public InsuranceCard() {
     }
-
+    // Constructor for insurance card class
     public InsuranceCard(String cardNumber, String cardHolderId, Date expirationDate, String policyOwnerId) {
         this.cardNumber = cardNumber;
         this.cardHolderId = cardHolderId;

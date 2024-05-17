@@ -1,5 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.view;
-
+/**
+ * @author team 5
+ */
 import com.insurancecompany.insurancemanagementgroupproject2.controller.ClaimController;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
@@ -59,6 +61,9 @@ public class SurveyorHomepage {
     @FXML
     private TableColumn<?, ?> status;
     private List<Claim> claimList;
+    /*
+    *  Initialize the pages upon opening pages
+    */
     @FXML
     private void initialize() {
         // Set up column widths and cell value factories
@@ -76,7 +81,7 @@ public class SurveyorHomepage {
             bankName.setPrefWidth(tableWidth * 0.15);
             bankUserName.setPrefWidth(tableWidth * 0.15);
             bankNumber.setPrefWidth(tableWidth * 0.15);
-
+            // Setting cell value for Table View
             claimID.setCellValueFactory(new PropertyValueFactory<>("id"));
             insuredPerson.setCellValueFactory(new PropertyValueFactory<>("insuredPerson"));
             cardNumber.setCellValueFactory(new PropertyValueFactory<>("cardNumber"));
@@ -100,25 +105,30 @@ public class SurveyorHomepage {
         //Call API to fetch claim data from database
         fetchClaimData();
     }
-
+    /*
+    Event Handler to handle button action of onclick
+     */
     EventHandler<ActionEvent> fetchAllClick = (ActionEvent ) -> fetchAllClaimData(claimList);
     EventHandler<ActionEvent> fetchProposalClick = (ActionEvent ) -> fetchStatusNewClaimData();
     EventHandler<ActionEvent> sortByPerson = (ActionEvent ) -> sortByClaimPerson();
     EventHandler<ActionEvent> sortByCard = (ActionEvent ) -> sortByClaimCard();
     EventHandler<ActionEvent> refreshClaimData = (ActionEvent ) -> fetchClaimData();
     EventHandler<ActionEvent> logoutClick = (ActionEvent ) -> LoginData.logOut(logout);
-
     EventHandler<ActionEvent> fetchSingleClaimClick = new EventHandler<>() {
         @Override
         public void handle(ActionEvent actionEvent) {
             if (claimChoiceBox.getValue() == null) {
                 errorLabel.setText("Empty claim value!");
             } else {
-                fetchSingleClaim(claimChoiceBox.getValue());
+                fetchClaimForAction(claimChoiceBox.getValue());
             }
         }
     };
+    //Create a new Claim Controller object
     ClaimController claimController = new ClaimController();
+    /*
+        Function to fetch all claim data by calling from claim controller methods and append to local variable
+     */
     public List<Claim> fetchClaimData() {
         //Create ObservableList for TableView
         ObservableList<Claim> claimData = FXCollections.observableArrayList();
@@ -135,7 +145,8 @@ public class SurveyorHomepage {
         claimChoiceBox.setItems(newClaimID);
         return claimList;
     }
-    public void fetchSingleClaim(String claimID){
+    // Return a single claim matching the ID and properties to perform action
+    public void fetchClaimForAction(String claimID){
         ObservableList<Claim> claimData = FXCollections.observableArrayList();
         boolean statusCheck = false;
         for(Claim claim : claimList){
@@ -151,11 +162,13 @@ public class SurveyorHomepage {
         if(statusCheck){createProposeAlert(claimID);
         }
     }
+    // Return all claim data from local variable back
     public void fetchAllClaimData(List<Claim> claim) {
         ObservableList<Claim> claimData = FXCollections.observableArrayList();
         claimData.addAll(claim);
         claimTable.setItems(claimData);
     }
+    // Fetch claim with value status = 'NEW'
     public void fetchStatusNewClaimData() {
         ObservableList<Claim> claimData = FXCollections.observableArrayList();
         for(Claim claim : claimList){
@@ -165,6 +178,7 @@ public class SurveyorHomepage {
         }
         claimTable.setItems(claimData);
     }
+    //Sort the claim list by user ID
     public void sortByClaimPerson(){
         ObservableList<Claim> claimData = FXCollections.observableArrayList();
         List<Claim> sortedList = claimList;
@@ -182,6 +196,7 @@ public class SurveyorHomepage {
         claimData.addAll(sortedList);
         claimTable.setItems(claimData);
     }
+    //Sort the claim list by card number
     public void sortByClaimCard(){
         ObservableList<Claim> claimData = FXCollections.observableArrayList();
         List<Claim> sortedList = claimList;
@@ -199,6 +214,9 @@ public class SurveyorHomepage {
         claimData.addAll(sortedList);
         claimTable.setItems(claimData);
     }
+    /*
+    Create an alert to allow surveyor role to perform action on claims
+     */
     public void createProposeAlert(String claimID){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Propose dialog");
