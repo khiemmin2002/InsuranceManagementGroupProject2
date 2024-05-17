@@ -44,7 +44,7 @@ public class PolicyHolderDependentManage {
 
 
 
-    private PolicyHolderDependentController controller = new PolicyHolderDependentController(databaseConnection);
+    private PolicyHolderDependentController controller = new PolicyHolderDependentController();
 
     @FXML
     void cancelUpdate(ActionEvent event) {
