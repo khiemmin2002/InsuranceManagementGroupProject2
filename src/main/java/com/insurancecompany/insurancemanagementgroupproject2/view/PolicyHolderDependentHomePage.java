@@ -116,6 +116,7 @@ public class PolicyHolderDependentHomePage {
     private DatabaseConnection databaseConnection;
     private Connection connection;
 
+
     private PolicyHolderDependentController controller = new PolicyHolderDependentController(databaseConnection, connection);
 
 

@@ -41,7 +41,9 @@ public class PolicyHolderDependentManage {
     private Label validationMessage;
 
     private DatabaseConnection databaseConnection;
+
     private Connection connection;
+
     private PolicyHolderDependentController controller = new PolicyHolderDependentController(databaseConnection, connection);
 
     @FXML
