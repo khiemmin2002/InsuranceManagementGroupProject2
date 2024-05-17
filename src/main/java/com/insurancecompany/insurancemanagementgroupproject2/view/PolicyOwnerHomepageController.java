@@ -1,4 +1,4 @@
-package com.insurancecompany.insurancemanagementgroupproject2.controller.policyowner;
+package com.insurancecompany.insurancemanagementgroupproject2.view;
 
 import com.insurancecompany.insurancemanagementgroupproject2.controller.DependentController;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;

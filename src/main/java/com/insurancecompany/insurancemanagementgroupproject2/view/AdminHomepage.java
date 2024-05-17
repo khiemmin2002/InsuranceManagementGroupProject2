@@ -20,6 +20,7 @@ import javafx.util.Callback;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -382,16 +383,19 @@ public class AdminHomepage implements Initializable {
         }
     }
     @FXML
-    private void editFormUserDeleteBtnOnAction(){
-        boolean isSuccess = adminController.deleteUser(editFormUserId.getText());
-        if(isSuccess){
-            userObservableList.removeIf(user -> Objects.equals(editFormUserId.getText(), user.getId()));
+    private void editFormUserDeleteBtnOnAction() {
+        String userId = editFormUserId.getText();
+        boolean isDeleted = adminController.deleteUser(userId);
+        if(isDeleted){
+            userObservableList.removeIf(user -> Objects.equals(userId, user.getId()));
             editFormUserInformation.setVisible(false);
             userTableView.refresh();
-        }else{
-            System.out.println("isSuccess: " + false);
+            System.out.println("User deleted successfully!");
+        } else {
+            System.out.println("Failed to delete user");
         }
     }
+
     @FXML
     private void selectUserRow() {
         User selectedUser = userTableView.getSelectionModel().getSelectedItem();
@@ -493,12 +497,8 @@ public class AdminHomepage implements Initializable {
                             InsuranceCard insuranceCard = getTableView().getItems().get(getIndex());
                             boolean isSuccess = adminController.deleteInsuranceCardInformation(insuranceCard.getCardNumber());
                             if (isSuccess) {
-                                boolean isClaimsDeleted = adminController.deleteClaimsOfInsuranceCard(insuranceCard.getCardNumber());
-                                if(isClaimsDeleted){
-                                    claimObservableList.removeIf(claim -> claim.getCardNumber().equalsIgnoreCase(insuranceCard.getCardNumber()));
                                     insuranceCardObservableList.remove(insuranceCard);
                                     insuranceCardTableView.refresh();
-                                }
                             } else {
                                 System.out.println("isSuccess: " + false);
                             }
