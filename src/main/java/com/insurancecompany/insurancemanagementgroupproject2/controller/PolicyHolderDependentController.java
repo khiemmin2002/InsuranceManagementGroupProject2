@@ -55,9 +55,9 @@ public class PolicyHolderDependentController {
                 }
             }
 
-            if (policyHolderId == null) {
-                throw new SQLException("Policy holder not found.");
-            }
+//            if (policyHolderId == null) {
+//                throw new SQLException("Policy holder not found.");
+//            }
 
             String insertUser = "INSERT INTO users (id, full_name, user_name, password, email, phone_number, address) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
