@@ -7,12 +7,14 @@ import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.swing.plaf.nimbus.State;
 import java.sql.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -81,55 +83,54 @@ class PolicyHolderDependentControllerTest {
 
     @Test
     void testAddDependent() throws SQLException {
-        // Arrange
+        // Setup
+        LoginData.usernameLogin = "QuangAcero";
+
         PreparedStatement findStmt = mock(PreparedStatement.class);
         PreparedStatement userStmt = mock(PreparedStatement.class);
         PreparedStatement depStmt = mock(PreparedStatement.class);
+        ResultSet rs = mock(ResultSet.class);
 
-        // Set up each PreparedStatement to return for its specific SQL command
         when(connection.prepareStatement("SELECT id FROM users WHERE user_name = ?")).thenReturn(findStmt);
-        when(connection.prepareStatement("INSERT INTO users (id, full_name, user_name, password, email, phone_number, address) VALUES (?, ?, ?, ?, ?, ?, ?)")).thenReturn(userStmt);
+        when(connection.prepareStatement("INSERT INTO users (id, full_name, user_name, password, roleId, email, phone_number, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"))
+                .thenReturn(userStmt);
         when(connection.prepareStatement("INSERT INTO dependent (dependent_id, policy_holder_id) VALUES (?, ?)")).thenReturn(depStmt);
 
-        String policyHolderUserName = "QuangAcero";
+        when(findStmt.executeQuery()).thenReturn(rs);
+        when(rs.next()).thenReturn(true);
+        when(rs.getString("id")).thenReturn("C1000114");
+
+        // Method call
         String id = "C2346231";
-        String full_name = "Jane Smith";
-        String user_name = "janesmith";
+        String fullName = "Jane Smith";
+        String userName = "janesmith";
         String password = "testpassword";
         String email = "testemail@gmail.com";
-        String phone_number = "23421234";
+        String phoneNumber = "23421234";
         String address = "123 SG";
         int roleId = 6;
-        Dependent dependent = new Dependent(id, full_name, user_name, password, email, phone_number, address, roleId);
+        controller.addDependent(id, fullName, userName, password, email, phoneNumber, address, roleId);
 
-        // Execute the method under test
-        controller.addDependent(dependent, policyHolderUserName);
-
-        // Verify that each PreparedStatement is correctly prepared
-        verify(connection).prepareStatement("SELECT id FROM users WHERE user_name = ?");
-        verify(connection).prepareStatement("INSERT INTO users (id, full_name, user_name, password, email, phone_number, address) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        verify(connection).prepareStatement("INSERT INTO dependent (dependent_id, policy_holder_id) VALUES (?, ?)");
-
-        // Assert and verify interactions with findStmt
-        verify(findStmt).setString(1, policyHolderUserName);
+        // Verification
+        verify(findStmt).setString(1, LoginData.usernameLogin);
         verify(findStmt).executeQuery();
 
-        // Assert and verify interactions with userStmt
         verify(userStmt).setString(1, id);
-        verify(userStmt).setString(2, full_name);
-        verify(userStmt).setString(3, user_name);
+        verify(userStmt).setString(2, fullName);
+        verify(userStmt).setString(3, userName);
         verify(userStmt).setString(4, password);
-        verify(userStmt).setString(5, email);
-        verify(userStmt).setString(6, phone_number);
-        verify(userStmt).setString(7, address);
+        verify(userStmt).setInt(5, roleId);
+        verify(userStmt).setString(6, email);
+        verify(userStmt).setString(7, phoneNumber);
+        verify(userStmt).setString(8, address);
         verify(userStmt).executeUpdate();
 
-        // Assert and verify interactions with depStmt
         verify(depStmt).setString(1, id);
-        // Here, you need to ensure that you are verifying with the correct policy holder id. If "C1000114" is expected, ensure it's returned by the resultSet mock.
         verify(depStmt).setString(2, "C1000114");
         verify(depStmt).executeUpdate();
     }
+
+
 
 
 
