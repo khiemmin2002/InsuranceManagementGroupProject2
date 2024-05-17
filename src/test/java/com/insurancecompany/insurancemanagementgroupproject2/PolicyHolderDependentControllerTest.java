@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class PolicyHolderDependentControllerTest {
     @InjectMocks
-    private PolicyHolderDependentController controller;
+    private PODependentController controller;
     @Mock
     DatabaseConnection databaseConnection;
     @Mock

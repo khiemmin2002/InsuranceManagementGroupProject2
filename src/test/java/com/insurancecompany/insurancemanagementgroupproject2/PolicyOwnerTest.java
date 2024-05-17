@@ -1,9 +1,9 @@
 package com.insurancecompany.insurancemanagementgroupproject2;
 
-import com.insurancecompany.insurancemanagementgroupproject2.controller.POClaimController;
-import com.insurancecompany.insurancemanagementgroupproject2.controller.PolicyOwnerMyPolicyHolderController;
-import com.insurancecompany.insurancemanagementgroupproject2.controller.PolicyOwnerMyProfileController;
-import com.insurancecompany.insurancemanagementgroupproject2.controller.PolicyOwnerMyDependentController;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.policyowner.POClaimController;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.policyowner.PODependentController;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.policyowner.POPolicyHolderController;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.policyowner.POProfileController;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Dependent;
 import com.insurancecompany.insurancemanagementgroupproject2.model.PolicyHolder;
@@ -34,11 +34,11 @@ public class PolicyOwnerTest {
 
     // Controllers
     @InjectMocks
-    private PolicyOwnerMyProfileController policyOwnerMyProfileController;
+    private POProfileController policyOwnerMyProfileController;
     @InjectMocks
-    private PolicyOwnerMyPolicyHolderController policyOwnerMyPolicyHolderController;
+    private POPolicyHolderController policyOwnerMyPolicyHolderController;
     @InjectMocks
-    private PolicyOwnerMyDependentController policyOwnerMyDependentController;
+    private PODependentController policyOwnerMyDependentController;
     @InjectMocks
     private POClaimController policyOwnerMyClaimController;
 

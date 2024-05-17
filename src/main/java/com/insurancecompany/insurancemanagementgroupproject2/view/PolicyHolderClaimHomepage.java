@@ -247,7 +247,7 @@ public class PolicyHolderClaimHomepage {
 
     public void fetchClaimData() {
         try {
-            ObservableList<Claim> claimData = PHClaimController.fetchAllClaims(this.userName);
+            ObservableList<Claim> claimData = PHClaimController.fetchAllClaims();
             claimID.setCellValueFactory(new PropertyValueFactory<>("id"));
             insuredPerson.setCellValueFactory(new PropertyValueFactory<>("insuredPerson"));
             cardNumber.setCellValueFactory(new PropertyValueFactory<>("cardNumber"));
