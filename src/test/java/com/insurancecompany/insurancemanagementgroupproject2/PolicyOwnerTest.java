@@ -1,6 +1,6 @@
 package com.insurancecompany.insurancemanagementgroupproject2;
 
-import com.insurancecompany.insurancemanagementgroupproject2.controller.PolicyOwnerMyClaimController;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.POClaimController;
 import com.insurancecompany.insurancemanagementgroupproject2.controller.PolicyOwnerMyPolicyHolderController;
 import com.insurancecompany.insurancemanagementgroupproject2.controller.PolicyOwnerMyProfileController;
 import com.insurancecompany.insurancemanagementgroupproject2.controller.PolicyOwnerMyDependentController;
@@ -40,7 +40,7 @@ public class PolicyOwnerTest {
     @InjectMocks
     private PolicyOwnerMyDependentController policyOwnerMyDependentController;
     @InjectMocks
-    private PolicyOwnerMyClaimController policyOwnerMyClaimController;
+    private POClaimController policyOwnerMyClaimController;
 
     @Mock
     private PreparedStatement preparedStatement;
