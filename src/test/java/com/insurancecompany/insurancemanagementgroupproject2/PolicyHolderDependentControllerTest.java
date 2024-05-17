@@ -41,7 +41,7 @@ class PolicyHolderDependentControllerTest {
         preparedStatement = mock(PreparedStatement.class);
         resultSet = mock(ResultSet.class);
 
-        controller = new PolicyHolderDependentController(databaseConnection, connection);
+        controller = new PolicyHolderDependentController(databaseConnection);
 
         // Setup the connection and preparedStatement with leniency
         lenient().when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);

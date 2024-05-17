@@ -42,9 +42,9 @@ public class PolicyHolderDependentManage {
 
     private DatabaseConnection databaseConnection;
 
-    private Connection connection;
 
-    private PolicyHolderDependentController controller = new PolicyHolderDependentController(databaseConnection, connection);
+
+    private PolicyHolderDependentController controller = new PolicyHolderDependentController(databaseConnection);
 
     @FXML
     void cancelUpdate(ActionEvent event) {

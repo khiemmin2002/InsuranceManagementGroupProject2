@@ -13,17 +13,16 @@ import java.sql.SQLException;
 
 public class PolicyHolderDependentController {
     private final DatabaseConnection databaseConnection;
-    private final Connection connection;
 
-    public PolicyHolderDependentController(DatabaseConnection databaseConnection, Connection connection) {
+
+    public PolicyHolderDependentController(DatabaseConnection databaseConnection) {
         this.databaseConnection = databaseConnection;
-        this.connection = connection;
     }
 
     public ObservableList<Dependent> fetchDependents() throws SQLException {
         String userName = LoginData.usernameLogin;
         ObservableList<Dependent> dependentData = FXCollections.observableArrayList();
-        try {
+        try (Connection connection = databaseConnection.getConnection()){
             String query = "SELECT d.id, d.full_name, d.user_name, d.password, d.email, d.phone_number, d.address " +
                     "FROM users d " +
                     "JOIN dependent dep ON d.id = dep.dependent_id " +
@@ -53,7 +52,7 @@ public class PolicyHolderDependentController {
         String policyHolderUserName = LoginData.usernameLogin;
         String policyHolderId = null;
 
-        try  {
+        try (Connection connection = databaseConnection.getConnection()) {
             String findPolicyHolder = "SELECT id FROM users WHERE user_name = ?";
             try (PreparedStatement findStmt = connection.prepareStatement(findPolicyHolder)) {
                 findStmt.setString(1, policyHolderUserName);
@@ -95,7 +94,7 @@ public class PolicyHolderDependentController {
     }
     public void deleteDependent(String dependentId) throws SQLException {
 
-        try  {
+        try (Connection connection = databaseConnection.getConnection()) {
             String deleteRelation = "DELETE FROM dependent WHERE dependent_id = ?";
             try (PreparedStatement relationStmt = connection.prepareStatement(deleteRelation)) {
                 relationStmt.setString(1, dependentId);
@@ -119,7 +118,7 @@ public class PolicyHolderDependentController {
         ObservableList<Dependent> foundDependents = FXCollections.observableArrayList();
 
 
-        try {
+        try (Connection connection = databaseConnection.getConnection()){
             String findQuery = "SELECT id, full_name, user_name, password, email, phone_number, address " +
                     "FROM users " +
                     "WHERE user_name = ?";
@@ -149,7 +148,7 @@ public class PolicyHolderDependentController {
     }
     public void updateDependent(String dependentId, String password, String email, String phoneNumber, String address) throws SQLException {
 
-        try {
+        try (Connection connection = databaseConnection.getConnection()){
             String updateQuery = "UPDATE public.users SET password = ?, email = ?, phone_number = ?, address = ? WHERE id = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
                 preparedStatement.setString(1, password);

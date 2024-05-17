@@ -114,10 +114,9 @@ public class PolicyHolderDependentHomePage {
     private MenuItem openClaimBtn;
 
     private DatabaseConnection databaseConnection;
-    private Connection connection;
 
 
-    private PolicyHolderDependentController controller = new PolicyHolderDependentController(databaseConnection, connection);
+    private PolicyHolderDependentController controller = new PolicyHolderDependentController(databaseConnection);
 
 
 
