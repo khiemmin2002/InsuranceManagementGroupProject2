@@ -202,12 +202,12 @@ public class AdminController {
     }
     //Claim Dashboard - Reference to ClaimController
     //Profile dashboard functions
-    public User getProfileDashboardInformation() {
+    public User getProfileDashboardInformation(String username, int roleId) {
         try {
             String queryProfileInformation = "SELECT * FROM users WHERE user_name = ? AND role_id = ?";
             try (PreparedStatement statement = connection.prepareStatement(queryProfileInformation)) {
-                statement.setString(1, LoginData.usernameLogin);
-                statement.setInt(2, LoginData.roleId);
+                statement.setString(1, username);
+                statement.setInt(2, roleId);
                 try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
                         User user = new User();

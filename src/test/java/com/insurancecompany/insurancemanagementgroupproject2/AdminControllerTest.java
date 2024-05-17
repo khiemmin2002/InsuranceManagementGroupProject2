@@ -224,7 +224,7 @@ public class AdminControllerTest {
         when(statement.executeQuery()).thenReturn(resultSet);
         when(connection.prepareStatement(anyString())).thenReturn(statement);
 
-        User user = adminController.getProfileDashboardInformation();
+        User user = adminController.getProfileDashboardInformation(LoginData.usernameLogin, LoginData.roleId);
 
         assertNotNull(user);
         assertEquals("123", user.getId());

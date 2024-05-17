@@ -648,7 +648,7 @@ public class AdminHomepage implements Initializable {
     }
 
     public void displayProfileDashboardInformation() {
-        User userData = adminController.getProfileDashboardInformation();
+        User userData = adminController.getProfileDashboardInformation(LoginData.usernameLogin, LoginData.roleId);
         if (userData != null) {
             profileDashboardId.setText(userData.getId());
             profileDashboardUsername.setText(userData.getUserName());

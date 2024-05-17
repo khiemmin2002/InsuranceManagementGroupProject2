@@ -2,6 +2,7 @@ package com.insurancecompany.insurancemanagementgroupproject2.controller;
 
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 
+import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -436,6 +437,37 @@ public class ClaimController {
             e.printStackTrace();
         }
         return false;
+    }
+
+    DependentController dependentController = new DependentController();
+    public ArrayList<Claim> getClaimsOfInsuredPerson() {
+//        ObservableList<Claim> claimData = FXCollections.observableArrayList();
+        ArrayList<Claim> claims = new ArrayList<>();
+        try {
+            String getClaimsQuery = "SELECT * FROM claims WHERE insured_person = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(getClaimsQuery);
+            preparedStatement.setString(1, dependentController.getIDFromUserName(LoginData.usernameLogin));
+            ResultSet queryResult = preparedStatement.executeQuery();
+
+            while (queryResult.next()) {
+                Claim claim = new Claim();
+                claim.setId(queryResult.getString("claim_id"));
+                claim.setInsuredPerson(queryResult.getString("insured_person"));
+                claim.setCardNumber(queryResult.getString("card_number"));
+                claim.setExamDate(queryResult.getDate("exam_date"));
+                claim.setClaimDate(queryResult.getDate("claim_date"));
+                claim.setClaimAmount(queryResult.getDouble("claim_amount"));
+                claim.setStatus(queryResult.getString("status"));
+                claim.setBankName(queryResult.getString("bank_name"));
+                claim.setBankUserName(queryResult.getString("bank_user_name"));
+                claim.setBankNumber(queryResult.getString("bank_number"));
+                claims.add(claim);
+            }
+//            dependentClaimTable.setItems(claimData); // Set the items to the TableView
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return claims;
     }
 
 }
