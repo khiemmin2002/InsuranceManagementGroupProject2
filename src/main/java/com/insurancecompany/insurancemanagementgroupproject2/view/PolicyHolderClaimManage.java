@@ -1,6 +1,8 @@
 package com.insurancecompany.insurancemanagementgroupproject2.view;
-
-import com.insurancecompany.insurancemanagementgroupproject2.controller.policyholder.PolicyHolderClaimController;
+/**
+ * @author team 5
+ */
+import com.insurancecompany.insurancemanagementgroupproject2.controller.policyholder.PHClaimController;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -89,7 +91,7 @@ public class PolicyHolderClaimManage {
 
     private List<String> uploadedDocumentNames = new ArrayList<>();
 
-    private PolicyHolderClaimController policyHolderClaimController = new PolicyHolderClaimController();
+    private PHClaimController PHClaimController = new PHClaimController();
 
 
     @FXML
@@ -117,7 +119,7 @@ public class PolicyHolderClaimManage {
         try {
             double claimAmount = Double.parseDouble(claimAmountText);
             Claim claim = new Claim(currentClaimId, insuredPerson, cardNumber, null, null, claimAmount, "NEW", bankName, bankUserName, bankNumber);
-            policyHolderClaimController.addClaim(claim, uploadedDocumentNames);
+            PHClaimController.addClaim(claim, uploadedDocumentNames);
             showAlert(Alert.AlertType.INFORMATION, "Claim and associated documents added successfully.");
             clearInputFields();
             uploadedDocumentNames.clear();
@@ -147,11 +149,11 @@ public class PolicyHolderClaimManage {
         try {
 
             double claimAmount = Double.parseDouble(claimAmountText);
-            policyHolderClaimController.updateClaim(claimId, insuredPersonID, cardNumber, claimAmount, bankName, bankUserName, bankNumber);
+            PHClaimController.updateClaim(claimId, insuredPersonID, cardNumber, claimAmount, bankName, bankUserName, bankNumber);
 
 
             if (!uploadedDocumentNames.isEmpty()) {
-                policyHolderClaimController.updateDocumentDetails(claimId, uploadedDocumentNames);
+                PHClaimController.updateDocumentDetails(claimId, uploadedDocumentNames);
                 uploadedDocumentNames.clear();
             }
 

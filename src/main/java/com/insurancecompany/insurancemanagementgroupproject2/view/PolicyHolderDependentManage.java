@@ -1,7 +1,9 @@
 package com.insurancecompany.insurancemanagementgroupproject2.view;
-
+/**
+ * @author team 5
+ */
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
-import com.insurancecompany.insurancemanagementgroupproject2.controller.policyholder.PolicyHolderDependentController;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.policyholder.PHDependentController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -11,7 +13,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
 public class PolicyHolderDependentManage {
@@ -39,12 +40,8 @@ public class PolicyHolderDependentManage {
 
     @FXML
     private Label validationMessage;
-
+    private PHDependentController controller = new PHDependentController();
     private DatabaseConnection databaseConnection;
-
-
-
-    private PolicyHolderDependentController controller = new PolicyHolderDependentController();
 
     @FXML
     void cancelUpdate(ActionEvent event) {

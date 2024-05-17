@@ -1,5 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.view;
-
+/**
+ * @author team 5
+ */
 import com.insurancecompany.insurancemanagementgroupproject2.controller.AdminController;
 import com.insurancecompany.insurancemanagementgroupproject2.controller.ClaimController;
 import com.insurancecompany.insurancemanagementgroupproject2.controller.ValidateInput;
@@ -20,6 +22,7 @@ import javafx.util.Callback;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -37,7 +40,6 @@ public class AdminHomepage implements Initializable {
     private Button navProfileBtn;
     @FXML
     private Button btnLogOut;
-
     //AnchorPane define
     @FXML
     private AnchorPane mainDashboard;
@@ -49,7 +51,6 @@ public class AdminHomepage implements Initializable {
     private AnchorPane claimDashboard;
     @FXML
     private AnchorPane profileDashboard;
-
     //navbar define
     @FXML
     private Label navAdminid;
@@ -59,7 +60,6 @@ public class AdminHomepage implements Initializable {
     private Label navFullname;
     @FXML
     private Label topUsername;
-
     //main dashboard define
     @FXML
     private Label totalProviders;
@@ -107,6 +107,7 @@ public class AdminHomepage implements Initializable {
     private TableColumn<User, String> userColAddress;
     @FXML
     private TableColumn<User, Integer> userColRole;
+    // Observable list
     private ObservableList<User> userObservableList = FXCollections.observableArrayList();
 
     @FXML
@@ -132,7 +133,6 @@ public class AdminHomepage implements Initializable {
     private Button editFormUserConfirmBtn;
     @FXML
     private Button editFormUserDeleteBtn;
-
     //Claim dashboard
     @FXML
     private TableView<Claim> claimTableView;
@@ -293,13 +293,15 @@ public class AdminHomepage implements Initializable {
             System.out.println("Role Observable List is empty or null.");
         }
     }
+    // Create new instance of validate input
     ValidateInput validateInput = new ValidateInput();
+    // Button action method handler
     @FXML
     private void addNewUserFormAdminBtnOnAction() {
         boolean isUsernameUnique = validateInput.isUserNameUnique(userObservableList, editFormCreateUserName.getText());
         boolean isValidEmail = validateInput.isValidEmail(editFormCreateUserEmail.getText());
         boolean isValidPhoneNumber = validateInput.isValidPhoneNumber(editFormCreateUserPhone.getText());
-
+        // Validate input
         if (isUsernameUnique) {
             if (!isValidEmail || !isValidPhoneNumber) {
                 System.out.println("Please check your Email or Phone Number again");
@@ -312,7 +314,7 @@ public class AdminHomepage implements Initializable {
                         break;
                     }
                 }
-
+                // validate roles
                 if (selectedRole != null) {
                     ManagerHomePage managerHomePage = new ManagerHomePage();
                     User newUser = new User();
@@ -343,7 +345,7 @@ public class AdminHomepage implements Initializable {
             System.out.println("Error: Username already exists.");
         }
     }
-
+    // Method to clear form fields
     private void clearNewUserFormFields() {
         editFormCreateUserId.clear();
         editFormCreateUserName.clear();
@@ -353,6 +355,7 @@ public class AdminHomepage implements Initializable {
         editFormCreateUserPhone.clear();
         editFormCreateUserAddress.clear();
     }
+    // Method to control form button
     @FXML
     private void editFormUserConfirmBtnOnAction() {
         boolean isSuccess = adminController.updateUser(editFormUserId.getText(),
@@ -381,17 +384,21 @@ public class AdminHomepage implements Initializable {
             System.out.println("isSuccess: " + false);
         }
     }
+    // Method to control form button
     @FXML
-    private void editFormUserDeleteBtnOnAction(){
-        boolean isSuccess = adminController.deleteUser(editFormUserId.getText());
-        if(isSuccess){
-            userObservableList.removeIf(user -> Objects.equals(editFormUserId.getText(), user.getId()));
+    private void editFormUserDeleteBtnOnAction() {
+        String userId = editFormUserId.getText();
+        boolean isDeleted = adminController.deleteUser(userId);
+        if(isDeleted){
+            userObservableList.removeIf(user -> Objects.equals(userId, user.getId()));
             editFormUserInformation.setVisible(false);
             userTableView.refresh();
-        }else{
-            System.out.println("isSuccess: " + false);
+            System.out.println("User deleted successfully!");
+        } else {
+            System.out.println("Failed to delete user");
         }
     }
+    // Method to select row of users
     @FXML
     private void selectUserRow() {
         User selectedUser = userTableView.getSelectionModel().getSelectedItem();
@@ -407,7 +414,7 @@ public class AdminHomepage implements Initializable {
             editFormUserInformation.setVisible(true);
         }
     }
-
+    // Method to set table view value
     private void displayUsersDashboardTableView() {
         userColId.setCellValueFactory(new PropertyValueFactory<>("id"));
         userColFullname.setCellValueFactory(new PropertyValueFactory<>("fullName"));
@@ -419,13 +426,12 @@ public class AdminHomepage implements Initializable {
         userColRole.setCellValueFactory(new PropertyValueFactory<>("roleId"));
         userTableView.setItems(userObservableList);
     }
-
     //Insurance Card function
     @FXML
     void editFormInsuranceCancelBtnOnAction() {
         editFormInsuranceCardInformation.setVisible(false);
     }
-
+    // Method to set form value
     @FXML
     private void selectInsuranceCardRow(InsuranceCard selectedInsuranceCard) {
         try {
@@ -442,7 +448,7 @@ public class AdminHomepage implements Initializable {
             e.printStackTrace();
         }
     }
-
+    // Method to set cell value for table view
     private void displayInsuranceCardDashboardTableView() {
         insuranceCardColCardNumber.setCellValueFactory(new PropertyValueFactory<>("cardNumber"));
         insuranceCardColExpDate.setCellValueFactory(new PropertyValueFactory<>("expirationDate"));
@@ -459,7 +465,7 @@ public class AdminHomepage implements Initializable {
         insuranceCardColAction.setCellFactory(createInsuranceCardActionCellFactory());
         insuranceCardTableView.setItems(insuranceCardObservableList);
     }
-
+    // Method to return call back
     private Callback<TableColumn<InsuranceCard, Void>, TableCell<InsuranceCard, Void>> createInsuranceCardActionCellFactory() {
         return new Callback<TableColumn<InsuranceCard, Void>, TableCell<InsuranceCard, Void>>() {
             @Override
@@ -493,12 +499,8 @@ public class AdminHomepage implements Initializable {
                             InsuranceCard insuranceCard = getTableView().getItems().get(getIndex());
                             boolean isSuccess = adminController.deleteInsuranceCardInformation(insuranceCard.getCardNumber());
                             if (isSuccess) {
-                                boolean isClaimsDeleted = adminController.deleteClaimsOfInsuranceCard(insuranceCard.getCardNumber());
-                                if(isClaimsDeleted){
-                                    claimObservableList.removeIf(claim -> claim.getCardNumber().equalsIgnoreCase(insuranceCard.getCardNumber()));
                                     insuranceCardObservableList.remove(insuranceCard);
                                     insuranceCardTableView.refresh();
-                                }
                             } else {
                                 System.out.println("isSuccess: " + false);
                             }
@@ -524,7 +526,7 @@ public class AdminHomepage implements Initializable {
     void editFormClaimCancelBtnOnAction() {
         editFormClaimInformation.setVisible(false);
     }
-
+    // Method to select row and set value
     private void selectClaimRow(Claim selectedClaim) {
         try {
             if (selectedClaim != null) {
@@ -545,7 +547,7 @@ public class AdminHomepage implements Initializable {
             e.printStackTrace();
         }
     }
-
+    // method to set table view cell value
     private void displayClaimDashboardTableView() {
         claimColClaimId.setCellValueFactory(new PropertyValueFactory<>("id"));
         claimColInsuredPerson.setCellValueFactory(cellData -> {
@@ -562,7 +564,7 @@ public class AdminHomepage implements Initializable {
 
         claimTableView.setItems(claimObservableList);
     }
-
+    // Method to return call back
     private Callback<TableColumn<Claim, Void>, TableCell<Claim, Void>> createClaimActionCellFactory() {
         return new Callback<TableColumn<Claim, Void>, TableCell<Claim, Void>>() {
             @Override
@@ -570,7 +572,6 @@ public class AdminHomepage implements Initializable {
                 return new TableCell<Claim, Void>() {
                     final Button editButton = new Button("Edit");
                     final Button deleteButton = new Button("Delete");
-
                     {
                         editButton.setOnAction(event -> {
                             Claim selectedClaim = getTableView().getItems().get(getIndex());
@@ -621,7 +622,6 @@ public class AdminHomepage implements Initializable {
             }
         };
     }
-
     //Profile function
     @FXML
     private void editProfileConfirmBtnOnAction() {
@@ -650,7 +650,7 @@ public class AdminHomepage implements Initializable {
             System.out.println("isSuccess: " + false);
         }
     }
-
+    // Method to set FXML dashboard information
     public void displayProfileDashboardInformation() {
         User userData = adminController.getProfileDashboardInformation(LoginData.usernameLogin, LoginData.roleId);
         if (userData != null) {
@@ -676,8 +676,6 @@ public class AdminHomepage implements Initializable {
             System.out.println("Failed to display profile dashboard information.");
         }
     }
-
-
     ///Main dashboard functions
     private void displayMainDashboardTableView() {
         mainDashboardColClaimId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -691,7 +689,7 @@ public class AdminHomepage implements Initializable {
         });
         mainDashboardTableView.setItems(claimObservableList);
     }
-
+    // Method to switch dashboard upon action event trigger
     public void switchDashboard(ActionEvent event) {
         if (event.getSource() == navMainDashboardBtn) {
             claimTableView.refresh();
@@ -709,7 +707,7 @@ public class AdminHomepage implements Initializable {
             showProfileDashboard();
         }
     }
-
+    // Method to show main dashboard
     private void showMainDashboard() {
         mainDashboard.setVisible(true);
         userInformationDashboard.setVisible(false);
@@ -717,7 +715,7 @@ public class AdminHomepage implements Initializable {
         claimDashboard.setVisible(false);
         profileDashboard.setVisible(false);
     }
-
+    // Method to show user dashboard
     private void showUserDashboard() {
         mainDashboard.setVisible(false);
         userInformationDashboard.setVisible(true);
@@ -725,7 +723,7 @@ public class AdminHomepage implements Initializable {
         claimDashboard.setVisible(false);
         profileDashboard.setVisible(false);
     }
-
+    // Method to show insurance card dashboard
     private void showInsuranceCardDashboard() {
         mainDashboard.setVisible(false);
         userInformationDashboard.setVisible(false);
@@ -733,7 +731,7 @@ public class AdminHomepage implements Initializable {
         claimDashboard.setVisible(false);
         profileDashboard.setVisible(false);
     }
-
+    // Method to show claim dashboard
     private void showClaimDashboard() {
         mainDashboard.setVisible(false);
         userInformationDashboard.setVisible(false);
@@ -741,7 +739,7 @@ public class AdminHomepage implements Initializable {
         claimDashboard.setVisible(true);
         profileDashboard.setVisible(false);
     }
-
+    // Method to show profile dashboard
     private void showProfileDashboard() {
         mainDashboard.setVisible(false);
         userInformationDashboard.setVisible(false);
@@ -749,7 +747,7 @@ public class AdminHomepage implements Initializable {
         claimDashboard.setVisible(false);
         profileDashboard.setVisible(true);
     }
-
+    // Method to initialize the page upon setup
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         userObservableList.addAll(adminController.fetchUsersFromDatabase());

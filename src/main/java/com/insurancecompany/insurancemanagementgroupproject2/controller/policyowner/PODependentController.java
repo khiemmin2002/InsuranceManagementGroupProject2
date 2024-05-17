@@ -1,10 +1,11 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller.policyowner;
-
+/**
+ * @author team 5
+ */
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Dependent;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import com.insurancecompany.insurancemanagementgroupproject2.model.PolicyHolder;
-import com.insurancecompany.insurancemanagementgroupproject2.model.Role;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,10 +23,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
-public class PolicyOwnerMyDependentController implements Initializable {
+public class PODependentController implements Initializable {
 
     DatabaseConnection databaseConnection = new DatabaseConnection();
     Connection connection = databaseConnection.getConnection();
@@ -289,7 +289,7 @@ public class PolicyOwnerMyDependentController implements Initializable {
 
 
     // Fetch dependent data from the database
-    private ArrayList<Dependent> fetchDependentFromDatabase() {
+    public ArrayList<Dependent> fetchDependentFromDatabase() {
         ArrayList<Dependent> dependentArrayList = new ArrayList<>();
         try {
             String policyOwnerId = getIDFromUserName(LoginData.usernameLogin);
@@ -356,7 +356,7 @@ public class PolicyOwnerMyDependentController implements Initializable {
     }
 
     // Add a new dependent to the database
-    private boolean addNewDependentToDatabase(Dependent dependent, String policyHolderId) {
+    public boolean addNewDependentToDatabase(Dependent dependent, String policyHolderId) {
         String insertUserQuery = "INSERT INTO users (id, full_name, user_name, password, email, phone_number, address, role_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         String insertDependentQuery = "INSERT INTO dependent (dependent_id, policy_holder_id) VALUES (?, ?)";
 
@@ -396,7 +396,7 @@ public class PolicyOwnerMyDependentController implements Initializable {
     }
 
     // Update the dependent in the database
-    private boolean updateDependent(String id, String fullName, String userName, String password, String email, String phoneNumber, String address) {
+    public boolean updateDependent(String id, String fullName, String userName, String password, String email, String phoneNumber, String address) {
         String updateQuery = "UPDATE users SET full_name = ?, user_name = ?, password = ?, email = ?, phone_number = ?, address = ? WHERE id = ?";
         try (Connection conn = databaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
@@ -415,23 +415,35 @@ public class PolicyOwnerMyDependentController implements Initializable {
     }
 
     // Delete the dependent in the database
-    private boolean deleteDependent(String dependentId) {
+    public boolean deleteDependent(String dependentId) {
+        String deleteDocumentsQuery = "DELETE FROM documents WHERE claim_id IN (SELECT claim_id FROM claims WHERE insured_person = ?)";
+        String deleteClaimsQuery = "DELETE FROM claims WHERE insured_person = ?";
         String deleteUserQuery = "DELETE FROM users WHERE id = ?";
         String deleteDependentQuery = "DELETE FROM dependent WHERE dependent_id = ?";
 
         try (Connection conn = databaseConnection.getConnection()) {
             conn.setAutoCommit(false);  // Start transaction
 
-            try (PreparedStatement stmtUser = conn.prepareStatement(deleteUserQuery);
-                 PreparedStatement stmtDependent = conn.prepareStatement(deleteDependentQuery)) {
+            try (PreparedStatement stmtDeleteDocuments = conn.prepareStatement(deleteDocumentsQuery);
+                 PreparedStatement stmtDeleteClaims = conn.prepareStatement(deleteClaimsQuery);
+                 PreparedStatement stmtDeleteDependent = conn.prepareStatement(deleteDependentQuery);
+                 PreparedStatement stmtDeleteUser = conn.prepareStatement(deleteUserQuery)) {
+
+                // Delete from documents table
+                stmtDeleteDocuments.setString(1, dependentId);
+                stmtDeleteDocuments.executeUpdate();
+
+                // Delete from claims table
+                stmtDeleteClaims.setString(1, dependentId);
+                stmtDeleteClaims.executeUpdate();
 
                 // Delete from dependent table
-                stmtDependent.setString(1, dependentId);
-                stmtDependent.executeUpdate();
+                stmtDeleteDependent.setString(1, dependentId);
+                stmtDeleteDependent.executeUpdate();
 
                 // Delete from users table
-                stmtUser.setString(1, dependentId);
-                stmtUser.executeUpdate();
+                stmtDeleteUser.setString(1, dependentId);
+                stmtDeleteUser.executeUpdate();
 
                 conn.commit();  // Commit transaction
                 return true;
@@ -445,6 +457,7 @@ public class PolicyOwnerMyDependentController implements Initializable {
             return false;
         }
     }
+
 
     // Get the ID from the username
     private String getIDFromUserName(String username) {

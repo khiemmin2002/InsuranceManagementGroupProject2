@@ -1,8 +1,9 @@
 package com.insurancecompany.insurancemanagementgroupproject2.view;
-
-
+/**
+ * @author team 5
+ */
 import com.insurancecompany.insurancemanagementgroupproject2.HelloApplication;
-import com.insurancecompany.insurancemanagementgroupproject2.controller.policyholder.PolicyHolderClaimController;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.policyholder.PHClaimController;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import javafx.application.Platform;
@@ -87,8 +88,7 @@ public class PolicyHolderClaimHomepage {
     @FXML
     private TableColumn<Claim, Void> deleteColumn;
 
-    private PolicyHolderClaimController policyHolderClaimController = new PolicyHolderClaimController();
-
+    private PHClaimController PHClaimController = new PHClaimController();
 
     private void setUpDeleteColumn() {
         deleteColumn.setCellFactory(param -> new TableCell<Claim, Void>() {
@@ -112,6 +112,7 @@ public class PolicyHolderClaimHomepage {
             }
         });
     }
+
     private void showAlert(boolean success, String message) {
         Alert.AlertType type = success ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR;
         Alert alert = new Alert(type);
@@ -127,36 +128,26 @@ public class PolicyHolderClaimHomepage {
             return;
         }
         try {
-            policyHolderClaimController.deleteClaimDocuments(claim.getId());
-            policyHolderClaimController.deleteClaim(claim.getId());
+            PHClaimController.deleteClaimDocuments(claim.getId());
+            PHClaimController.deleteClaim(claim.getId());
             claimTable.getItems().remove(claim);
         } catch (SQLException e) {
             showAlert(false, "Error deleting claim: " + e.getMessage());
             throw new RuntimeException(e);
         }
-
     }
-
-
 
     @FXML
     void logout(ActionEvent event) {
         try {
             MenuItem menuItem = (MenuItem) event.getSource();
-
-
             Scene scene = menuItem.getParentPopup().getOwnerWindow().getScene();
             Stage currentStage = (Stage) scene.getWindow();
-
-
             currentStage.close();
-
-
             FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("fxml/login.fxml"));
             Parent root = loader.load();
             Stage loginStage = new Stage();
             Scene loginScene = new Scene(root);
-
             loginStage.setTitle("Login - Insurance Claim Management System");
             loginStage.setScene(loginScene);
             loginStage.show();
@@ -171,8 +162,6 @@ public class PolicyHolderClaimHomepage {
         alert.showAndWait();
     }
 
-
-
     private String generateRandomClaimID() {
         StringBuilder claimId = new StringBuilder("F");
         Random random = new Random();
@@ -181,8 +170,6 @@ public class PolicyHolderClaimHomepage {
         }
         return claimId.toString();
     }
-
-
 
     @FXML
     private void initialize() {
@@ -250,7 +237,7 @@ public class PolicyHolderClaimHomepage {
     private void findClaimId() {
         String insuredPersonId = inputClaimId.getText();
         try {
-            ObservableList<Claim> foundClaims = policyHolderClaimController.findClaimsByInsuredPerson(insuredPersonId);
+            ObservableList<Claim> foundClaims = PHClaimController.findClaimsByInsuredPerson(insuredPersonId);
             claimTable.setItems(foundClaims);
         } catch (SQLException e) {
             showAlert(false, "Error finding claims: " + e.getMessage());
@@ -260,7 +247,7 @@ public class PolicyHolderClaimHomepage {
 
     public void fetchClaimData() {
         try {
-            ObservableList<Claim> claimData = policyHolderClaimController.fetchAllClaims();
+            ObservableList<Claim> claimData = PHClaimController.fetchAllClaims(this.userName);
             claimID.setCellValueFactory(new PropertyValueFactory<>("id"));
             insuredPerson.setCellValueFactory(new PropertyValueFactory<>("insuredPerson"));
             cardNumber.setCellValueFactory(new PropertyValueFactory<>("cardNumber"));
@@ -278,12 +265,10 @@ public class PolicyHolderClaimHomepage {
         }
     }
 
-
     @FXML
     private void openAddClaimModal() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/policy-holder-add-claim.fxml"));
         Parent root = fxmlLoader.load();
-
         // Set up the scene
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
@@ -291,6 +276,4 @@ public class PolicyHolderClaimHomepage {
         stage.setScene(new Scene(root));
         stage.showAndWait();
     }
-
-
 }

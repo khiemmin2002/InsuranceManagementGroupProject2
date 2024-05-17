@@ -1,5 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller.policyholder;
-
+/**
+ * @author team 5
+ */
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Claim;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
@@ -12,7 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class PolicyHolderClaimController {
+public class PHClaimController {
     private final DatabaseConnection databaseConnection = new DatabaseConnection();
     private final Connection connection = databaseConnection.getConnection();
 

@@ -1,5 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.view;
-
+/**
+ * @author team 5
+ */
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.SceneLoader;
 import com.insurancecompany.insurancemanagementgroupproject2.controller.ClaimController;
@@ -72,6 +74,9 @@ public class ManagerHomePage extends SurveyorHomepage {
     private List<Claim> claimList = new ArrayList<>();
     private SurveyorController surveyorController;
     private List<Surveyor> surveyorList = new ArrayList<Surveyor>();
+    /*
+     *  Initialize the pages upon opening pages
+     */
     @FXML
     private void initialize() {
         //Setup database connection
@@ -93,7 +98,7 @@ public class ManagerHomePage extends SurveyorHomepage {
             bankName.setPrefWidth(tableWidth * 0.15);
             bankUserName.setPrefWidth(tableWidth * 0.15);
             bankNumber.setPrefWidth(tableWidth * 0.15);
-
+            // Setting cell value for Table View
             claimID.setCellValueFactory(new PropertyValueFactory<>("id"));
             insuredPerson.setCellValueFactory(new PropertyValueFactory<>("insuredPerson"));
             cardNumber.setCellValueFactory(new PropertyValueFactory<>("cardNumber"));
@@ -105,6 +110,7 @@ public class ManagerHomePage extends SurveyorHomepage {
             bankUserName.setCellValueFactory(new PropertyValueFactory<>("bankUserName"));
             bankNumber.setCellValueFactory(new PropertyValueFactory<>("bankNumber"));
         });
+        // Setting cell value for Table View
         surveyorTable.widthProperty().addListener((observable, oldValue, newValue) -> {
                     surveyorID.setCellValueFactory(new PropertyValueFactory<>("id"));
                     surveyorFullName.setCellValueFactory(new PropertyValueFactory<>("fullName"));
@@ -124,6 +130,9 @@ public class ManagerHomePage extends SurveyorHomepage {
         claimList = fetchClaimData();
         fetchSurveyorData();
     }
+    /*
+    Event Handler to handle button action of onclick
+     */
     EventHandler<ActionEvent> refreshClaimData = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent actionEvent) {
@@ -138,20 +147,26 @@ public class ManagerHomePage extends SurveyorHomepage {
             if (claimChoiceBox.getValue() == null) {
                 errorLabel.setText("Cannot approve empty claim!");
             } else {
-                fetchSingleClaim(claimChoiceBox.getValue());
+                fetchClaimForAction(claimChoiceBox.getValue());
             }
         }
     };
+    //Create a new Claim Controller object
+    ClaimController claimController = new ClaimController();
+    //Function to fetch the stage context
     public Stage thisStage(){
         return (Stage) createButton.getScene().getWindow();
     }
+    //Function to call to surveyor Controller and fetch Surveyor data, then append to table
     public void fetchSurveyorData(){
         ObservableList<Surveyor> surveyorObservableList = FXCollections.observableArrayList();
         surveyorList = surveyorController.fetchSurveyor();
         surveyorObservableList.addAll(surveyorList);
         surveyorTable.setItems(surveyorObservableList);
     }
-    ClaimController claimController = new ClaimController();
+    /*
+        Function to fetch all claim data by calling from claim controller methods and append to local variable
+     */
     @Override
     public List<Claim> fetchClaimData() {
         //Create ObservableList for TableView
@@ -170,9 +185,9 @@ public class ManagerHomePage extends SurveyorHomepage {
         claimChoiceBox.setItems(processingClaimID);
         return claimList;
     }
-
+    // Return a single claim matching the ID and properties to perform action
     @Override
-    public void fetchSingleClaim(String claimID) {
+    public void fetchClaimForAction(String claimID) {
         ObservableList<Claim> claimData = FXCollections.observableArrayList();
         boolean statusCheck = false;
         for(Claim claim : claimList){
@@ -188,7 +203,9 @@ public class ManagerHomePage extends SurveyorHomepage {
         if(statusCheck){createProposeAlert(claimID);
         }
     }
-
+    /*
+    Create an alert to allow manager role to perform action on claims
+     */
     @Override
     public void createProposeAlert(String claimID) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -220,6 +237,7 @@ public class ManagerHomePage extends SurveyorHomepage {
             fetchAllClaimData(claimList);
         }
     }
+    // Generate a new surveyor ID with logic for duplicate ID handling
     public String createSurveyorID(){
         StringBuilder sb = new StringBuilder();
         sb.append("T");
@@ -235,13 +253,13 @@ public class ManagerHomePage extends SurveyorHomepage {
         }
         return id;
     }
-
+    // Generate a new customer ID with logic for duplicate ID handling
     public String createCustomerID(){
         StringBuilder sb = new StringBuilder();
         sb.append("C");
         Random random = new Random();
         for (int i = 0; i < 6; i++) {
-            sb.append(random.nextInt(10)); // Append random digit (0-9)
+            sb.append(random.nextInt(10));
         }
         String id = sb.toString();
         for(Surveyor surveyor : surveyorList){

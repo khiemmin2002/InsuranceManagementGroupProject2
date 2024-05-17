@@ -1,5 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
-
+/**
+ * @author team 5
+ */
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.model.*;
 
@@ -79,24 +81,16 @@ public class AdminController {
         }
         return false;
     }
-    public boolean deleteUser(String id) {
-            try {
-                String deleteQuery = "DELETE FROM users WHERE id = ?";
-                try (PreparedStatement statement = connection.prepareStatement(deleteQuery)) {
-                    statement.setString(1, id);
-                    int rowDeleted = statement.executeUpdate();
-                    if (rowDeleted > 0) {
-                        System.out.println("User deleted successfully!");
-                        return true;
-//                        userObservableList.remove(selectedUser);
-//                        editFormUserInformation.setVisible(false);
-//                        userTableView.refresh();s
-                    }
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            return false;
+    public boolean deleteUser(String userId) {
+        String deleteUserQuery = "DELETE FROM users WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(deleteUserQuery)) {
+            statement.setString(1, userId);
+            int rowsDeleted = statement.executeUpdate();
+            return rowsDeleted > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
     public ArrayList<User> fetchUsersFromDatabase() {
         ArrayList<User> userArrayList = new ArrayList<>();
@@ -127,36 +121,18 @@ public class AdminController {
     }
 
     //Insurance Card Dashboard
-    public boolean deleteClaimsOfInsuranceCard(String cardNumber) {
-        String deleteQuery = "DELETE FROM claims WHERE card_number = ?";
+    public boolean deleteInsuranceCardInformation(String cardNumber) {
+        String deleteQuery = "DELETE FROM insurance_card WHERE card_number = ?";
         try (PreparedStatement statement = connection.prepareStatement(deleteQuery)) {
             statement.setString(1, cardNumber);
             int rowsDeleted = statement.executeUpdate();
-            if (rowsDeleted > 0) {
-                System.out.println("Claims deleted successfully!");
-                return true;
-            }
+            return rowsDeleted > 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
-    public boolean deleteInsuranceCardInformation(String cardNumber){
-            try {
-                String deleteQuery = "DELETE FROM insurance_card WHERE card_number = ?";
-                try (PreparedStatement statement = connection.prepareStatement(deleteQuery)) {
-                    statement.setString(1, cardNumber);
-                    int rowDeleted = statement.executeUpdate();
-                    if (rowDeleted > 0) {
-                        System.out.println("Insurance Card deleted successfully!");
-                        return true;
-                    }
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-        }
-            return false;
-    }
+
     public boolean updateInsuranceCardInformation(String cardNumber, String expDate) throws ParseException {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date parsedDate = sdf.parse(expDate);
@@ -170,10 +146,6 @@ public class AdminController {
                 if (rowsUpdated > 0) {
                     System.out.println("Insurance Card Information updated successfully!");
                     return true;
-//                    selectedInsuranceCard.setExpirationDate(sqlDate);
-//                    insuranceCardTableView.refresh();
-//                    editFormInsuranceExpDate.setText(String.valueOf(sqlDate));
-//                    editFormInsuranceCardInformation.setVisible(false);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -229,36 +201,6 @@ public class AdminController {
         }
         return null;
     }
-    //Main Dash board
-
-//    public ArrayList<Claim> fetchClaimsFromDatabase() {
-//        ArrayList<Claim> claimList = new ArrayList<>();
-//        try {
-//            String queryClaims = "SELECT * FROM claims";
-//            PreparedStatement statement = connection.prepareStatement(queryClaims);
-//            ResultSet resultSet = statement.executeQuery();
-//            while (resultSet.next()) {
-//                Claim claim = new Claim();
-//                claim.setId(resultSet.getString("claim_id"));
-//                claim.setInsuredPerson(resultSet.getString("insured_person"));
-//                claim.setCardNumber(resultSet.getString("card_number"));
-//                claim.setClaimDate(resultSet.getDate("claim_date"));
-//                claim.setExamDate(resultSet.getDate("exam_date"));
-//                claim.setClaimAmount(resultSet.getDouble("claim_amount"));
-//                claim.setStatus(resultSet.getString("status"));
-//                claim.setBankName(resultSet.getString("bank_name"));
-//                claim.setBankUserName(resultSet.getString("bank_user_name"));
-//                claim.setBankNumber(resultSet.getString("bank_number"));
-//                claimList.add(claim);
-//            }
-//            resultSet.close();
-//            statement.close();
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return claimList;
-//    }
 
     public String getNameForUser(String userId) {
         String name = "";

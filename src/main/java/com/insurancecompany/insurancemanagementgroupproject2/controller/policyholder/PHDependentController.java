@@ -1,5 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller.policyholder;
-
+/**
+ * @author team 5
+ */
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Dependent;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
@@ -11,7 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class PolicyHolderDependentController {
+public class PHDependentController {
 
     public ObservableList<Dependent> fetchDependents() throws SQLException {
         String userName = LoginData.usernameLogin;
