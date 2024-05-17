@@ -1,5 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
-
+/**
+ * @author team 5
+ */
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.model.*;
 
@@ -119,18 +121,6 @@ public class AdminController {
     }
 
     //Insurance Card Dashboard
-    public boolean deleteClaimsOfInsuranceCard(String cardNumber) {
-        String deleteQuery = "DELETE FROM claims WHERE card_number = ?";
-        try (PreparedStatement statement = connection.prepareStatement(deleteQuery)) {
-            statement.setString(1, cardNumber);
-            int rowsDeleted = statement.executeUpdate();
-            return rowsDeleted > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
     public boolean deleteInsuranceCardInformation(String cardNumber) {
         String deleteQuery = "DELETE FROM insurance_card WHERE card_number = ?";
         try (PreparedStatement statement = connection.prepareStatement(deleteQuery)) {
@@ -156,10 +146,6 @@ public class AdminController {
                 if (rowsUpdated > 0) {
                     System.out.println("Insurance Card Information updated successfully!");
                     return true;
-//                    selectedInsuranceCard.setExpirationDate(sqlDate);
-//                    insuranceCardTableView.refresh();
-//                    editFormInsuranceExpDate.setText(String.valueOf(sqlDate));
-//                    editFormInsuranceCardInformation.setVisible(false);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -215,50 +201,6 @@ public class AdminController {
         }
         return null;
     }
-    //Main Dash board
-
-//    public ArrayList<Claim> fetchClaimsFromDatabase() {
-//        ArrayList<Claim> claimList = new ArrayList<>();
-//        try {
-//            String queryClaims = "SELECT * FROM claims";
-//            PreparedStatement statement = connection.prepareStatement(queryClaims);
-//            ResultSet resultSet = statement.executeQuery();
-//            while (resultSet.next()) {
-//                Claim claim = new Claim();
-//                claim.setId(resultSet.getString("claim_id"));
-//                claim.setInsuredPerson(resultSet.getString("insured_person"));
-//                claim.setCardNumber(resultSet.getString("card_number"));
-//                claim.setClaimDate(resultSet.getDate("claim_date"));
-//                claim.setExamDate(resultSet.getDate("exam_date"));
-//                claim.setClaimAmount(resultSet.getDouble("claim_amount"));
-//                claim.setStatus(resultSet.getString("status"));
-//                claim.setBankName(resultSet.getString("bank_name"));
-//                claim.setBankUserName(resultSet.getString("bank_user_name"));
-//                claim.setBankNumber(resultSet.getString("bank_number"));
-//                claimList.add(claim);
-//            }
-//            resultSet.close();
-//            statement.close();
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return claimList;
-//    }
-public String getInsuranceCardNumber(String cardHolderId) {
-    String query = "SELECT card_number FROM insurance_card WHERE card_holder_id = ?";
-    try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setString(1, cardHolderId);
-        ResultSet resultSet = statement.executeQuery();
-        if (resultSet.next()) {
-            return resultSet.getString("card_number");
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-    return null;
-}
-
 
     public String getNameForUser(String userId) {
         String name = "";

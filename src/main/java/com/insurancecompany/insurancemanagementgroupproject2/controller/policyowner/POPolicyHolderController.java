@@ -1,11 +1,11 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller.policyowner;
-
+/**
+ * @author team 5
+ */
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.controller.BcryptPassword;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import com.insurancecompany.insurancemanagementgroupproject2.model.PolicyHolder;
-import com.insurancecompany.insurancemanagementgroupproject2.model.Role;
-import com.insurancecompany.insurancemanagementgroupproject2.model.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,7 +13,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.net.URL;
@@ -25,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-public class PolicyOwnerMyPolicyHolderController implements Initializable {
+public class POPolicyHolderController implements Initializable {
 
     DatabaseConnection databaseConnection = new DatabaseConnection();
     Connection connection = databaseConnection.getConnection();
@@ -183,7 +182,6 @@ public class PolicyOwnerMyPolicyHolderController implements Initializable {
         policyHolderRoleCol.setCellValueFactory(new PropertyValueFactory<>("roleId"));
         policyHolderTableView.setItems(policyHolderObservableList);
     }
-
     // Setting text when clicking on a row in the TableView
     @FXML
     private void selectPolicyHolderRow() {
@@ -199,7 +197,6 @@ public class PolicyOwnerMyPolicyHolderController implements Initializable {
             editFieldPolicyHolderRole.setText(getRoleName(selectedPolicyHolder.getRoleId()));
         }
     }
-
 
     @FXML
     private void editFieldPolicyHolderConfirmBtnOnAction(ActionEvent event) {
@@ -285,7 +282,6 @@ public class PolicyOwnerMyPolicyHolderController implements Initializable {
             if (!isUsernameUnique) System.out.println("Error: Username already exists.");
         }
     }
-
     // Clear the fields in the form to add a new policyholder
     private void clearNewPolicyFolderFormFields() {
         addNewPolicyHolderUsernameField.clear();
@@ -296,7 +292,6 @@ public class PolicyOwnerMyPolicyHolderController implements Initializable {
         addNewPolicyHolderAddressField.clear();
         addNewPolicyHolderCardExpriedDateField.clear();
     }
-
     // Update the policyholder in the database
     public boolean updatePolicyHolder(String id, String fullName, String password, String email, String phoneNumber, String address) {
         try {
@@ -319,13 +314,11 @@ public class PolicyOwnerMyPolicyHolderController implements Initializable {
         }
         return false;
     }
-
     // Delete the policyholder from the database
     public boolean deletePolicyHolder(String id) {
         Connection conn = null;
         PreparedStatement deleteInsuranceCardsStmt = null;
         PreparedStatement deletePolicyHolderStmt = null;
-
         try {
             conn = databaseConnection.getConnection();
             conn.setAutoCommit(false); // Start transaction

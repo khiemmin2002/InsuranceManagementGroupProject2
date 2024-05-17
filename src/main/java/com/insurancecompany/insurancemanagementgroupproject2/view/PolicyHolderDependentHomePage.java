@@ -1,9 +1,11 @@
 package com.insurancecompany.insurancemanagementgroupproject2.view;
-
+/**
+ * @author team 5
+ */
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.HelloApplication;
 import com.insurancecompany.insurancemanagementgroupproject2.controller.BcryptPassword;
-import com.insurancecompany.insurancemanagementgroupproject2.controller.policyholder.PolicyHolderDependentController;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.policyholder.PHDependentController;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Dependent;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import javafx.application.Platform;
@@ -113,7 +115,7 @@ public class PolicyHolderDependentHomePage {
     @FXML
     private MenuItem openClaimBtn;
 
-    private PolicyHolderDependentController controller = new PolicyHolderDependentController();
+    private PHDependentController controller = new PHDependentController();
 
 
 

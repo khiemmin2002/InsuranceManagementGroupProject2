@@ -1,5 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.view;
-
+/**
+ * @author team 5
+ */
 import com.insurancecompany.insurancemanagementgroupproject2.controller.DependentController;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import javafx.fxml.FXML;
@@ -18,18 +20,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PolicyOwnerHomepageController implements Initializable {
-
     @FXML
     private BorderPane borderPane;
-
     @FXML
     private AnchorPane anchorPane;
-
     @FXML
     private Button logoutButton;
-
-
-
+    // Set mouse event action
     @FXML
     private void home(MouseEvent event) {
         System.out.println("Home");

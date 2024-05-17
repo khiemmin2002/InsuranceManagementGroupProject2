@@ -1,5 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller.policyowner;
-
+/**
+ * @author team 5
+ */
 import com.insurancecompany.insurancemanagementgroupproject2.model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -7,7 +9,6 @@ import javafx.fxml.Initializable;
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
 import java.net.URL;
 import java.sql.Connection;
@@ -23,7 +24,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
-public class PolicyOwnerMyProfileController implements Initializable {
+public class POProfileController implements Initializable {
 
     @FXML
     private Button policyOwnerEditConfirmBtn;

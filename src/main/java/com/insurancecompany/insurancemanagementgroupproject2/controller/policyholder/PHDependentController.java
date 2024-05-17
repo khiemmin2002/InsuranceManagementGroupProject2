@@ -1,5 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller.policyholder;
-
+/**
+ * @author team 5
+ */
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Dependent;
 import javafx.collections.FXCollections;
@@ -10,7 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class PolicyHolderDependentController {
+public class PHDependentController {
 
     public ObservableList<Dependent> fetchDependents(String userName) throws SQLException {
         ObservableList<Dependent> dependentData = FXCollections.observableArrayList();
