@@ -90,7 +90,6 @@ public class PolicyHolderClaimHomepage {
 
     private PHClaimController PHClaimController = new PHClaimController();
 
-
     private void setUpDeleteColumn() {
         deleteColumn.setCellFactory(param -> new TableCell<Claim, Void>() {
             private final Button btn = new Button("Delete");
@@ -113,6 +112,7 @@ public class PolicyHolderClaimHomepage {
             }
         });
     }
+
     private void showAlert(boolean success, String message) {
         Alert.AlertType type = success ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR;
         Alert alert = new Alert(type);
@@ -135,29 +135,19 @@ public class PolicyHolderClaimHomepage {
             showAlert(false, "Error deleting claim: " + e.getMessage());
             throw new RuntimeException(e);
         }
-
     }
-
-
 
     @FXML
     void logout(ActionEvent event) {
         try {
             MenuItem menuItem = (MenuItem) event.getSource();
-
-
             Scene scene = menuItem.getParentPopup().getOwnerWindow().getScene();
             Stage currentStage = (Stage) scene.getWindow();
-
-
             currentStage.close();
-
-
             FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("fxml/login.fxml"));
             Parent root = loader.load();
             Stage loginStage = new Stage();
             Scene loginScene = new Scene(root);
-
             loginStage.setTitle("Login - Insurance Claim Management System");
             loginStage.setScene(loginScene);
             loginStage.show();
@@ -172,8 +162,6 @@ public class PolicyHolderClaimHomepage {
         alert.showAndWait();
     }
 
-
-
     private String generateRandomClaimID() {
         StringBuilder claimId = new StringBuilder("F");
         Random random = new Random();
@@ -182,8 +170,6 @@ public class PolicyHolderClaimHomepage {
         }
         return claimId.toString();
     }
-
-
 
     @FXML
     private void initialize() {
@@ -279,12 +265,10 @@ public class PolicyHolderClaimHomepage {
         }
     }
 
-
     @FXML
     private void openAddClaimModal() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/policy-holder-add-claim.fxml"));
         Parent root = fxmlLoader.load();
-
         // Set up the scene
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
@@ -292,6 +276,4 @@ public class PolicyHolderClaimHomepage {
         stage.setScene(new Scene(root));
         stage.showAndWait();
     }
-
-
 }

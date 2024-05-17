@@ -116,11 +116,8 @@ public class PolicyHolderDependentHomePage {
     private MenuItem openClaimBtn;
 
     private PHDependentController controller = new PHDependentController();
-
-
-
+    private DatabaseConnection databaseConnection;
     private String userName;
-
     BcryptPassword bcryptPassword = new BcryptPassword();
 
     private void setUpDeleteColumn() {
@@ -128,7 +125,6 @@ public class PolicyHolderDependentHomePage {
         deleteCol.setMinWidth(100);
         deleteCol.setCellFactory(param -> new TableCell<Dependent, Void>() {
             private final Button deleteBtn = new Button("Delete");
-
             {
                 deleteBtn.setOnAction(event -> {
                     Dependent dependent = getTableView().getItems().get(getIndex());
@@ -150,7 +146,6 @@ public class PolicyHolderDependentHomePage {
         });
         dependentTable.getColumns().add(deleteCol);
     }
-
     private void deleteDependent(Dependent dependent) {
         System.out.println("Attempting to delete dependent with ID: " + dependent.getId());
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this dependent?", ButtonType.YES, ButtonType.NO);
@@ -174,7 +169,6 @@ public class PolicyHolderDependentHomePage {
 
     @FXML
     private void initialize() {
-
         dependentTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         dependentTable.widthProperty().addListener((observable, oldValue, newValue) -> {
             double tableWidth = dependentTable.getWidth();
@@ -184,9 +178,7 @@ public class PolicyHolderDependentHomePage {
             passwordCol.setPrefWidth(tableWidth * 0.15);
             phoneNumberCol.setPrefWidth(tableWidth * 0.15);
             emailCol.setPrefWidth(tableWidth * 0.15);
-
         });
-
         dependentTable.prefWidthProperty().bind(dependentPane.widthProperty());
         dependentTable.prefHeightProperty().bind(dependentPane.heightProperty().subtract(100));
         setUpDeleteColumn();
@@ -202,7 +194,6 @@ public class PolicyHolderDependentHomePage {
         addEmailField.clear();
         addPhoneNumField.clear();
         addAddressField.clear();
-
         fetchDependentData();
     }
 
@@ -215,20 +206,13 @@ public class PolicyHolderDependentHomePage {
     void logout(ActionEvent event) {
         try {
             MenuItem menuItem = (MenuItem) event.getSource();
-
-
             Scene scene = menuItem.getParentPopup().getOwnerWindow().getScene();
             Stage currentStage = (Stage) scene.getWindow();
-
-
             currentStage.close();
-
-
             FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("fxml/login.fxml"));
             Parent root = loader.load();
             Stage loginStage = new Stage();
             Scene loginScene = new Scene(root);
-
             loginStage.setTitle("Login - Insurance Claim Management System");
             loginStage.setScene(loginScene);
             loginStage.show();
@@ -255,7 +239,6 @@ public class PolicyHolderDependentHomePage {
         }
     }
 
-
     @FXML
     void clearAddFields(ActionEvent event) {
         addUserNameField.clear();
@@ -266,9 +249,6 @@ public class PolicyHolderDependentHomePage {
         addPassWordField.clear();
         addAddressField.clear();
     }
-
-
-
 
     @FXML
     void openClaimModal(ActionEvent event) throws IOException {
@@ -284,8 +264,6 @@ public class PolicyHolderDependentHomePage {
         stage.showAndWait();
     }
 
-
-
     @FXML
     void refreshData(ActionEvent event)  {
         fetchDependentData();
@@ -295,7 +273,6 @@ public class PolicyHolderDependentHomePage {
     void openUpdateDependentModal(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/policy-holder-update-dependent.fxml"));
         Parent root = fxmlLoader.load();
-
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Update Dependent");
@@ -303,22 +280,17 @@ public class PolicyHolderDependentHomePage {
         stage.showAndWait();
     }
 
-
     @FXML
     void confirmAddDependent(ActionEvent event) {
         try {
             String dependentId = generatedRandomUserId();
-
             String userName = addUserNameField.getText().trim();
             String fullName = addFullNameField.getText().trim();
             String passwordPlainText = addPassWordField.getText().trim();
             String phoneNumber = addPhoneNumField.getText().trim();
             String email = addEmailField.getText().trim();
-
             String address = addAddressField.getText().trim();
-
             int roleId = 6;
-
             if (userName.isEmpty() || fullName.isEmpty() || passwordPlainText.isEmpty() || phoneNumber.isEmpty() || address.isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Error");
@@ -329,15 +301,11 @@ public class PolicyHolderDependentHomePage {
             String passWordHashed = bcryptPassword.hashBcryptPassword(passwordPlainText);
             controller.addDependent(dependentId, fullName, userName, passWordHashed, email, phoneNumber, address, roleId);
             fetchDependentData();
-
             showAlert(Alert.AlertType.INFORMATION, "Dependent added successfully");
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Failed to add dependent: " + e.getMessage());
         }
-
     }
-
-
 
     private void fetchDependentData()  {
         try {
@@ -350,13 +318,11 @@ public class PolicyHolderDependentHomePage {
             phoneNumberCol.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
             emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
             addressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
-
-
             dependentTable.setItems(dependentData);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    };
+    }
 
     private String generatedRandomUserId() {
         StringBuilder dependentID = new StringBuilder("C");
@@ -366,6 +332,5 @@ public class PolicyHolderDependentHomePage {
         }
         return dependentID.toString();
     }
-
 }
 

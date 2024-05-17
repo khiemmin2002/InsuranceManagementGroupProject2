@@ -2,6 +2,7 @@ package com.insurancecompany.insurancemanagementgroupproject2.view;
 /**
  * @author team 5
  */
+import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.controller.policyholder.PHDependentController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -40,6 +41,7 @@ public class PolicyHolderDependentManage {
     @FXML
     private Label validationMessage;
     private PHDependentController controller = new PHDependentController();
+    private DatabaseConnection databaseConnection;
 
     @FXML
     void cancelUpdate(ActionEvent event) {
