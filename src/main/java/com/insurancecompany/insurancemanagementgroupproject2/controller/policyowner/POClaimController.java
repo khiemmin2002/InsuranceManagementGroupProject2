@@ -1,10 +1,11 @@
-package com.insurancecompany.insurancemanagementgroupproject2.controller;
-
+package com.insurancecompany.insurancemanagementgroupproject2.controller.policyowner;
+/**
+ * @author team 5
+ */
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,7 +20,6 @@ import javafx.util.StringConverter;
 import java.io.File;
 import java.net.URL;
 import java.sql.*;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class PolicyOwnerMyClaimController implements Initializable {
+public class POClaimController implements Initializable {
 
     DatabaseConnection databaseConnection = new DatabaseConnection();
     Connection connection = databaseConnection.getConnection();
@@ -79,7 +79,6 @@ public class PolicyOwnerMyClaimController implements Initializable {
         }
     }
 
-
     @FXML
     private ComboBox<User> newClaimFormInsuredPersonField;
 
@@ -95,9 +94,13 @@ public class PolicyOwnerMyClaimController implements Initializable {
     @FXML
     private TextField newClaimFormClaimAmountField;
 
+
+
+
     private ObservableList<User> insuredPersonObservableList = FXCollections.observableArrayList();
     private ObservableList<File> newClaimFormDocumentList = FXCollections.observableArrayList();
     private ObservableList<Claim> claimObservableList = FXCollections.observableArrayList();
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -166,6 +169,74 @@ public class PolicyOwnerMyClaimController implements Initializable {
         return users;
     }
 
+
+    // Dependent
+    private ArrayList<Dependent> fetchDependentFromDatabase() {
+        ArrayList<Dependent> dependentArrayList = new ArrayList<>();
+        try {
+            String policyOwnerId = getIDFromUserName(LoginData.usernameLogin);
+
+            // Updated query to include the policyholder's full name
+            String query = "SELECT d.*, ph.full_name AS policy_holder_name FROM users d " +
+                    "INNER JOIN dependent dp ON d.id = dp.dependent_id " +
+                    "INNER JOIN users ph ON dp.policy_holder_id = ph.id " +
+                    "INNER JOIN insurance_card ic ON ph.id = ic.card_holder_id " +
+                    "WHERE ic.policy_owner_id = ? AND d.role_id = 6";
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, policyOwnerId);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Dependent dependent = new Dependent();
+                dependent.setId(resultSet.getString("id"));
+                dependent.setFullName(resultSet.getString("full_name"));
+                dependent.setUserName(resultSet.getString("user_name"));
+                dependent.setPassword(resultSet.getString("password"));
+                dependent.setEmail(resultSet.getString("email"));
+                dependent.setPhoneNumber(resultSet.getString("phone_number"));
+                dependent.setAddress(resultSet.getString("address"));
+                dependent.setRoleId(resultSet.getInt("role_id"));
+                dependent.setPolicyHolderName(resultSet.getString("policy_holder_name")); // Assuming you have a setter for this
+                dependentArrayList.add(dependent);
+            }
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dependentArrayList;
+    }
+
+    // PolicyHolders
+    private ArrayList<PolicyHolder> fetchPolicyHoldersFromDatabase() {
+        ArrayList<PolicyHolder> policyHolders = new ArrayList<>();
+        try {
+            String policyOwnerId = getIDFromUserName(LoginData.usernameLogin);
+            PreparedStatement stmt = connection.prepareStatement(
+                    "SELECT * FROM users WHERE role_id = 5 AND id IN " +
+                            "(SELECT card_holder_id FROM insurance_card WHERE policy_owner_id = ?)");
+            stmt.setString(1, policyOwnerId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                policyHolders.add(new PolicyHolder(
+                        rs.getString("id"),
+                        rs.getString("full_name"),
+                        rs.getString("user_name"),
+                        rs.getString("password"),
+                        rs.getString("email"),
+                        rs.getString("phone_number"),
+                        rs.getString("address"),
+                        rs.getInt("role_id")
+                ));
+            }
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return policyHolders;
+    }
 
     // Claims
     public ArrayList<Claim> fetchClaimsFromDatabase() {
@@ -247,6 +318,7 @@ public class PolicyOwnerMyClaimController implements Initializable {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String formattedDate = currentDate.format(formatter);
 
+
         String originalFileName = originalFile.getName();
         String baseName = originalFileName.substring(0, originalFileName.lastIndexOf('.'));
         String extension = getFileExtension(originalFile);
@@ -254,6 +326,7 @@ public class PolicyOwnerMyClaimController implements Initializable {
         String newFileName = formattedDate + "_" + baseName + extension;
         System.out.println("File renamed to: " + newFileName);
         return newFileName;
+
     }
 
     // Get the file extension
@@ -295,8 +368,6 @@ public class PolicyOwnerMyClaimController implements Initializable {
         new Thread(task).start();
     }
 
-
-
     // Setting new claim form insured person field
     private void setupInsuredPersonComboBox() {
         newClaimFormInsuredPersonField.setCellFactory(lv -> new ListCell<User>() {
@@ -325,6 +396,8 @@ public class PolicyOwnerMyClaimController implements Initializable {
         // Populate ComboBox with both policyholders and dependents
         newClaimFormInsuredPersonField.getItems().setAll(fetchPolicyHoldersAndDependentsFromDatabase());
     }
+
+
 
     @FXML
     private void newClaimFormConfirmBtnOnAction(ActionEvent event) {
@@ -372,6 +445,7 @@ public class PolicyOwnerMyClaimController implements Initializable {
         } else {
             System.out.println("Claim number is not unique");
         }
+
     }
 
     private String fetchCardNumberForInsuredPerson(String userId) {
@@ -553,6 +627,7 @@ public class PolicyOwnerMyClaimController implements Initializable {
             return false;
         }
     }
+
 
     // Deleting claim functions
 

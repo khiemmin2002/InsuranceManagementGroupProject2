@@ -1,6 +1,9 @@
-package com.insurancecompany.insurancemanagementgroupproject2.controller;
-
+package com.insurancecompany.insurancemanagementgroupproject2.controller.policyowner;
+/**
+ * @author team 5
+ */
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.BcryptPassword;
 import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import com.insurancecompany.insurancemanagementgroupproject2.model.PolicyHolder;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Role;
@@ -21,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-public class PolicyOwnerMyPolicyHolderController implements Initializable {
+public class POPolicyHolderController implements Initializable {
 
     DatabaseConnection databaseConnection = new DatabaseConnection();
     Connection connection = databaseConnection.getConnection();

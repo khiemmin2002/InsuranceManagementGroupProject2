@@ -1,5 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.controller;
-
+/**
+ * @author team 5
+ */
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Surveyor;
 
@@ -10,12 +12,12 @@ import java.util.List;
 public class SurveyorController extends Thread{
     private final DatabaseConnection databaseConnection;
     private final Connection connection;
-
+    // Constructor to SurveyorController
     public SurveyorController(DatabaseConnection databaseConnection, Connection connection) {
          this.databaseConnection = databaseConnection;
         this.connection = connection;
     }
-
+    // Method to fetch surveyor information from user table from database
     public List<Surveyor> fetchSurveyor(){
         List<Surveyor> surveyorList = new ArrayList<Surveyor>();
         try {
@@ -41,7 +43,7 @@ public class SurveyorController extends Thread{
         }
         return surveyorList;
     }
-
+    // Method to create new surveyor inside user database table
     public boolean createNewSurveyor(String id, String full_name, String user_name, String password, String email, String phone_number, String address){
         try{
             String insertSurveyor = "INSERT INTO users VALUES (?,?,?,?, 2,?,?,?)";
@@ -61,7 +63,7 @@ public class SurveyorController extends Thread{
             return false;
         }
     }
-
+    // Method to update user information for surveyor existing
     public boolean updateSurveyorInformation(String id,String full_name, String email, String phone_number, String address){
         try{
             String updateSurveyor = "UPDATE users SET full_name = ?, email = ?, phone_number = ?, address = ? WHERE id = ?";
@@ -79,7 +81,7 @@ public class SurveyorController extends Thread{
             return false;
         }
     }
-
+    // Method to remove a surveyor from user database table
     public boolean removeSurveyor(String id){
         try{
             String updateSurveyor = "DELETE FROM users WHERE id = ?";

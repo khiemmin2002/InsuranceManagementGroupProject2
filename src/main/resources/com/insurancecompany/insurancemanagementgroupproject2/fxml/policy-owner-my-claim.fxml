@@ -12,7 +12,29 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="718.0" prefWidth="868.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.PolicyOwnerMyClaimController">
+<<<<<<< HEAD
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="667.0" prefWidth="904.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.view.DependentHomepage">
+   <children>
+      <TableView fx:id="dependentClaimTable" layoutX="21.0" layoutY="20.0" prefHeight="700.0" prefWidth="900.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+        <columns>
+          <TableColumn fx:id="claimID" prefWidth="75.0" text="Claim ID" />
+          <TableColumn fx:id="claimInsuredPerson" prefWidth="95.0" text="Insured Person" />
+            <TableColumn fx:id="claimCardNum" prefWidth="87.0" text="Card Number" />
+            <TableColumn fx:id="claimDate" prefWidth="74.0" text="Claim Date" />
+            <TableColumn fx:id="claimExamDate" minWidth="0.0" prefWidth="74.0" text="Exam Date" />
+            <TableColumn fx:id="claimAmount" minWidth="0.0" prefWidth="105.86447143554688" text="Claim Amount" />
+            <TableColumn fx:id="claimStatus" minWidth="0.0" prefWidth="50.1356201171875" text="Status" />
+            <TableColumn fx:id="claimBankName" minWidth="0.0" prefWidth="78.0" text="Bank Name" />
+            <TableColumn fx:id="claimBankUserName" minWidth="0.0" prefWidth="113.832763671875" text="Bank User Name" />
+            <TableColumn fx:id="claimBankNum" minWidth="0.0" prefWidth="119.5" text="Bank Number" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+   </children>
+=======
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="718.0" prefWidth="868.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insurancecompany.insurancemanagementgroupproject2.controller.policyowner.POClaimController">
     <children>
         <StackPane prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
@@ -94,4 +116,5 @@
             </children>
         </AnchorPane>
     </children>
+>>>>>>> 65b21e7f235ca00586cbe668be323eb4ff066417
 </AnchorPane>

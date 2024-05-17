@@ -1,5 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.model;
-
+/**
+ * @author team 5
+ */
 public abstract class Customer {
     private String id;
     private String full_name;
@@ -8,7 +10,9 @@ public abstract class Customer {
     private String phone_number;
     private String address;
     private InsuranceCard insurance_card;
-
+    /*
+        Getter and setter for Customer class
+     */
     public String getId() {
         return id;
     }
@@ -64,7 +68,7 @@ public abstract class Customer {
     public void setInsurance_card(InsuranceCard insurance_card) {
         this.insurance_card = insurance_card;
     }
-
+    // Constructor customer class
     public Customer(String id, String full_name, String user_name, String email, String phone_number, String address) {
         this.id = id;
         this.full_name = full_name;
@@ -74,7 +78,7 @@ public abstract class Customer {
         this.address = address;
         this.insurance_card = null;
     }
-
+    //Empty Constructor customer class
     public Customer() {
         this.id = "";
         this.full_name = "";

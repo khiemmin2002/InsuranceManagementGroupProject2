@@ -1,7 +1,10 @@
-package com.insurancecompany.insurancemanagementgroupproject2.controller;
-
+package com.insurancecompany.insurancemanagementgroupproject2.controller.policyholder;
+/**
+ * @author team 5
+ */
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Dependent;
+import com.insurancecompany.insurancemanagementgroupproject2.model.LoginData;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -10,12 +13,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class PolicyHolderDependentController {
+public class PHDependentController {
 
-    public ObservableList<Dependent> fetchDependents(String userName) throws SQLException {
+    public ObservableList<Dependent> fetchDependents() throws SQLException {
+        String userName = LoginData.usernameLogin;
         ObservableList<Dependent> dependentData = FXCollections.observableArrayList();
         DatabaseConnection databaseConnection = new DatabaseConnection();
-        try (Connection connection = databaseConnection.getConnection()) {
+        try (Connection connection = databaseConnection.getConnection()){
             String query = "SELECT d.id, d.full_name, d.user_name, d.password, d.email, d.phone_number, d.address " +
                     "FROM users d " +
                     "JOIN dependent dep ON d.id = dep.dependent_id " +
@@ -35,15 +39,17 @@ public class PolicyHolderDependentController {
                 dependent.setAddress(results.getString("address"));
                 dependentData.add(dependent);
             }
+            System.out.println("Fetch data from database successfully");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return dependentData;
     }
-    public void addDependent(Dependent dependent, String policyHolderUserName) throws SQLException {
-        DatabaseConnection databaseConnection = new DatabaseConnection();
+    public boolean addDependent(String id, String fullName, String userName, String password, String email, String phoneNumber, String address, int roleId) throws SQLException {
+        String policyHolderUserName = LoginData.usernameLogin;
         String policyHolderId = null;
-
+        DatabaseConnection databaseConnection = new DatabaseConnection();
         try (Connection connection = databaseConnection.getConnection()) {
-
             String findPolicyHolder = "SELECT id FROM users WHERE user_name = ?";
             try (PreparedStatement findStmt = connection.prepareStatement(findPolicyHolder)) {
                 findStmt.setString(1, policyHolderUserName);
@@ -57,32 +63,35 @@ public class PolicyHolderDependentController {
                 throw new SQLException("Policy holder not found.");
             }
 
-            String insertUser = "INSERT INTO users (id, full_name, user_name, password, email, phone_number, address) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String insertUser = "INSERT INTO users (id, full_name, user_name, password, role_id ,email, phone_number, address) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement userStmt = connection.prepareStatement(insertUser)) {
-                userStmt.setString(1, dependent.getId());
-                userStmt.setString(2, dependent.getFullName());
-                userStmt.setString(3, dependent.getUserName());
-                userStmt.setString(4, dependent.getPassword());  // Assuming password is already hashed
-                userStmt.setString(5, dependent.getEmail());
-                userStmt.setString(6, dependent.getPhoneNumber());
-                userStmt.setString(7, dependent.getAddress());
+                userStmt.setString(1, id);
+                userStmt.setString(2, fullName);
+                userStmt.setString(3, userName);
+                userStmt.setString(4, password);
+                userStmt.setInt(5, roleId);
+                userStmt.setString(6, email);
+                userStmt.setString(7, phoneNumber);
+                userStmt.setString(8, address);
                 userStmt.executeUpdate();
             }
 
             String insertDependent = "INSERT INTO dependent (dependent_id, policy_holder_id) VALUES (?, ?)";
             try (PreparedStatement depStmt = connection.prepareStatement(insertDependent)) {
-                depStmt.setString(1, dependent.getId());
+                depStmt.setString(1, id);
                 depStmt.setString(2, policyHolderId);
                 depStmt.executeUpdate();
             }
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
     public void deleteDependent(String dependentId) throws SQLException {
         DatabaseConnection databaseConnection = new DatabaseConnection();
-
         try (Connection connection = databaseConnection.getConnection()) {
-
             String deleteRelation = "DELETE FROM dependent WHERE dependent_id = ?";
             try (PreparedStatement relationStmt = connection.prepareStatement(deleteRelation)) {
                 relationStmt.setString(1, dependentId);
@@ -98,14 +107,15 @@ public class PolicyHolderDependentController {
                     throw new SQLException("No dependent found with ID: " + dependentId);
                 }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
     public ObservableList<Dependent> findDependentUserName(String userName) {
         ObservableList<Dependent> foundDependents = FXCollections.observableArrayList();
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        Connection connection = databaseConnection.getConnection();
 
-        try {
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        try (Connection connection = databaseConnection.getConnection()){
             String findQuery = "SELECT id, full_name, user_name, password, email, phone_number, address " +
                     "FROM users " +
                     "WHERE user_name = ?";
@@ -135,7 +145,7 @@ public class PolicyHolderDependentController {
     }
     public void updateDependent(String dependentId, String password, String email, String phoneNumber, String address) throws SQLException {
         DatabaseConnection databaseConnection = new DatabaseConnection();
-        try (Connection connection = databaseConnection.getConnection()) {
+        try (Connection connection = databaseConnection.getConnection()){
             String updateQuery = "UPDATE public.users SET password = ?, email = ?, phone_number = ?, address = ? WHERE id = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
                 preparedStatement.setString(1, password);
@@ -149,6 +159,8 @@ public class PolicyHolderDependentController {
                     throw new SQLException("Updating dependent failed, no rows affected.");
                 }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 

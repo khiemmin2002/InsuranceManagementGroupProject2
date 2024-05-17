@@ -1,5 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2;
-
+/**
+ * @author team 5
+ */
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -16,7 +18,7 @@ public class HelloApplication extends Application {
         stage.setScene(scene);
         stage.show();
     }
-
+    // Starting point of the application
     public static void main(String[] args) {
         launch();
     }

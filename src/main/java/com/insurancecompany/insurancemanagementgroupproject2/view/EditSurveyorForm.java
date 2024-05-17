@@ -1,7 +1,11 @@
-package com.insurancecompany.insurancemanagementgroupproject2.controller;
-
+package com.insurancecompany.insurancemanagementgroupproject2.view;
+/**
+ * @author team 5
+ */
 import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.SceneLoader;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.SurveyorController;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.ValidateInput;
 import com.insurancecompany.insurancemanagementgroupproject2.model.Surveyor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,6 +39,9 @@ public class EditSurveyorForm {
     public ChoiceBox<String> idBox;
     private SurveyorController surveyorController;
     private List<Surveyor> surveyorList;
+    /*
+     *  Initialize the pages upon opening pages, create controller and local variable
+     */
     @FXML
     private void initialize(){
         DatabaseConnection databaseConnection = new DatabaseConnection();
@@ -46,7 +53,9 @@ public class EditSurveyorForm {
         idBox.getItems().addAll(surveyorsID);
         idBox.setOnAction(fillForm);
     }
-
+    //Create new validate input class object
+    ValidateInput validateInput = new ValidateInput();
+    // Set event handler for button on click action
     @FXML
     EventHandler<ActionEvent> submitForm = new EventHandler<ActionEvent>() {
         @Override
@@ -54,7 +63,7 @@ public class EditSurveyorForm {
             editSurveyor(idBox.getValue());
         }
     };
-
+    // Set event handler for choice box on click action
     @FXML
     EventHandler<ActionEvent> fillForm = new EventHandler<ActionEvent>() {
         @Override
@@ -72,6 +81,7 @@ public class EditSurveyorForm {
             }
         }
     };
+    // Function to fetch ID
     private List<String> getID(List<Surveyor> surveyors){
         List<String> id = new ArrayList<>();
         for(Surveyor surveyor : surveyorList){
@@ -79,7 +89,9 @@ public class EditSurveyorForm {
         }
         return id;
     }
-    ValidateInput validateInput = new ValidateInput();
+    /*
+     *  Method to check field inside text field then call controller to edit a surveyor
+     */
     private void editSurveyor(String id){
         //Validate field is not empty
         if (full_name.getText().isEmpty() ||  email.getText().isEmpty()
@@ -103,6 +115,7 @@ public class EditSurveyorForm {
                 phone_number.getText(),address.getText());
         SceneLoader.loadSceneWithInput("fxml/manager-homepage.fxml",thisStage(),944,709);
     }
+    //method to get this stage context
     private Stage thisStage(){
         return (Stage) submitSurveyor.getScene().getWindow();
     }

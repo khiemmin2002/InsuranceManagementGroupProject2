@@ -1,5 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.model;
-
+/**
+ * @author team 5
+ */
 public class User {
     private String id;
     private String fullName;
@@ -9,7 +11,9 @@ public class User {
     private String phoneNumber;
     private String address;
     private int roleId;
-
+    /*
+        Getter and setter for user class
+     */
     public String getId() {
         return id;
     }
@@ -73,9 +77,9 @@ public class User {
     public void setRoleId(int roleId) {
         this.roleId = roleId;
     }
-
+    //Empty Constructor for User Class
     public User(){};
-
+    //Constructor for User Class
     public User(String id, String fullName, String userName, String password, String email, String phoneNumber, String address, int roleId) {
         this.id = id;
         this.fullName = fullName;

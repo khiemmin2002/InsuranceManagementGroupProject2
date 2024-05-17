@@ -1,5 +1,7 @@
 package com.insurancecompany.insurancemanagementgroupproject2.model;
-
+/**
+ * @author team 5
+ */
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 
 public class Claim {
-
     private String id;
     private String insuredPerson;
     private String cardNumber;
@@ -19,7 +20,7 @@ public class Claim {
     private String bankUserName;
     private String bankNumber;
     private String documents;
-
+    // Empty constructor for Claim class
     public Claim() {
         this.id = "";
         this.insuredPerson = "";
@@ -34,7 +35,7 @@ public class Claim {
         this.documents = "";
 
     }
-
+    // Constructor for Claim class
     public Claim(String id,String insuredPerson, String cardNumber, Date examDate, Date claimDate, double claimAmount, String status, String bankName, String bankUserName, String bankNumber) {
         this.id = id;
         this.insuredPerson = insuredPerson;
@@ -47,7 +48,7 @@ public class Claim {
         this.bankUserName = bankUserName;
         this.bankNumber = bankNumber;
     }
-
+    // Constructor for Claim class
     public Claim(String id, String insuredPerson, String cardNumber, Date examDate, Date claimDate, double claimAmount, String status, String bankName, String bankUserName, String bankNumber, String documents) {
         this.id = id;
         this.insuredPerson = insuredPerson;
@@ -61,7 +62,9 @@ public class Claim {
         this.bankNumber = bankNumber;
         this.documents = documents;
     }
-
+    /*
+       Getter and setter for Claim class
+    */
     public String getId() {
         return id;
     }
@@ -141,6 +144,7 @@ public class Claim {
     public void setBankNumber(String bankNumber) {
         this.bankNumber = bankNumber;
     }
+
     public java.sql.Date getClaimDateFormat(String claimDate) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
