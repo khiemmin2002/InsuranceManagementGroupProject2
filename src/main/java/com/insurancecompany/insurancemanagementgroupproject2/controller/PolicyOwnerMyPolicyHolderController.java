@@ -16,10 +16,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -321,57 +318,51 @@ public class PolicyOwnerMyPolicyHolderController implements Initializable {
 
     // Delete the policyholder from the database
     public boolean deletePolicyHolder(String id) {
-        Connection conn = null;
-        PreparedStatement deleteInsuranceCardsStmt = null;
-        PreparedStatement deletePolicyHolderStmt = null;
+        String deleteInsuranceCardsQuery = "DELETE FROM insurance_card WHERE card_holder_id = ?";
+        String deleteDependentsQuery = "DELETE FROM dependent WHERE policy_holder_id = ?";
+        String deleteDocumentsQuery = "DELETE FROM documents WHERE claim_id IN (SELECT claim_id FROM claims WHERE insured_person = ?)";
+        String deleteClaimsQuery = "DELETE FROM claims WHERE insured_person = ?";
+        String deletePolicyHolderQuery = "DELETE FROM users WHERE id = ?";
 
-        try {
-            conn = databaseConnection.getConnection();
-            conn.setAutoCommit(false); // Start transaction
+        try (Connection conn = databaseConnection.getConnection()) {
+            conn.setAutoCommit(false);  // Start transaction
 
-            // First, delete dependent records in the insurance_card table
-            String deleteInsuranceCardsQuery = "DELETE FROM insurance_card WHERE card_holder_id = ?";
-            deleteInsuranceCardsStmt = conn.prepareStatement(deleteInsuranceCardsQuery);
-            deleteInsuranceCardsStmt.setString(1, id);
-            deleteInsuranceCardsStmt.executeUpdate();
+            try (PreparedStatement deleteInsuranceCardsStmt = conn.prepareStatement(deleteInsuranceCardsQuery);
+                 PreparedStatement deleteDependentsStmt = conn.prepareStatement(deleteDependentsQuery);
+                 PreparedStatement deleteDocumentsStmt = conn.prepareStatement(deleteDocumentsQuery);
+                 PreparedStatement deleteClaimsStmt = conn.prepareStatement(deleteClaimsQuery);
+                 PreparedStatement deletePolicyHolderStmt = conn.prepareStatement(deletePolicyHolderQuery)) {
 
-            // Now, delete the policyholder from the users table
-            String deletePolicyHolderQuery = "DELETE FROM users WHERE id = ?";
-            deletePolicyHolderStmt = conn.prepareStatement(deletePolicyHolderQuery);
-            deletePolicyHolderStmt.setString(1, id);
-            int rowsDeleted = deletePolicyHolderStmt.executeUpdate();
+                // Delete associated insurance cards
+                deleteInsuranceCardsStmt.setString(1, id);
+                deleteInsuranceCardsStmt.executeUpdate();
 
-            conn.commit(); // Commit the transaction
+                // Delete associated dependents
+                deleteDependentsStmt.setString(1, id);
+                deleteDependentsStmt.executeUpdate();
 
-            if (rowsDeleted > 0) {
-                System.out.println("Policy Holder and related insurance cards deleted successfully!");
+                // Delete associated documents
+                deleteDocumentsStmt.setString(1, id);
+                deleteDocumentsStmt.executeUpdate();
+
+                // Delete associated claims
+                deleteClaimsStmt.setString(1, id);
+                deleteClaimsStmt.executeUpdate();
+
+                // Delete the policyholder
+                deletePolicyHolderStmt.setString(1, id);
+                deletePolicyHolderStmt.executeUpdate();
+
+                conn.commit();  // Commit transaction
                 return true;
-            } else {
-                System.out.println("No Policy Holder found with the specified ID.");
+            } catch (SQLException ex) {
+                conn.rollback();  // Rollback on error
+                ex.printStackTrace();
                 return false;
             }
         } catch (SQLException e) {
-            if (conn != null) {
-                try {
-                    conn.rollback(); // rollback transaction on error
-                } catch (SQLException ex) {
-                    System.out.println("Error rolling back transaction");
-                    ex.printStackTrace();
-                }
-            }
             e.printStackTrace();
             return false;
-        } finally {
-            try {
-                if (deleteInsuranceCardsStmt != null) deleteInsuranceCardsStmt.close();
-                if (deletePolicyHolderStmt != null) deletePolicyHolderStmt.close();
-                if (conn != null) {
-                    conn.setAutoCommit(true); // Reset auto-commit to true
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
         }
     }
 
@@ -380,12 +371,15 @@ public class PolicyOwnerMyPolicyHolderController implements Initializable {
         PreparedStatement insertUserStmt = null;
         PreparedStatement insertCardStmt = null;
 
+        // Define the queries outside the try-catch block
+        String insertUserQuery = "INSERT INTO users (id, full_name, user_name, password, email, phone_number, address, role_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertCardQuery = "INSERT INTO insurance_card (card_number, card_holder_id, policy_owner_id, expiration_date) VALUES (?, ?, ?, ?)";
+
         try {
             conn = databaseConnection.getConnection();
             conn.setAutoCommit(false); // Start transaction
 
             // Insert the new policyHolder
-            String insertUserQuery = "INSERT INTO users (id, full_name, user_name, password, email, phone_number, address, role_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             insertUserStmt = conn.prepareStatement(insertUserQuery);
             insertUserStmt.setString(1, policyHolder.getId());
             insertUserStmt.setString(2, policyHolder.getFullName());
@@ -398,7 +392,6 @@ public class PolicyOwnerMyPolicyHolderController implements Initializable {
             insertUserStmt.executeUpdate();
 
             // Insert the corresponding insurance card
-            String insertCardQuery = "INSERT INTO insurance_card (card_number, card_holder_id, policy_owner_id, expiration_date) VALUES (?, ?, ?, ?)";
             insertCardStmt = conn.prepareStatement(insertCardQuery);
             insertCardStmt.setString(1, cardNumber);
             insertCardStmt.setString(2, policyHolder.getId());
@@ -451,20 +444,19 @@ public class PolicyOwnerMyPolicyHolderController implements Initializable {
 
     public String getRoleName(int roleId) {
         String roleName = "";
-        try {
-            String queryRoleName = "SELECT role FROM roles WHERE id = ?";
-            PreparedStatement statement = connection.prepareStatement(queryRoleName);
-            statement.setInt(1, roleId);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                roleName = resultSet.getString("role");
-            }
-            resultSet.close();
-            statement.close();
+        String queryRoleName = "SELECT role FROM roles WHERE id = ?"; // Define the query outside the try-catch block
 
+        try (PreparedStatement statement = connection.prepareStatement(queryRoleName)) {
+            statement.setInt(1, roleId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    roleName = resultSet.getString("role");
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return roleName;
     }
 

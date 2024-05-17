@@ -4,6 +4,7 @@ import com.insurancecompany.insurancemanagementgroupproject2.DatabaseConnection;
 import com.insurancecompany.insurancemanagementgroupproject2.model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,7 +19,6 @@ import javafx.util.StringConverter;
 import java.io.File;
 import java.net.URL;
 import java.sql.*;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -79,6 +79,7 @@ public class PolicyOwnerMyClaimController implements Initializable {
         }
     }
 
+
     @FXML
     private ComboBox<User> newClaimFormInsuredPersonField;
 
@@ -94,13 +95,9 @@ public class PolicyOwnerMyClaimController implements Initializable {
     @FXML
     private TextField newClaimFormClaimAmountField;
 
-
-
-
     private ObservableList<User> insuredPersonObservableList = FXCollections.observableArrayList();
     private ObservableList<File> newClaimFormDocumentList = FXCollections.observableArrayList();
     private ObservableList<Claim> claimObservableList = FXCollections.observableArrayList();
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -114,14 +111,20 @@ public class PolicyOwnerMyClaimController implements Initializable {
     // Fetching data from database
 
     // PolicyHolders and Dependents
-    private ArrayList<User> fetchPolicyHoldersAndDependentsFromDatabase() {
+    public ArrayList<User> fetchPolicyHoldersAndDependentsFromDatabase() {
         ArrayList<User> users = new ArrayList<>();
+        String policyOwnerId = getIDFromUserName(LoginData.usernameLogin);
+
+        String fetchPolicyHoldersQuery = "SELECT * FROM users WHERE role_id = 5 AND id IN " +
+                "(SELECT card_holder_id FROM insurance_card WHERE policy_owner_id = ?)";
+        String fetchDependentsQuery = "SELECT u.* FROM users u " +
+                "JOIN dependent d ON u.id = d.dependent_id " +
+                "JOIN insurance_card ic ON d.policy_holder_id = ic.card_holder_id " +
+                "WHERE ic.policy_owner_id = ?";
+
         try {
-            String policyOwnerId = getIDFromUserName(LoginData.usernameLogin);
             // Fetch policyholders
-            PreparedStatement stmt = connection.prepareStatement(
-                    "SELECT * FROM users WHERE role_id = 5 AND id IN " +
-                            "(SELECT card_holder_id FROM insurance_card WHERE policy_owner_id = ?)");
+            PreparedStatement stmt = connection.prepareStatement(fetchPolicyHoldersQuery);
             stmt.setString(1, policyOwnerId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -140,11 +143,7 @@ public class PolicyOwnerMyClaimController implements Initializable {
             stmt.close();
 
             // Fetch dependents
-            stmt = connection.prepareStatement(
-                    "SELECT u.* FROM users u " +
-                            "JOIN dependent d ON u.id = d.dependent_id " +
-                            "JOIN insurance_card ic ON d.policy_holder_id = ic.card_holder_id " +
-                            "WHERE ic.policy_owner_id = ?");
+            stmt = connection.prepareStatement(fetchDependentsQuery);
             stmt.setString(1, policyOwnerId);
             rs = stmt.executeQuery();
             while (rs.next()) {
@@ -167,74 +166,6 @@ public class PolicyOwnerMyClaimController implements Initializable {
         return users;
     }
 
-
-    // Dependent
-    private ArrayList<Dependent> fetchDependentFromDatabase() {
-        ArrayList<Dependent> dependentArrayList = new ArrayList<>();
-        try {
-            String policyOwnerId = getIDFromUserName(LoginData.usernameLogin);
-
-            // Updated query to include the policyholder's full name
-            String query = "SELECT d.*, ph.full_name AS policy_holder_name FROM users d " +
-                    "INNER JOIN dependent dp ON d.id = dp.dependent_id " +
-                    "INNER JOIN users ph ON dp.policy_holder_id = ph.id " +
-                    "INNER JOIN insurance_card ic ON ph.id = ic.card_holder_id " +
-                    "WHERE ic.policy_owner_id = ? AND d.role_id = 6";
-
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, policyOwnerId);
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                Dependent dependent = new Dependent();
-                dependent.setId(resultSet.getString("id"));
-                dependent.setFullName(resultSet.getString("full_name"));
-                dependent.setUserName(resultSet.getString("user_name"));
-                dependent.setPassword(resultSet.getString("password"));
-                dependent.setEmail(resultSet.getString("email"));
-                dependent.setPhoneNumber(resultSet.getString("phone_number"));
-                dependent.setAddress(resultSet.getString("address"));
-                dependent.setRoleId(resultSet.getInt("role_id"));
-                dependent.setPolicyHolderName(resultSet.getString("policy_holder_name")); // Assuming you have a setter for this
-                dependentArrayList.add(dependent);
-            }
-            resultSet.close();
-            statement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return dependentArrayList;
-    }
-
-    // PolicyHolders
-    private ArrayList<PolicyHolder> fetchPolicyHoldersFromDatabase() {
-        ArrayList<PolicyHolder> policyHolders = new ArrayList<>();
-        try {
-            String policyOwnerId = getIDFromUserName(LoginData.usernameLogin);
-            PreparedStatement stmt = connection.prepareStatement(
-                    "SELECT * FROM users WHERE role_id = 5 AND id IN " +
-                            "(SELECT card_holder_id FROM insurance_card WHERE policy_owner_id = ?)");
-            stmt.setString(1, policyOwnerId);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                policyHolders.add(new PolicyHolder(
-                        rs.getString("id"),
-                        rs.getString("full_name"),
-                        rs.getString("user_name"),
-                        rs.getString("password"),
-                        rs.getString("email"),
-                        rs.getString("phone_number"),
-                        rs.getString("address"),
-                        rs.getInt("role_id")
-                ));
-            }
-            rs.close();
-            stmt.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return policyHolders;
-    }
 
     // Claims
     public ArrayList<Claim> fetchClaimsFromDatabase() {
@@ -316,15 +247,13 @@ public class PolicyOwnerMyClaimController implements Initializable {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String formattedDate = currentDate.format(formatter);
 
-
         String originalFileName = originalFile.getName();
         String baseName = originalFileName.substring(0, originalFileName.lastIndexOf('.'));
         String extension = getFileExtension(originalFile);
 
-        String newFileName = formattedDate + "_" + baseName + extension;;
+        String newFileName = formattedDate + "_" + baseName + extension;
         System.out.println("File renamed to: " + newFileName);
         return newFileName;
-
     }
 
     // Get the file extension
@@ -340,19 +269,33 @@ public class PolicyOwnerMyClaimController implements Initializable {
 
     // Save documents
     private void saveDocuments(String claimId) {
-        for (File file : newClaimFormDocumentList) {
-            String documentName = renameAndSaveFile(file);
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(
-                        "INSERT INTO documents (claim_id, document_name) VALUES (?, ?)");
-                preparedStatement.setString(1, claimId);
-                preparedStatement.setString(2, documentName);
-                preparedStatement.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
+        String insertDocumentQuery = "INSERT INTO documents (claim_id, document_name) VALUES (?, ?)";
+
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() {
+                for (File file : newClaimFormDocumentList) {
+                    String documentName = renameAndSaveFile(file);
+                    try (PreparedStatement preparedStatement = connection.prepareStatement(insertDocumentQuery)) {
+                        preparedStatement.setString(1, claimId);
+                        preparedStatement.setString(2, documentName);
+                        preparedStatement.executeUpdate();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return null;
             }
-        }
+        };
+
+        task.setOnSucceeded(event -> {
+            System.out.println("Documents saved successfully");
+        });
+
+        new Thread(task).start();
     }
+
+
 
     // Setting new claim form insured person field
     private void setupInsuredPersonComboBox() {
@@ -383,8 +326,6 @@ public class PolicyOwnerMyClaimController implements Initializable {
         newClaimFormInsuredPersonField.getItems().setAll(fetchPolicyHoldersAndDependentsFromDatabase());
     }
 
-
-
     @FXML
     private void newClaimFormConfirmBtnOnAction(ActionEvent event) {
         String newClaimNumber = generateClaimNumber();
@@ -407,35 +348,46 @@ public class PolicyOwnerMyClaimController implements Initializable {
             newClaim.setBankNumber(newClaimFormBankNumberField.getText());
             newClaim.setDocuments(newClaimFormDocumentList.toString());
 
-            // Save the claim to the database and the documents
-            boolean isSuccess = addNewClaimToDatabase(newClaim);
+            // Save the claim to the database
+            Task<Void> saveClaimTask = new Task<>() {
+                @Override
+                protected Void call() {
+                    boolean isSuccess = addNewClaimToDatabase(newClaim);
+                    if (isSuccess) {
+                        // Only if the claim is successfully added, proceed to save documents
+                        saveDocuments(newClaimNumber);
+                    } else {
+                        System.out.println("Error adding claim to database");
+                    }
+                    return null;
+                }
+            };
 
-            if (isSuccess) {
+            saveClaimTask.setOnSucceeded(e -> {
                 claimObservableList.add(newClaim);
                 addNewClaimForm.setVisible(false);
-                saveDocuments(newClaimNumber);
-            } else {
-                System.out.println("Error adding claim to database");
-            }
+            });
+
+            new Thread(saveClaimTask).start();
         } else {
             System.out.println("Claim number is not unique");
         }
-
     }
 
     private String fetchCardNumberForInsuredPerson(String userId) {
-        try {
-            String query = """
-            SELECT ic.card_number FROM users u
-            LEFT JOIN dependent d ON u.id = d.dependent_id
-            LEFT JOIN insurance_card ic ON ic.card_holder_id = COALESCE(d.policy_holder_id, u.id)
-            WHERE u.id = ?
-        """;
-            PreparedStatement stmt = connection.prepareStatement(query);
+        String query = """
+        SELECT ic.card_number FROM users u
+        LEFT JOIN dependent d ON u.id = d.dependent_id
+        LEFT JOIN insurance_card ic ON ic.card_holder_id = COALESCE(d.policy_holder_id, u.id)
+        WHERE u.id = ?
+    """;
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, userId);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getString("card_number");
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("card_number");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -443,10 +395,10 @@ public class PolicyOwnerMyClaimController implements Initializable {
         return "";
     }
 
-    private boolean addNewClaimToDatabase(Claim claim) {
+
+    public boolean addNewClaimToDatabase(Claim claim) {
         String insertClaimQuery = "INSERT INTO claims (claim_id, insured_person, card_number, exam_date, claim_date, claim_amount, status, bank_name, bank_user_name, bank_number) VALUES (?, ?, ?, NULL, NULL, ?, 'NEW', ?, ?, ?)";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(insertClaimQuery);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(insertClaimQuery)) {
             preparedStatement.setString(1, claim.getId());
             preparedStatement.setString(2, claim.getInsuredPerson());
             preparedStatement.setString(3, claim.getCardNumber());
@@ -587,8 +539,7 @@ public class PolicyOwnerMyClaimController implements Initializable {
         }
     }
 
-
-    private boolean updateClaimBankDetails(String claimId, String bankName, String bankUser, String bankNumber) {
+    public boolean updateClaimBankDetails(String claimId, String bankName, String bankUser, String bankNumber) {
         String updateQuery = "UPDATE claims SET bank_name = ?, bank_user_name = ?, bank_number = ? WHERE claim_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(updateQuery)) {
             statement.setString(1, bankName);
@@ -603,25 +554,51 @@ public class PolicyOwnerMyClaimController implements Initializable {
         }
     }
 
-
     // Deleting claim functions
+
+    // Delete button
     @FXML
     void editFieldClaimDeleteBtnOnAction(ActionEvent event) {
         Claim selectedClaim = claimTableView.getSelectionModel().getSelectedItem();
         if (selectedClaim != null) {
-            deleteClaimFromDatabase(selectedClaim.getId());
-            claimObservableList.remove(selectedClaim);
+            boolean isDeleted = deleteClaimFromDatabase(selectedClaim.getId());
+            if (isDeleted) {
+                claimObservableList.remove(selectedClaim);
+            } else {
+                System.out.println("Failed to delete the claim.");
+            }
         }
     }
 
-    private void deleteClaimFromDatabase(String claimId) {
-        try {
-            String deleteQuery = "DELETE FROM claims WHERE claim_id = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery);
-            preparedStatement.setString(1, claimId);
-            preparedStatement.executeUpdate();
+    // Delete claim from database
+    public boolean deleteClaimFromDatabase(String claimId) {
+        String deleteDocumentsQuery = "DELETE FROM documents WHERE claim_id = ?";
+        String deleteClaimQuery = "DELETE FROM claims WHERE claim_id = ?";
+
+        try (Connection conn = databaseConnection.getConnection()) {
+            conn.setAutoCommit(false);  // Start transaction
+
+            try (PreparedStatement deleteDocumentsStmt = conn.prepareStatement(deleteDocumentsQuery);
+                 PreparedStatement deleteClaimStmt = conn.prepareStatement(deleteClaimQuery)) {
+
+                // Delete associated documents
+                deleteDocumentsStmt.setString(1, claimId);
+                deleteDocumentsStmt.executeUpdate();
+
+                // Delete the claim
+                deleteClaimStmt.setString(1, claimId);
+                deleteClaimStmt.executeUpdate();
+
+                conn.commit();  // Commit transaction
+                return true;
+            } catch (SQLException ex) {
+                conn.rollback();  // Rollback on error
+                ex.printStackTrace();
+                return false;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
