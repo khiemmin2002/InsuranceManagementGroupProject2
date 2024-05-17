@@ -79,25 +79,58 @@ class PolicyHolderDependentControllerTest {
         LoginData.usernameLogin = username;
     }
 
-//    @Test
-//    void testAddDependent() throws SQLException {
-//        PreparedStatement preparedStatement1 = mock(PreparedStatement.class);
-//        when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
-//
-//        // Arrange
-//        String randomUserId = generatedRandomUserId();
-//        String full_name = "Jane Smith";
-//        String user_name = "janesmith";
-//        String password = "testpassword";
-//        String email = "testemail@gmail.com";
-//        String phone_number = "23421234";
-//        String address ="123 SG";
-//        int roleId = 6;
-//        Dependent dependent = new Dependent(randomUserId, )
-//
-//        boolean result = controller.addDependent();
-//
-//    }
+    @Test
+    void testAddDependent() throws SQLException {
+        // Arrange
+        PreparedStatement findStmt = mock(PreparedStatement.class);
+        PreparedStatement userStmt = mock(PreparedStatement.class);
+        PreparedStatement depStmt = mock(PreparedStatement.class);
+
+        // Set up each PreparedStatement to return for its specific SQL command
+        when(connection.prepareStatement("SELECT id FROM users WHERE user_name = ?")).thenReturn(findStmt);
+        when(connection.prepareStatement("INSERT INTO users (id, full_name, user_name, password, email, phone_number, address) VALUES (?, ?, ?, ?, ?, ?, ?)")).thenReturn(userStmt);
+        when(connection.prepareStatement("INSERT INTO dependent (dependent_id, policy_holder_id) VALUES (?, ?)")).thenReturn(depStmt);
+
+        String policyHolderUserName = "QuangAcero";
+        String id = "C2346231";
+        String full_name = "Jane Smith";
+        String user_name = "janesmith";
+        String password = "testpassword";
+        String email = "testemail@gmail.com";
+        String phone_number = "23421234";
+        String address = "123 SG";
+        int roleId = 6;
+        Dependent dependent = new Dependent(id, full_name, user_name, password, email, phone_number, address, roleId);
+
+        // Execute the method under test
+        controller.addDependent(dependent, policyHolderUserName);
+
+        // Verify that each PreparedStatement is correctly prepared
+        verify(connection).prepareStatement("SELECT id FROM users WHERE user_name = ?");
+        verify(connection).prepareStatement("INSERT INTO users (id, full_name, user_name, password, email, phone_number, address) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        verify(connection).prepareStatement("INSERT INTO dependent (dependent_id, policy_holder_id) VALUES (?, ?)");
+
+        // Assert and verify interactions with findStmt
+        verify(findStmt).setString(1, policyHolderUserName);
+        verify(findStmt).executeQuery();
+
+        // Assert and verify interactions with userStmt
+        verify(userStmt).setString(1, id);
+        verify(userStmt).setString(2, full_name);
+        verify(userStmt).setString(3, user_name);
+        verify(userStmt).setString(4, password);
+        verify(userStmt).setString(5, email);
+        verify(userStmt).setString(6, phone_number);
+        verify(userStmt).setString(7, address);
+        verify(userStmt).executeUpdate();
+
+        // Assert and verify interactions with depStmt
+        verify(depStmt).setString(1, id);
+        // Here, you need to ensure that you are verifying with the correct policy holder id. If "C1000114" is expected, ensure it's returned by the resultSet mock.
+        verify(depStmt).setString(2, "C1000114");
+        verify(depStmt).executeUpdate();
+    }
+
 
 
     @Test

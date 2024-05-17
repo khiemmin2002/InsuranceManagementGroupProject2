@@ -48,7 +48,8 @@ public class PolicyHolderDependentController {
         }
         return dependentData;
     }
-    public void addDependent(Dependent dependent, String policyHolderUserName) throws SQLException {
+    public void addDependent(String id, String fullName, String userName, String password, String email, String phoneNumber, String address, int roleId) throws SQLException {
+        String policyHolderUserName = LoginData.usernameLogin;
         DatabaseConnection databaseConnection = new DatabaseConnection();
         String policyHolderId = null;
 
@@ -67,22 +68,23 @@ public class PolicyHolderDependentController {
                 throw new SQLException("Policy holder not found.");
             }
 
-            String insertUser = "INSERT INTO users (id, full_name, user_name, password, email, phone_number, address) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String insertUser = "INSERT INTO users (id, full_name, user_name, password, role_id ,email, phone_number, address) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement userStmt = connection.prepareStatement(insertUser)) {
-                userStmt.setString(1, dependent.getId());
-                userStmt.setString(2, dependent.getFullName());
-                userStmt.setString(3, dependent.getUserName());
-                userStmt.setString(4, dependent.getPassword());  // Assuming password is already hashed
-                userStmt.setString(5, dependent.getEmail());
-                userStmt.setString(6, dependent.getPhoneNumber());
-                userStmt.setString(7, dependent.getAddress());
+                userStmt.setString(1, id);
+                userStmt.setString(2, fullName);
+                userStmt.setString(3, userName);
+                userStmt.setString(4, password);
+                userStmt.setInt(5, roleId);
+                userStmt.setString(6, email);
+                userStmt.setString(7, phoneNumber);
+                userStmt.setString(8, address);
                 userStmt.executeUpdate();
             }
 
             String insertDependent = "INSERT INTO dependent (dependent_id, policy_holder_id) VALUES (?, ?)";
             try (PreparedStatement depStmt = connection.prepareStatement(insertDependent)) {
-                depStmt.setString(1, dependent.getId());
+                depStmt.setString(1, id);
                 depStmt.setString(2, policyHolderId);
                 depStmt.executeUpdate();
             }

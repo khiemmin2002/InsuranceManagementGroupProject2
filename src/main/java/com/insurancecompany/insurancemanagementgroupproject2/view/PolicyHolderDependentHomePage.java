@@ -309,16 +309,15 @@ public class PolicyHolderDependentHomePage {
         try {
             String dependentId = generatedRandomUserId();
 
-            String userName = addUserNameField.getText();
-            String fullName = addFullNameField.getText();
-            String passwordPlainText = addPassWordField.getText();
-            String phoneNumber = addPhoneNumField.getText();
-            String email = addEmailField.getText();
+            String userName = addUserNameField.getText().trim();
+            String fullName = addFullNameField.getText().trim();
+            String passwordPlainText = addPassWordField.getText().trim();
+            String phoneNumber = addPhoneNumField.getText().trim();
+            String email = addEmailField.getText().trim();
 
-            String address = addAddressField.getText();
+            String address = addAddressField.getText().trim();
 
             int roleId = 6;
-
 
             if (userName.isEmpty() || fullName.isEmpty() || passwordPlainText.isEmpty() || phoneNumber.isEmpty() || address.isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -328,8 +327,7 @@ public class PolicyHolderDependentHomePage {
                 alert.showAndWait();
             }
             String passWordHashed = bcryptPassword.hashBcryptPassword(passwordPlainText);
-            Dependent dependent = new Dependent(dependentId, fullName, userName, passWordHashed, email, phoneNumber, address, roleId);
-            controller.addDependent(dependent, LoginData.usernameLogin);
+            controller.addDependent(dependentId, fullName, userName, passWordHashed, email, phoneNumber, address, roleId);
             fetchDependentData();
 
             showAlert(Alert.AlertType.INFORMATION, "Dependent added successfully");
