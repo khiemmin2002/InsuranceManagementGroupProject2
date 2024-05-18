@@ -46,7 +46,7 @@ public class AdminController {
                 statement.setString(1,user.getId());
                 statement.setString(2, user.getFullName());
                 statement.setString(3, user.getUserName());
-                statement.setString(4, bcryptPassword.hashBcryptPassword(user.getPassword()));
+                statement.setString(4, user.getPassword());
                 statement.setString(5, user.getEmail());
                 statement.setString(6, user.getPhoneNumber());
                 statement.setString(7, user.getAddress());
@@ -65,7 +65,7 @@ public class AdminController {
                 String updateProfileQuery = "UPDATE users SET full_name = ?, password = ?, email = ?, phone_number = ?, address = ? WHERE id = ?";
                 try (PreparedStatement statement = connection.prepareStatement(updateProfileQuery)) {
                     statement.setString(1, fullName);
-                    statement.setString(2, bcryptPassword.hashBcryptPassword(password));
+                    statement.setString(2, password);
                     statement.setString(3, email);
                     statement.setString(4, phoneNumber);
                     statement.setString(5, address);
@@ -81,6 +81,21 @@ public class AdminController {
         }
         return false;
     }
+    public boolean updateUserWithoutPassword(String id, String fullName, String email, String phoneNumber, String address) {
+        String query = "UPDATE users SET full_name = ?, email = ?, phone_number = ?, address = ? WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, fullName);
+            statement.setString(2, email);
+            statement.setString(3, phoneNumber);
+            statement.setString(4, address);
+            statement.setString(5, id);
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean deleteUser(String userId) {
         String deleteUserQuery = "DELETE FROM users WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(deleteUserQuery)) {
@@ -351,5 +366,32 @@ public class AdminController {
             e.printStackTrace();
         }
         return claimCount;
+    }
+
+    public User getUserById(String id){
+        User user = null;
+        try {
+            String queryRoleName = "SELECT * FROM users WHERE id = ?";
+            PreparedStatement statement = connection.prepareStatement(queryRoleName);
+            statement.setString(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                user = new User();
+                user.setId(resultSet.getString("id"));
+                user.setUserName(resultSet.getString("user_name"));
+                user.setEmail(resultSet.getString("email"));
+                user.setFullName(resultSet.getString("full_name"));
+                user.setRoleId(resultSet.getInt("role_id"));
+                user.setPassword(resultSet.getString("password"));
+                user.setPhoneNumber(resultSet.getString("phone_number"));
+                user.setAddress(resultSet.getString("address"));
+            }
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
     }
 }

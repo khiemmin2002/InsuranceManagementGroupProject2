@@ -351,9 +351,9 @@
                               <TextField fx:id="editFormClaimInsuredPerson" disable="true" layoutX="136.0" layoutY="97.0" prefHeight="25.0" prefWidth="300.0" promptText="Nguyen Van A" />
                               <TextField fx:id="editFormClaimCardNumber" disable="true" layoutX="136.0" layoutY="137.0" prefHeight="25.0" prefWidth="300.0" promptText="Xxxxxx" />
                               <Label layoutX="46.0" layoutY="141.0" text="Card number:" />
-                              <TextField fx:id="editFormClaimDate" layoutX="136.0" layoutY="175.0" prefHeight="25.0" prefWidth="100.0" promptText="2024-10-12" />
+                              <TextField fx:id="editFormClaimDate" disable="true" editable="false" layoutX="136.0" layoutY="175.0" prefHeight="25.0" prefWidth="100.0" promptText="2024-10-12" />
                               <Label layoutX="60.0" layoutY="179.0" text="Claim date:" />
-                              <TextField fx:id="editFormClaimExam" layoutX="336.0" layoutY="175.0" prefHeight="25.0" prefWidth="100.0" promptText="2024-10-14" />
+                              <TextField fx:id="editFormClaimExam" disable="true" editable="false" layoutX="336.0" layoutY="175.0" prefHeight="25.0" prefWidth="100.0" promptText="2024-10-14" />
                               <Label layoutX="261.0" layoutY="179.0" text="Exam date:" />
                               <TextField fx:id="editFormClaimAmount" layoutX="137.0" layoutY="214.0" prefHeight="25.0" prefWidth="300.0" promptText="500" />
                               <Label layoutX="41.0" layoutY="218.0" text="Claim amount:" />
@@ -367,7 +367,7 @@
                               <Label layoutX="250.0" layoutY="295.0" text="Bank user:" />
                               <TextField fx:id="editFormClaimBankNumber" layoutX="137.0" layoutY="331.0" prefHeight="25.0" prefWidth="300.0" promptText="XXXX-XXXX-XXXX-XXXX" />
                               <Label layoutX="46.0" layoutY="335.0" text="Bank number:" />
-                              <TextField fx:id="editFormClaimTotalDocument" editable="false" layoutX="136.0" layoutY="368.0" prefHeight="25.0" prefWidth="300.0" promptText="100" />
+                              <TextField fx:id="editFormClaimTotalDocument" disable="true" editable="false" layoutX="136.0" layoutY="368.0" prefHeight="25.0" prefWidth="300.0" promptText="100" />
                               <Label layoutX="31.0" layoutY="372.0" text="Total documents:" />
                            </children>
                            <effect>

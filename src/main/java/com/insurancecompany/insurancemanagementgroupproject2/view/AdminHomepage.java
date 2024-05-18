@@ -3,6 +3,7 @@ package com.insurancecompany.insurancemanagementgroupproject2.view;
  * @author team 5
  */
 import com.insurancecompany.insurancemanagementgroupproject2.controller.AdminController;
+import com.insurancecompany.insurancemanagementgroupproject2.controller.BcryptPassword;
 import com.insurancecompany.insurancemanagementgroupproject2.controller.ClaimController;
 import com.insurancecompany.insurancemanagementgroupproject2.controller.ValidateInput;
 import com.insurancecompany.insurancemanagementgroupproject2.model.*;
@@ -21,10 +22,7 @@ import javafx.util.Callback;
 
 import java.net.URL;
 import java.text.ParseException;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class AdminHomepage implements Initializable {
     //Button Define
@@ -295,6 +293,7 @@ public class AdminHomepage implements Initializable {
     }
     // Create new instance of validate input
     ValidateInput validateInput = new ValidateInput();
+    BcryptPassword bcryptPassword = new BcryptPassword();
     // Button action method handler
     @FXML
     private void addNewUserFormAdminBtnOnAction() {
@@ -325,7 +324,7 @@ public class AdminHomepage implements Initializable {
                     }
                     newUser.setUserName(editFormCreateUserName.getText());
                     newUser.setFullName(editFormCreateUserFullName.getText());
-                    newUser.setPassword(editFormCreateUserPassword.getText());
+                    newUser.setPassword(bcryptPassword.hashBcryptPassword(editFormCreateUserPassword.getText()));
                     newUser.setEmail(editFormCreateUserEmail.getText());
                     newUser.setPhoneNumber(editFormCreateUserPhone.getText());
                     newUser.setAddress(editFormCreateUserAddress.getText());
@@ -358,25 +357,36 @@ public class AdminHomepage implements Initializable {
     // Method to control form button
     @FXML
     private void editFormUserConfirmBtnOnAction() {
-        boolean isSuccess = adminController.updateUser(editFormUserId.getText(),
-                editFormUserFullName.getText(),
-                editFormUserPassword.getText(),
-                editFormUserEmail.getText(),
-                editFormUserPhoneNumber.getText(),
-                editFormUserAddress.getText());
+        String userId = editFormUserId.getText();
+        String fullName = editFormUserFullName.getText();
+        String email = editFormUserEmail.getText();
+        String phoneNumber = editFormUserPhoneNumber.getText();
+        String address = editFormUserAddress.getText();
+
+        User user = adminController.getUserById(userId);
+        boolean isSuccess;
+        if (editFormUserPassword.getText().equalsIgnoreCase(user.getPassword())) {
+            isSuccess = adminController.updateUserWithoutPassword(userId, fullName, email, phoneNumber, address);
+        } else {
+            String bcryptUpdatePassword = bcryptPassword.hashBcryptPassword(editFormUserPassword.getText());
+            isSuccess = adminController.updateUser(userId, fullName, bcryptUpdatePassword, email, phoneNumber, address);
+        }
+
         if (isSuccess) {
-            editFormUserFullName.setText(editFormUserFullName.getText());
-            editFormUserPassword.setText(editFormUserPassword.getText());
-            editFormUserEmail.setText(editFormUserEmail.getText());
-            editFormUserPhoneNumber.setText(editFormUserPhoneNumber.getText());
-            editFormUserAddress.setText(editFormUserAddress.getText());
+            editFormUserFullName.setText(fullName);
+            editFormUserEmail.setText(email);
+            editFormUserPhoneNumber.setText(phoneNumber);
+            editFormUserAddress.setText(address);
+
             for (User selectedUser : userObservableList) {
-                if (Objects.equals(editFormUserId.getText(), selectedUser.getId())) {
-                    selectedUser.setFullName(editFormUserFullName.getText());
-                    selectedUser.setPassword(editFormUserPassword.getText());
-                    selectedUser.setEmail(editFormUserEmail.getText());
-                    selectedUser.setPhoneNumber(editFormUserPhoneNumber.getText());
-                    selectedUser.setAddress(editFormUserAddress.getText());
+                if (Objects.equals(userId, selectedUser.getId())) {
+                    selectedUser.setFullName(fullName);
+                    selectedUser.setEmail(email);
+                    selectedUser.setPhoneNumber(phoneNumber);
+                    selectedUser.setAddress(address);
+                    if (!editFormUserPassword.getText().isEmpty()) {
+                        selectedUser.setPassword(editFormUserPassword.getText());
+                    }
                     break;
                 }
             }
@@ -384,6 +394,8 @@ public class AdminHomepage implements Initializable {
             System.out.println("isSuccess: " + false);
         }
     }
+
+
     // Method to control form button
     @FXML
     private void editFormUserDeleteBtnOnAction() {
@@ -577,10 +589,8 @@ public class AdminHomepage implements Initializable {
                             Claim selectedClaim = getTableView().getItems().get(getIndex());
                             selectClaimRow(selectedClaim);
                             editFormClaimConfirmBtn.setOnAction(event1 -> {
-                                boolean isSuccess = claimController.updateClaimInformation(editFormClaimId.getText(), editFormClaimDate.getText(), editFormClaimExam.getText(), editFormClaimAmount.getText(), editFormClaimStatus.getText(), editFormClaimBankName.getText(), editFormClaimBankUser.getText(), editFormClaimBankNumber.getText());
+                                boolean isSuccess = claimController.updateClaimInformation(editFormClaimId.getText(), editFormClaimAmount.getText(), editFormClaimStatus.getText(), editFormClaimBankName.getText(), editFormClaimBankUser.getText(), editFormClaimBankNumber.getText());
                                 if (isSuccess) {
-                                    selectedClaim.setClaimDate(selectedClaim.getClaimDateFormat(editFormClaimDate.getText()));
-                                   selectedClaim.setExamDate(selectedClaim.getExamDateFormat(editFormClaimExam.getText()));
                                    selectedClaim.setClaimAmount(Double.parseDouble(editFormClaimAmount.getText()));
                                 selectedClaim.setStatus(editFormClaimStatus.getText());
                                 selectedClaim.setBankName(editFormClaimBankName.getText());
@@ -623,26 +633,50 @@ public class AdminHomepage implements Initializable {
         };
     }
     //Profile function
+    public User getUserById(String id, ObservableList<User> users){
+        for(User user: users){
+            if(user.getId().equalsIgnoreCase(id)){
+                System.out.println(user.getId() + user.getUserName());
+            }
+        }
+        return null;
+    }
     @FXML
     private void editProfileConfirmBtnOnAction() {
-        boolean isSuccess = adminController.updateUser(editProfileId.getText(), editProfileFullName.getText(), editProfilePassword.getText(), editProfileEmail.getText(), editProfilePhoneNumber.getText(), editProfileAddress.getText());
+        String userId = editProfileId.getText();
+        String fullName = editProfileFullName.getText();
+        String email = editProfileEmail.getText();
+        String phoneNumber = editProfilePhoneNumber.getText();
+        String address = editProfileAddress.getText();
+
+        User user = adminController.getUserById(userId);
+        boolean isSuccess;
+        if (editProfilePassword.getText().equalsIgnoreCase(user.getPassword())){
+            isSuccess = adminController.updateUserWithoutPassword(userId, fullName, email, phoneNumber, address);
+        } else {
+            String bcryptUpdatePassword = bcryptPassword.hashBcryptPassword(editProfilePassword.getText());
+            isSuccess = adminController.updateUser(userId, fullName, bcryptUpdatePassword, email, phoneNumber, address);
+        }
+
         if (isSuccess) {
-            editProfileFullName.setText(editProfileFullName.getText());
-            editProfilePassword.setText(editProfilePassword.getText());
-            editProfileEmail.setText(editProfileEmail.getText());
-            editProfilePhoneNumber.setText(editProfilePhoneNumber.getText());
-            editProfileAddress.setText(editProfileAddress.getText());
-            navFullname.setText(editProfileFullName.getText());
-            topUsername.setText(editProfileFullName.getText());
-            profileDashboardFullname.setText(editProfileFullName.getText());
-            profileDashboardEmail.setText(editProfileEmail.getText());
+            editProfileFullName.setText(fullName);
+            editProfileEmail.setText(email);
+            editProfilePhoneNumber.setText(phoneNumber);
+            editProfileAddress.setText(address);
+            navFullname.setText(fullName);
+            topUsername.setText(fullName);
+            profileDashboardFullname.setText(fullName);
+            profileDashboardEmail.setText(email);
+
             for (User selectedUser : userObservableList) {
-                if (Objects.equals(editProfileId.getText(), selectedUser.getId())) {
-                    selectedUser.setFullName(editProfileFullName.getText());
-                    selectedUser.setPassword(editProfilePassword.getText());
-                    selectedUser.setEmail(editProfileEmail.getText());
-                    selectedUser.setPhoneNumber(editProfilePhoneNumber.getText());
-                    selectedUser.setAddress(editProfileAddress.getText());
+                if (Objects.equals(userId, selectedUser.getId())) {
+                    selectedUser.setFullName(fullName);
+                    selectedUser.setEmail(email);
+                    selectedUser.setPhoneNumber(phoneNumber);
+                    selectedUser.setAddress(address);
+                    if (!editProfilePassword.getText().isEmpty()) {
+                        selectedUser.setPassword(editProfilePassword.getText());
+                    }
                     break;
                 }
             }
@@ -650,6 +684,8 @@ public class AdminHomepage implements Initializable {
             System.out.println("isSuccess: " + false);
         }
     }
+
+
     // Method to set FXML dashboard information
     public void displayProfileDashboardInformation() {
         User userData = adminController.getProfileDashboardInformation(LoginData.usernameLogin, LoginData.roleId);

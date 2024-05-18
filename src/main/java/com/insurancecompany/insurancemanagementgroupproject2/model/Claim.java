@@ -148,28 +148,6 @@ public class Claim {
         this.bankNumber = bankNumber;
     }
 
-    public java.sql.Date getClaimDateFormat(String claimDate) {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            java.util.Date parsedDate = sdf.parse(claimDate);
-            return new java.sql.Date(parsedDate.getTime());
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public java.sql.Date getExamDateFormat(String examDate) {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            java.util.Date parsedDate = sdf.parse(examDate);
-            return new java.sql.Date(parsedDate.getTime());
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     public String getDocuments() {
         return documents;
     }

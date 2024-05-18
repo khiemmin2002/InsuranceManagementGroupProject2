@@ -153,34 +153,10 @@ public class ClaimController {
             return claimList;
         }
         // Method to update claim information
-        public boolean updateClaimInformation(String claimId, String claimDate, String examDate, String amount, String status, String bankName, String bankUser, String bankNumber) {
+        public boolean updateClaimInformation(String claimId, String amount, String status, String bankName, String bankUser, String bankNumber) {
             DatabaseConnection databaseConnection = new DatabaseConnection();
             Connection connection = databaseConnection.getConnection();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            java.util.Date parsedClaimDate = null;
-            java.util.Date parsedExamDate = null;
-            java.sql.Date sqlClaimDate = null;
-            java.sql.Date sqlExamDate = null;
-            // Catching exception
-            try {
-                if (claimDate != null && !claimDate.isEmpty()) {
-                    parsedClaimDate = sdf.parse(claimDate);
-                    sqlClaimDate = new java.sql.Date(parsedClaimDate.getTime());
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-                return false;
-            }
-            // Catching exception
-            try {
-                if (examDate != null && !examDate.isEmpty()) {
-                    parsedExamDate = sdf.parse(examDate);
-                    sqlExamDate = new java.sql.Date(parsedExamDate.getTime());
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-                return false;
-            }
+
             double claimAmount;
             // Catching exception
             try {
@@ -191,18 +167,14 @@ public class ClaimController {
             }
             // Catching exception, execute update
             try {
-                String updateQuery = "UPDATE claims SET claim_date=?, exam_date=?, claim_amount=?, status=?, bank_name=?, bank_user_name=?, bank_number=? WHERE claim_id=?";
+                String updateQuery = "UPDATE claims SET claim_amount=?, status=?, bank_name=?, bank_user_name=?, bank_number=? WHERE claim_id=?";
                 try (PreparedStatement statement = connection.prepareStatement(updateQuery)) {
-                    if (sqlClaimDate != null) statement.setDate(1, sqlClaimDate);
-                    else statement.setNull(1, Types.DATE);
-                    if (sqlExamDate != null) statement.setDate(2, sqlExamDate);
-                    else statement.setNull(2, Types.DATE);
-                    statement.setDouble(3, claimAmount);
-                    statement.setString(4, status);
-                    statement.setString(5, bankName);
-                    statement.setString(6, bankUser);
-                    statement.setString(7, bankNumber);
-                    statement.setString(8, claimId);
+                    statement.setDouble(1, claimAmount);
+                    statement.setString(2, status);
+                    statement.setString(3, bankName);
+                    statement.setString(4, bankUser);
+                    statement.setString(5, bankNumber);
+                    statement.setString(6, claimId);
                     int rowsUpdated = statement.executeUpdate();
                     if (rowsUpdated > 0) {
                         System.out.println("Claim information updated successfully!");
