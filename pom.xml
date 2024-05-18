@@ -9,13 +9,14 @@
     <artifactId>InsuranceManagementGroupProject2</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>InsuranceManagementGroupProject2</name>
-
+    <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.10.0</junit.version>
     </properties>
 
     <dependencies>
+
         <!-- https://mvnrepository.com/artifact/at.favre.lib/bcrypt -->
         <dependency>
             <groupId>at.favre.lib</groupId>
@@ -83,15 +84,15 @@
             <artifactId>poi</artifactId>
             <version>5.1.0</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>5.1.0</version>
-        </dependency>
     </dependencies>
 
+
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources/com/insurancecompany/insurancemanagementgroupproject2</directory>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -111,9 +112,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>
-                                com.insurancecompany.insurancemanagementgroupproject2/com.insurancecompany.insurancemanagementgroupproject2.HelloApplication
-                            </mainClass>
+                            <mainClass>com.insurancecompany.insurancemanagementgroupproject2.HelloApplication</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

@@ -76,7 +76,7 @@ class PHClaimControllerTest {
         // Prepare the mock return (successful operation mock)
         when(preparedStatement.executeUpdate()).thenReturn(1);
         // Check value to see if operation success
-        boolean doAble = controller.updateClaim(CLAIM_ID, INSURED_PERSON_ID, CARD_NUMBER, CLAIM_AMOUNT, BANK_NAME, BANK_USER_NAME, BANK_NUMBER);
+        boolean doAble = controller.updateClaim(claim,DOCUMENT_LIST);
         assertTrue(doAble);
     }
 
