@@ -697,7 +697,7 @@ public class POClaimController implements Initializable {
 
     // Generate a random claim number with format fxxxxxxxxxx
     private String generateClaimNumber() {
-        StringBuilder claimNumber = new StringBuilder("f");
+        StringBuilder claimNumber = new StringBuilder("F");
         for (int i = 0; i < 10; i++) {
             claimNumber.append((int) (Math.random() * 10));
         }
