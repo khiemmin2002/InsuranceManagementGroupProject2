@@ -32,9 +32,9 @@ This project use Java and JavaFX library to build, Junit 5 for unit test and req
 `password`: nguyenvanb283
 
 ### Policy Holder
-`username`: QuangAcero
+`username`: declanriceARS41
 
-`password`: quang2909
+`password`: declanriceARS41
 
 ### Dependent
 `username`: tomiyasuARS18
