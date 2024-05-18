@@ -70,7 +70,6 @@ public class POProfileController implements Initializable {
 
     private ObservableList<PolicyOwner> policyOwnerObservableList = FXCollections.observableArrayList();
 
-
     DatabaseConnection databaseConnection = new DatabaseConnection();
     Connection connection = databaseConnection.getConnection();
 
@@ -108,6 +107,7 @@ public class POProfileController implements Initializable {
         return null;
     }
 
+    // Get role name by role id
     public String getRoleName(int roleId) {
         String roleName = "";
         try {
@@ -127,6 +127,7 @@ public class POProfileController implements Initializable {
         return roleName;
     }
 
+    // Update policy owner information
     public boolean updatePolicyOwner(String id, String fullName, String password, String email, String phoneNumber, String address) {
         try {
             String updateProfileQuery = "UPDATE users SET full_name = ?, password = ?, email = ?, phone_number = ?, address = ? WHERE id = ?";
@@ -149,6 +150,7 @@ public class POProfileController implements Initializable {
         return false;
     }
 
+    // Display policy owner dashboard information
     public void displayProfileDashboardInformation() {
         PolicyOwner policyOwnerData = getProfileDashboardInformation();
         if (policyOwnerData != null) {
@@ -171,6 +173,7 @@ public class POProfileController implements Initializable {
         }
     }
 
+    // Setting the btn to edit the profile of the policy owner
     @FXML
     void policyOwnerEditConfirmBtnOnAction(ActionEvent event) {
         boolean isSuccess = updatePolicyOwner(policyOwnerMyProfileCustomerIDEditField.getText(), policyOwnerMyProfileFullNameEditField.getText(), policyOwnerMyProfilePasswordEditField.getText(), policyOwnerMyProfileEmailEditField.getText(), policyOwnerMyProfilePhoneNumberEditField.getText(), policyOwnerMyProfileAddressEditField.getText());
