@@ -147,17 +147,13 @@ public class PolicyHolderClaimManage {
         }
 
         try {
-
             double claimAmount = Double.parseDouble(claimAmountText);
-            PHClaimController.updateClaim(claimId, insuredPersonID, cardNumber, claimAmount, bankName, bankUserName, bankNumber);
-
-
+            Claim claim = new Claim(claimId, insuredPersonID, cardNumber, null, null, claimAmount, "NEW", bankName, bankUserName, bankNumber);
+            PHClaimController.updateClaim(claim, uploadedDocumentNames);
             if (!uploadedDocumentNames.isEmpty()) {
                 PHClaimController.updateDocumentDetails(claimId, uploadedDocumentNames);
                 uploadedDocumentNames.clear();
             }
-
-
             showAlert(Alert.AlertType.INFORMATION, "Claim and associated documents updated successfully.");
             clearUpdateInputFields();
         } catch (SQLException e) {

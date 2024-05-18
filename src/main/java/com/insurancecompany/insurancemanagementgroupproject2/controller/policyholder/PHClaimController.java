@@ -99,18 +99,19 @@ public class PHClaimController {
         claim.setDocuments(rs.getString("document_name"));
         return claim;
     }
-    public boolean updateClaim(String claimId, String insuredPersonID, String cardNumber, double claimAmount, String bankName, String bankUserName, String bankNumber) throws SQLException {
+    public boolean updateClaim(Claim claim, List<String> documentNames) throws SQLException {
         String query = "UPDATE public.claims SET insured_person = ?, card_number = ?, claim_amount = ?, bank_name = ?, bank_user_name = ?, bank_number = ? WHERE claim_id = ?";
         try {
             PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setString(1, insuredPersonID);
-            stmt.setString(2, cardNumber);
-            stmt.setDouble(3, claimAmount);
-            stmt.setString(4, bankName);
-            stmt.setString(5, bankUserName);
-            stmt.setString(6, bankNumber);
-            stmt.setString(7, claimId);
+            stmt.setString(1, claim.getInsuredPerson());
+            stmt.setString(2, claim.getCardNumber());
+            stmt.setDouble(3, claim.getClaimAmount());
+            stmt.setString(4, claim.getBankName());
+            stmt.setString(5, claim.getBankUserName());
+            stmt.setString(6, claim.getBankNumber());
+            stmt.setString(7, claim.getId());
             stmt.executeUpdate();
+            updateDocumentDetails(claim.getId(), documentNames );
             return true;
         } catch (SQLException e ){
             System.out.println("Error " + e);

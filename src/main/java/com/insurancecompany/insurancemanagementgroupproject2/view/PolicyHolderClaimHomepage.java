@@ -162,14 +162,7 @@ public class PolicyHolderClaimHomepage {
         alert.showAndWait();
     }
 
-    private String generateRandomClaimID() {
-        StringBuilder claimId = new StringBuilder("F");
-        Random random = new Random();
-        for (int i = 0; i < 10; i++) {
-            claimId.append(random.nextInt(10));
-        }
-        return claimId.toString();
-    }
+
 
     @FXML
     private void initialize() {
