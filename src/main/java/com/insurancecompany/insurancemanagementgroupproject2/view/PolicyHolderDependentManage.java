@@ -40,7 +40,7 @@ public class PolicyHolderDependentManage {
 
     @FXML
     private Label validationMessage;
-    private PHDependentController controller = new PHDependentController();
+    private PHDependentController controller = new PHDependentController( );
     private DatabaseConnection databaseConnection;
 
     @FXML

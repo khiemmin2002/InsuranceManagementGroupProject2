@@ -62,6 +62,9 @@ public class Claim {
         this.bankNumber = bankNumber;
         this.documents = documents;
     }
+
+
+
     /*
        Getter and setter for Claim class
     */

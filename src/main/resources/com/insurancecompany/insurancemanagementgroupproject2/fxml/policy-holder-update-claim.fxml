@@ -26,7 +26,7 @@
       <TextField fx:id="updateBankUserNameField" layoutX="220.0" layoutY="409.0" promptText="Nguyen Van A" />
       <Text layoutX="237.0" layoutY="457.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bank Account Number" />
       <TextField fx:id="updateBankNumberField" layoutX="218.0" layoutY="472.0" promptText="123456789" />
-      <Button layoutX="236.0" layoutY="514.0" mnemonicParsing="false" text="Upload Documents" />
+      <Button layoutX="236.0" layoutY="514.0" mnemonicParsing="false" onAction="#uploadMultipleFiles" text="Upload Documents" />
       <Button fx:id="cancelUpdateBtn" layoutX="203.0" layoutY="549.0" mnemonicParsing="false" onAction="#cancelUpdateClaim" text="Cancel" />
       <Button fx:id="confirmUpdateBtn" layoutX="337.0" layoutY="549.0" mnemonicParsing="false" onAction="#confirmUpdateClaim" text="Confirm" />
       <Label fx:id="validationMessage" layoutX="277.0" layoutY="497.0" />
