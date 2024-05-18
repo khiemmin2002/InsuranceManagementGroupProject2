@@ -21,7 +21,7 @@ public class SurveyorController extends Thread{
     public List<Surveyor> fetchSurveyor(){
         List<Surveyor> surveyorList = new ArrayList<Surveyor>();
         try {
-            String getSurveyorQuery = "SELECT * FROM users WHERE role_id = 2";
+            String getSurveyorQuery = "SELECT * FROM users WHERE role_id = 3";
             Statement statement = connection.createStatement();
             ResultSet queryResult = statement.executeQuery(getSurveyorQuery);
             while (queryResult.next()){
@@ -46,7 +46,7 @@ public class SurveyorController extends Thread{
     // Method to create new surveyor inside user database table
     public boolean createNewSurveyor(String id, String full_name, String user_name, String password, String email, String phone_number, String address){
         try{
-            String insertSurveyor = "INSERT INTO users VALUES (?,?,?,?, 2,?,?,?)";
+            String insertSurveyor = "INSERT INTO users VALUES (?,?,?,?, 3,?,?,?)";
             PreparedStatement preparedStatement = connection.prepareStatement(insertSurveyor);
             preparedStatement.setString(1,id);
             preparedStatement.setString(2,full_name);

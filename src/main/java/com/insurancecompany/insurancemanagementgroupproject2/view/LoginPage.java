@@ -41,13 +41,13 @@ public class LoginPage {
                 case 2 -> {
                     LoginData.usernameLogin = usernameTextField.getText();
                     LoginData.roleId = roleIdLogIn;
-                    loadSurveyorHomePage();
+                    loadManagerHomePage();
                     System.out.println(LoginData.usernameLogin);
                 }
                 case 3 -> {
                     LoginData.usernameLogin = usernameTextField.getText();
                     LoginData.roleId = roleIdLogIn;
-                    loadManagerHomePage();
+                    loadSurveyorHomePage();
                     System.out.println(LoginData.usernameLogin);
                 }
                 case 4 -> {
