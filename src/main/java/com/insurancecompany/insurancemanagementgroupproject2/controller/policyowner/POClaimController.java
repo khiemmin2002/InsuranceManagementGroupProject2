@@ -38,6 +38,7 @@ public class POClaimController implements Initializable {
     @FXML
     private Button addNewClaimBtn;
 
+    // Set visible for new claim form
     @FXML
     private void addNewClaimBtnOnAction(ActionEvent event) {
         addNewClaimForm.setVisible(true);
@@ -50,6 +51,7 @@ public class POClaimController implements Initializable {
     @FXML
     private Button newClaimFormCancelBtn;
 
+    // Close new claim form
     @FXML
     private void newClaimFormCancelBtnOnAction(ActionEvent event) {
         addNewClaimForm.setVisible(false);
@@ -61,6 +63,7 @@ public class POClaimController implements Initializable {
     @FXML
     private Button newClaimFormAddDocBtn;
 
+    // Add doc btn in new claim form
     @FXML
     private void newClaimFormAddDocBtnOnAction(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -95,13 +98,9 @@ public class POClaimController implements Initializable {
     @FXML
     private TextField newClaimFormClaimAmountField;
 
-
-
-
     private ObservableList<User> insuredPersonObservableList = FXCollections.observableArrayList();
     private ObservableList<File> newClaimFormDocumentList = FXCollections.observableArrayList();
     private ObservableList<Claim> claimObservableList = FXCollections.observableArrayList();
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -169,7 +168,6 @@ public class POClaimController implements Initializable {
         }
         return users;
     }
-
 
     // Dependent
     private ArrayList<Dependent> fetchDependentFromDatabase() {
@@ -341,7 +339,7 @@ public class POClaimController implements Initializable {
         return name.substring(lastIndexOf);
     }
 
-    // Save documents
+    // Save documents to the database
     private void saveDocuments(String claimId) {
         String insertDocumentQuery = "INSERT INTO documents (claim_id, document_name) VALUES (?, ?)";
 
@@ -398,8 +396,7 @@ public class POClaimController implements Initializable {
         newClaimFormInsuredPersonField.getItems().setAll(fetchPolicyHoldersAndDependentsFromDatabase());
     }
 
-
-
+    // New claim form confirm button
     @FXML
     private void newClaimFormConfirmBtnOnAction(ActionEvent event) {
         String newClaimNumber = generateClaimNumber();
@@ -449,6 +446,7 @@ public class POClaimController implements Initializable {
 
     }
 
+    // Fetch card number for insured person
     private String fetchCardNumberForInsuredPerson(String userId) {
         String query = """
         SELECT ic.card_number FROM users u
@@ -470,7 +468,7 @@ public class POClaimController implements Initializable {
         return "";
     }
 
-
+    // Add new claim to the database
     public boolean addNewClaimToDatabase(Claim claim) {
         String insertClaimQuery = "INSERT INTO claims (claim_id, insured_person, card_number, exam_date, claim_date, claim_amount, status, bank_name, bank_user_name, bank_number) VALUES (?, ?, ?, NULL, NULL, ?, 'NEW', ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertClaimQuery)) {
@@ -569,6 +567,7 @@ public class POClaimController implements Initializable {
     @FXML
     private TextField editFieldClaimStatus;
 
+    // Selecting a claim row
     @FXML
     private void selectClaimRow(MouseEvent event) {
         Claim selectedClaim = claimTableView.getSelectionModel().getSelectedItem();
@@ -588,6 +587,7 @@ public class POClaimController implements Initializable {
         }
     }
 
+    // Edit claim confirm button
     @FXML
     private void editFieldClaimConfirmBtnOnAction(ActionEvent event) {
         String bankName = editFieldClaimBankName.getText();
@@ -614,6 +614,7 @@ public class POClaimController implements Initializable {
         }
     }
 
+    // Update claim to the database
     public boolean updateClaimBankDetails(String claimId, String bankName, String bankUser, String bankNumber) {
         String updateQuery = "UPDATE claims SET bank_name = ?, bank_user_name = ?, bank_number = ? WHERE claim_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(updateQuery)) {
@@ -695,7 +696,7 @@ public class POClaimController implements Initializable {
         return userId;
     }
 
-    // Generate a random claim number with format fxxxxxxxxxx
+    // Generate a random claim number with format Fxxxxxxxxxx
     private String generateClaimNumber() {
         StringBuilder claimNumber = new StringBuilder("F");
         for (int i = 0; i < 10; i++) {

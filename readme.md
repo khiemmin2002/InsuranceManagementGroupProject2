@@ -27,29 +27,29 @@ This project use Java and JavaFX library to build, Junit 5 for unit test and req
 `password`: admin123
 
 ### Policy Owner
-`username`:
+`username`: nguyenvanb283
 
-`password`:
+`password`: nguyenvanb283
 
 ### Policy Holder
-`username`: QuangAcero
+`username`: declanriceARS41
 
-`password`: quang2909
+`password`: declanriceARS41
 
 ### Dependent
-`username`:
+`username`: tomiyasuARS18
 
-`password`:
+`password`: tomiyasuARS18
 
 ### Insurance Manager
-`username`: whyme
+`username`: nguyenvanc433
 
-`password`: whyme123
+`password`: nguyenvanc433
 
 ### Insurance Surveyor
-`username`: adam
+`username`: vanthang
 
-`password`: adam123
+`password`: vanthang123
 
 ---
 # System Overview

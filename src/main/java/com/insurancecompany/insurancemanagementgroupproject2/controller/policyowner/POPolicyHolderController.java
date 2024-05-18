@@ -136,6 +136,7 @@ public class POPolicyHolderController implements Initializable {
         addNewPolicyHolderForm.setVisible(false);
     }
 
+    // Fetch all policyholders from the database
     private ArrayList<PolicyHolder> fetchPolicyHoldersFromDatabase() {
         ArrayList<PolicyHolder> policyHolderArrayList = new ArrayList<>();
         try {
@@ -199,7 +200,7 @@ public class POPolicyHolderController implements Initializable {
         }
     }
 
-
+    // Setting the confirm button to confirm edit the policyholder
     @FXML
     private void editFieldPolicyHolderConfirmBtnOnAction(ActionEvent event) {
         boolean isSuccess = updatePolicyHolder(editFieldPolicyHolderID.getText(),
@@ -249,6 +250,7 @@ public class POPolicyHolderController implements Initializable {
         }
     }
 
+    // Setting the btn to confirm adding a new policyholder
     @FXML
     private void policyHolderFormConfirmBtnOnAction(ActionEvent event) {
         String newPolicyHolderID = generatePolicyHolderID();
@@ -369,6 +371,7 @@ public class POPolicyHolderController implements Initializable {
         }
     }
 
+    // Add a new policyholder and insurance card to the database
     private boolean addNewPolicyHolderAndCard(PolicyHolder policyHolder, String cardNumber, java.sql.Date expirationDate) {
         Connection conn = null;
         PreparedStatement insertUserStmt = null;
@@ -429,6 +432,7 @@ public class POPolicyHolderController implements Initializable {
         }
     }
 
+    // Get the ID of the logged-in user
     private String getIDFromUserName(String username) {
         String getIDQuery = "SELECT id FROM users WHERE user_name = ?";
         String userId= "";
@@ -445,6 +449,7 @@ public class POPolicyHolderController implements Initializable {
         return userId;
     }
 
+    // Get the role name from the role ID
     public String getRoleName(int roleId) {
         String roleName = "";
         String queryRoleName = "SELECT role FROM roles WHERE id = ?"; // Define the query outside the try-catch block
