@@ -42,14 +42,14 @@ This project use Java and JavaFX library to build, Junit 5 for unit test and req
 `password`:
 
 ### Insurance Manager
-`username`: whyme
+`username`: nguyenvanc433
 
-`password`: whyme123
+`password`: nguyenvanc433
 
 ### Insurance Surveyor
-`username`: adam
+`username`: vanthang
 
-`password`: adam123
+`password`: vanthang123
 
 ---
 # System Overview
