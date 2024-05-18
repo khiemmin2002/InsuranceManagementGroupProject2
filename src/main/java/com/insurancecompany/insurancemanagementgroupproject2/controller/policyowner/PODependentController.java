@@ -126,11 +126,13 @@ public class PODependentController implements Initializable {
     private ObservableList<PolicyHolder> policyHolderObservableList = FXCollections.observableArrayList();
     private ObservableList<Dependent> dependentObservableList = FXCollections.observableArrayList();
 
+    // Set visible for new dependent form
     @FXML
     private void addNewDependentBtnOnAction(ActionEvent event) {
         addNewDependentForm.setVisible(true);
     }
 
+    // Close the new dependent form
     @FXML
     private void dependentFormCancelBtnOnAction(ActionEvent event) {
         addNewDependentForm.setVisible(false);
@@ -174,6 +176,7 @@ public class PODependentController implements Initializable {
         }
     }
 
+    // Confirm button for editing a dependent
     @FXML
     private void editFieldDependentConfirmBtnOnAction(ActionEvent event) {
         String id = editFieldDependentID.getText();
@@ -201,6 +204,7 @@ public class PODependentController implements Initializable {
         }
     }
 
+    // Delete button for deleting a dependent
     @FXML
     private void editFieldDependentDeleteBtnOnAction(ActionEvent event) {
         Dependent selectedDependent = dependentTableView.getSelectionModel().getSelectedItem();
@@ -259,6 +263,7 @@ public class PODependentController implements Initializable {
         dependentTableView.setItems(dependentObservableList);
     }
 
+    // Set up the policyholder ComboBox
     private void setupPolicyHolderComboBox() {
         addNewDependentPolicyHolderField.setCellFactory(lv -> new ListCell<PolicyHolder>() {
             @Override
@@ -326,6 +331,7 @@ public class PODependentController implements Initializable {
         return dependentArrayList;
     }
 
+    // Fetch policyholders from the database
     private ArrayList<PolicyHolder> fetchPolicyHoldersFromDatabase() {
         ArrayList<PolicyHolder> policyHolders = new ArrayList<>();
         try {
@@ -476,7 +482,7 @@ public class PODependentController implements Initializable {
         return userId;
     }
 
-    // Function to create a random ID for the new policyholder
+    // Function to create a random ID for the new dependent
     private static String generateDependentID() {
         StringBuilder policyNumber = new StringBuilder("C");
         for (int i = 0; i < 7; i++) {
